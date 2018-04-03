@@ -1,0 +1,104 @@
+{% extends 'template/base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <a href="{{ path('addimages',{'shop': shop, 'offerte_id': offerte_id}) }}">
+                <button class="btn btn-success">Afbeeldingen toevoegen</button>
+            </a>
+        </div>
+        <div class="row">
+            <div class='list-group gallery'>
+                {% if images|length == 0 %}
+                    <div class="alert alert-success" role="alert">
+                        <strong>Geen afbeeldingen gevonden voor deze offerte!</strong>
+                    </div>
+                {% endif %}
+                {% for image in images %}
+                <div class='col-sm-4 col-xs-6 col-md-3 col-lg-3 img-box'>
+                    <a class="thumbnail fancybox" rel="ligthbox" href="{{ image.furl }}">
+                        <img class="img-responsive" alt="" src="{{ asset('/img/file_icons/') }}{{ image.fextension }}.png"/>
+                        <span class="text-center">{{ image.fname }}</span>
+                    </a>
+                    <button class="btn btn-danger deletebtn" onclick="removeImagemodal('{{ image.fname }}')">Verwijderen</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Afbeelding verwijderen</strong>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h4><strong>Bent u zeker dat u deze afbeelding wilt verwijderen?</strong></h4>
+                        <p>Na het verwijderen van de afbeelding zal het <strong>Niet mogelijk zijn</strong> deze terug te halen.</p>
+                        <input type="hidden" id="imageName">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Nee</button>
+                    <button type="button" class="btn btn-danger" onclick="removeImage()" data-dismiss="modal">Ja</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
+          media="screen">
+    <style>
+        .gallery {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .img-box {
+            width: 200px;
+            height: 400px;
+        }
+
+        .deletebtn
+        {
+            margin-top: -25px;
+            width: 170px;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".fancybox").fancybox({
+                openEffect: "none",
+                closeEffect: "none"
+            });
+        });
+
+        function removeImagemodal(imageName) {
+            $('#myModal').modal();
+            $('#imageName').val(imageName);
+        }
+
+        function removeImage(imageName) {
+            var url = "/removeimage";
+            var data = $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    "fname": $('#imageName').val()
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            }).responseText;
+        }
+    </script>
+{% endblock %}
