@@ -1,0 +1,24 @@
+{% extends 'template/base.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% block body %}
+    <div class="features-boxed">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col-sm-8"><h1 style="padding-top: 20px;">Klant aanpassen :</h1></div>
+                        <div class="col-sm-4"><img class="header_icon_image navbar-right" src="{{ asset('/img/icons/user-10.png') }}" alt="..."></div>
+                    </div>
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+

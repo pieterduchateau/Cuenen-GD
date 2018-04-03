@@ -1,0 +1,187 @@
+{% extends 'template/base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8"><h1
+                        style="padding-top: 20px;">{{ customer.firstname|capitalize }} {{ customer.lastname|capitalize }}</h1>
+            </div>
+            <div class="col-sm-4"><img class="header_icon_image navbar-right" src="{{ asset('/img/icons/user.png') }}"
+                                       alt="..."></div>
+            <hr>
+        </div>
+        <div class="row" style="margin-bottom: 20px">
+            <a href="{{ path('editCustomer',{'customerid': customer.id,'shop': shop}) }}">
+                <button type="button" class="btn btn-success">Gegevens aanpassen</button>
+            </a>
+        </div>
+        <div class="row">
+            <div class="well col-xs-12">
+                <table class="col-lg-6">
+                    <tr>
+                        <td><strong>Voornaam :</strong></td>
+                        <td>{{ customer.firstname }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Achternaam :</strong></td>
+                        <td>{{ customer.lastname }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adres :</strong></td>
+                        <td>{{ customer.address }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Postcode :</strong></td>
+                        <td>{{ customer.postcode }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email :</strong></td>
+                        <td>{{ customer.email }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Telefoon/GSM :</strong></td>
+                        <td>{{ customer.phone }}</td>
+                    </tr>
+                    {% if customer.btwnumber == NULL %}
+                    {% else %}
+                        <tr>
+                            <td><strong>BTW-nummer :</strong></td>
+                            <td>{{ customer.btwnumber }}</td>
+                        </tr>
+                    {% endif %}
+                </table>
+                <table class="col-lg-6">
+                    <tr>
+                        <td><strong>Extra informatie :</strong></td>
+                    </tr>
+                    <tr>
+                        <td>{{ customer.info }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <a href="{{ path('addOfferte',{
+                'shop': shop,
+                'customerId': customer.id}) }}">
+                <button type="button" class="btn btn-success">Offerte toevoegen</button>
+            </a>
+        </div>
+        <div class="row" style="margin-top: 15px">
+            <table id="offertes_table" class="table table-hover table-striped table-bordered"
+                   cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th width="500px">Titel</th>
+                    <th>Leverdatum</th>
+                    <th>Leveradres</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for key,offerteAddress in offertesAddresses %}
+                    <tr>
+                        <td>{{ offerteAddress.offerteNr }}</td>
+                        <td>{{ offerteTitels[key].paraValue }}</td>
+                        <td>{{ offertesDates[key].paraValue }}</td>
+                        <td>{{ offerteAddress.paraValue }}</td>
+                        <td width="240px">
+                            <a href="/offerte/{{ offerteAddress.offerteNr }}">
+                                <button style="margin-right: 2px;" class="btn btn-success"><i
+                                            class="fa fa-file-pdf-o icon"></i></button>
+                            </a>
+                            <a href="/laadbon/{{ offerteAddress.offerteNr }}">
+                                <button style="margin-right: 2px;" class="btn btn-success"><i
+                                            class="fa fa-truck icon"></i></button>
+                            </a>
+                            </a>
+                            <a href="/{{ shop }}/images/{{ offerteAddress.offerteNr }}">
+                                <button style="margin-right: 2px;" class="btn btn-success"><i
+                                            class="fa fa-photo icon"></i></button>
+                            </a>
+                            <a href="{{ path('editOfferte',{
+                                'shop': shop,
+                                'offerteNr': offerteAddress.offerteNr}) }}">
+                                <button style="margin-right: 2px;" class="btn btn-success"><i
+                                            class="fa fa-edit icon"></i></button>
+                            </a>
+                                <button style="margin-right: 2px;" class="btn btn-danger" onclick="removeOffertemodal({{ offerteAddress.offerteNr }})"><i
+                                        class="fa fa-remove icon"></i></button>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Offerte verwijderen</strong>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h4><strong>Bent u zeker dat u deze offerte wilt verwijderen?</strong></h4>
+                        <p>Bij het verwijderen van deze offerte worden ook al de foto's die bij deze offerte horen verwijderd.</p>
+                        <input type="hidden" id="offerte_nr">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Nee</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteOfferte()" data-dismiss="modal">Ja</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    {% block stylesheets %}
+        <style>
+            a:hover{
+                text-decoration: none;
+            }
+        </style>
+    {% endblock %}
+    {% block javascripts %}
+        <script>
+            $(document).ready(new function () {
+                var table = $('#offertes_table').DataTable({
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Dutch.json"
+                        },
+                        "columnDefs": [
+                            {
+                                "targets": [0],
+                                "visible": false,
+                                "searchable": false
+                            }
+                        ]
+                    }
+                );
+            });
+
+            function removeOffertemodal(offerteid) {
+                $('#myModal').modal();
+                $('#offerte_nr').val(offerteid);
+            }
+
+            function deleteOfferte() {
+                var url = "/removeOfferte";
+                var data = $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        "offerte_id": $('#offerte_nr').val()
+                    },
+                    success: function (data) {
+                        location.reload();
+                    }
+                }).responseText;
+            }
+        </script>
+    {% endblock %}

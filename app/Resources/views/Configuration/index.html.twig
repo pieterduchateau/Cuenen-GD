@@ -1,0 +1,58 @@
+{% extends 'Configuration/Config_base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong>Disk space :(offertes)</strong></div>
+                    <div class="panel-body alert-info">
+                        <h1><img src="{{ asset('/img/icons/diskette.png') }}"> <span
+                                    class="pull-right top-info-box">558.45 Mbit</span></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong>Amount offertes :</strong></div>
+                    <div class="panel-body alert-info">
+                        <h1><img src="{{ asset('/img/icons/folder.png') }}"><span class="pull-right top-info-box"> 754</span></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong>Customers :</strong></div>
+                    <div class="panel-body alert-info">
+                        <h1><img src="{{ asset('/img/icons/team.png') }}"><span class="pull-right top-info-box"> 114</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Accounts</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% for user in users %}
+                            <div class="alert alert-info">
+                                {{ user.username }}
+                                <span class="pull-right alert-danger">{{ user.role }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .top-info-box {
+            margin-top: 13px;
+        }
+    </style>
+{% endblock %}

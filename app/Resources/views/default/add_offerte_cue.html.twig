@@ -1,0 +1,136 @@
+{% extends 'template/base.html.twig' %}
+{% block body %}
+    <div class="features-boxed">
+        <div class="container">
+            <div class="col">
+                <form action="{{ path('GenerateOfferte',{'shop': shop}) }}" method="post">
+                    <input type="hidden" name="customerID" value="{{ customerID }}">
+                    <div class="col-lg-12">
+                            <div class="form-group"><label>Titel :</label><input name="titel" class="form-control"
+                                                                             type="text"></div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="form-group"><label>Leveradres :</label><input name="leveradres" class="form-control"
+                                                                                  type="text"></div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group"><label>Postcode :</label><input name="postcode" class="form-control"
+                                                                                type="number"></div>
+                    </div>
+                    <div class="form-group col-lg-12"><label>Lever datum :</label><input name="leverdatum" class="form-control"
+                                                                                         type="date">
+                    </div>
+                    <hr>
+                   <div class="col-lg-12">
+                       <table class="table table-bordered">
+                           <thead>
+                           <tr>
+                               <th>Code</th>
+                               <th>Omschrijving</th>
+                               <th>Aantal</th>
+                               <th>Prijs</th>
+                               <th>Totaal</th>
+                               <th></th>
+                           </tr>
+                           </thead>
+                           <tbody id="tableBody">
+                           <tr>
+                               <td width="40px"><input type="number" size="5" class="insideTable" name="parameters[code][]"></td>
+                               <td width="40px"><input type="text" size="95" class="insideTable" name="parameters[omschrijving][]"></td>
+                               <td width="40px"><input type="number" size="5" class="insideTable aantal" name="parameters[aantal][]"></td>
+                               <td width="40px"><input type="number" size="5" class="insideTable prijs" name="parameters[prijs][]"></td>
+                               <td width="40px"><input type="number" size="5" class="insideTable" name="parameters[totaal][]" disabled="disabled"></td>
+                               <td><input type="checkbox" class="deleteRow"></td>
+                           </tr>
+                           </tbody>
+                           <tfoot>
+                           <tr>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td>Korting(%)</td>
+                               <td width="40px"><input type="number" size="5" class="insideTable" name="korting" value="0" min="0" max="100"></td>
+                           </tr>
+                           <tr>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td>Totaal</td>
+                               <td width="40px"><input type="number" size="5" class="insideTable" disabled="disabled" name="totaal" value="0"></td>
+                           </tr>
+                           <tr>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td width="40px"><button type="button" id="calculatebtn" class="btn btn-info">Bereken</button> </td>
+                           </tr>
+                           </tfoot>
+                       </table>
+                   </div>
+                    <div class="col-xs-12">
+                        <button id="addproductrow" class="btn btn-success" type="button">produt toevoegen</button>
+                        <button class="btn btn-danger" type="button" onclick="deleterows()">producten verwijderen</button>
+                        <hr>
+                        <button  class="btn btn-primary" type="submit">offerte Toevoegen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(new function () {
+
+            $('#calculatebtn').on('click',function () {
+
+                $('input[name="totaal"]').val(0);
+                var totaal = 0;
+                $( "input[name='parameters[totaal][]']" ).each(function () {
+
+                    var amount = $(this).closest('tr').find('.aantal').val();
+                    var priceeach = $(this).closest('tr').find('.prijs').val();
+
+                    $(this).val(amount * priceeach);
+
+
+                    //totaal berekenen
+                    var data =  totaal;
+                    var data2 = $(this).val();
+                    totaal = parseInt(data) + parseInt(data2);
+                });
+
+                var procent = parseInt($( "input[name='korting']" ).val());
+                var korting = totaal / 100 * procent;
+                $('input[name="totaal"]').val((totaal - korting).toFixed(2));
+            });
+
+            $('#addproductrow').on('click', function () {
+                $('#tableBody').append('<tr>' +
+                    '<td width="40px"><input type="number" size="5" class="insideTable" name="parameters[code][]"></td>' +
+                    '<td width="40px"><input type="text" size="95" class="insideTable" name="parameters[omschrijving][]"></td>' +
+                    '<td width="40px"><input type="number" size="5" class="insideTable aantal" name="parameters[aantal][]"></td>' +
+                    '<td width="40px"><input type="number" size="5" class="insideTable prijs" name="parameters[prijs][]"></td>' +
+                    '<td width="40px"><input type="number" size="5" class="insideTable" name="parameters[totaal][]" disabled="disabled"></td>' +
+                    '<td><input type="checkbox" class="deleteRow"></td>' +
+                    '</tr>');
+            });
+        })
+
+        function deleterows() {
+            $('input.deleteRow:checked').each(function () {
+                $(this).parent().parent().remove()
+            });
+        }
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    <style>
+        input[type=number].insideTable{
+            width: 80px;
+        }
+    </style>
+{% endblock %}
+
+

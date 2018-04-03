@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>FlexDash | Login</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700|Lato:400,100,300,700,900'
+          rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ asset('css/animate.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="top">
+        <h1 id="title" class="hidden" style="font-size: 50px"><span id="logo">Flex<span>DASH</span></span></h1>
+    </div>
+    <div class="login-box animated fadeInUp">
+        <div class="box-header">
+            <h2>Aanmelden</h2>
+        </div>
+        <form action="{{ path('login') }}" method="post">
+            <label for="username">Naam</label>
+            <br/>
+            <input type="text" name="_username" id="username" required>
+            <br/>
+            <label for="password">Wachtwoord</label>
+            <br/>
+            <input type="password" name="_password" id="password" required>
+            <br/>
+            <button type="submit">Aanmelden</button>
+        </form>
+        {% if error %}
+            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+        <br/>
+    </div>
+</div>
+</body>
+<div class="footer">Copyrights<strong> @FlexDash</strong> | <strong>Cue-events & Gordijnen Myriam</strong></div>
+
+<script>
+    $(document).ready(function () {
+        $('#logo').addClass('animated fadeInDown');
+        $("input:text:visible:first").focus();
+    });
+    $('#username').focus(function () {
+        $('label[for="username"]').addClass('selected');
+    });
+    $('#username').blur(function () {
+        $('label[for="username"]').removeClass('selected');
+    });
+    $('#password').focus(function () {
+        $('label[for="password"]').addClass('selected');
+    });
+    $('#password').blur(function () {
+        $('label[for="password"]').removeClass('selected');
+    });
+</script>
+
+</html>

@@ -1,0 +1,71 @@
+{% extends 'template/base.html.twig' %}
+{% block body %}
+    <div class="features-boxed">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8"><h1 style="padding-top: 20px;">Klanten :</h1></div>
+                <div class="col-sm-4"><img class="header_icon_image navbar-right" src="{{ asset('/img/icons/group-1.png') }}" alt="..."></div>
+                <hr>
+            </div>
+            <div class="row justify-content-center features">
+                <div class="col">
+                    <table id="customers_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Voornaam</th>
+                            <th>Achternaam</th>
+                            <th>Adres</th>
+                            <th>Postcode</th>
+                            <th>Datum Aanwezig</th>
+                            <th>Email</th>
+                            <th>Telefoon/GSM</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for cust in customers %}
+                        <tr>
+                            <td>{{ cust.id }}</td>
+                            <td>{{ cust.firstname }}</td>
+                            <td>{{ cust.lastname }}</td>
+                            <td>{{ cust.address }}</td>
+                            <td>{{ cust.postcode }}</td>
+                            <td>{{ cust.dateInit|date("Y-m-d") }}</td>
+                            <td>{{ cust.email }}</td>
+                            <td>{{ cust.phone }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(new function () {
+            var table = $('#customers_table').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Dutch.json"
+                    },
+                    "columnDefs": [
+                        {
+                            "targets": [0],
+                            "visible": false,
+                            "searchable": false
+                        }
+                    ]
+                }
+            );
+
+            $('#customers_table tbody').on('click', 'tr', function () {
+                var data = table.row(this).data();
+                window.location.href = "/{{ shop }}/customer/" + data[0];
+            });
+        });
+    </script>
+{% endblock %}
+

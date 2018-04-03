@@ -1,0 +1,90 @@
+<img class="banner" src="img/cue/offerte_header.JPG"/><br>
+<div class="row">
+    <table>
+        <tbody>
+        <tr>
+            <td>Naam :</td>
+            <td>{{ customerParameters.firstName }} {{ customerParameters.lastName }}</td>
+        </tr>
+        <tr>
+            <td>Adres :</td>
+            <td>{{ customerParameters.address }}</td>
+        </tr>
+        <tr>
+            <td>Postcode :</td>
+            <td>{{ customerParameters.postcode }}</td>
+            <td>Plaats :</td>
+        </tr>
+        <tr>
+            <td>Telefoon :</td>
+            <td>{{ customerParameters.phone }}</td>
+        </tr>
+        <tr>
+            <td>Lever adres :</td>
+            <td>{{ offerteParameters['deliveryAddress']}}</td>
+        </tr>
+        <tr>
+            <td>Lever Datum :</td>
+            <td>{{ offerteParameters['deliveryDate']}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <table class="data_table" width="780px">
+        <col width="80">
+        <col width="580">
+        <col width="80">
+        <thead>
+        <tr>
+        <th align="center" class="data_table">Code</th>
+        <th align="center" class="data_table">Omschrijving</th>
+        <th align="center" class="data_table">Aantal</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set totaal = 0 %}
+        {% for rows in offerteParameters["producten"] %}
+            {% set rowsplit = rows|split(',-,') %}
+            <tr>
+                <td class="data_table">{{ rowsplit[0] }}</td>
+                <td class="data_table">{{ rowsplit[1] }}</td>
+                <td class="data_table">{{ rowsplit[2] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<img class="bannerfooter" src="img/cue/offerte_footer.JPG"/><br>
+<style>
+
+    .banner {
+        width: 780px;
+    }
+
+    .bannerfooter
+    {
+        position:absolute;
+        bottom: 170px;
+        width: 780px;
+        background:#6cf;
+    }
+
+     table.data_table, th.data_table, td.data_table {
+        border: 1px solid black;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    .data_table_foot{
+        border: 1px solid black;
+        border-left: 1px solid black;
+    }
+
+    .left-center
+    {
+        border-right: 1px solid black;
+    }
+</style>

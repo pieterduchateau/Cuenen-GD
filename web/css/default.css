@@ -1,0 +1,19 @@
+body{
+    background-color: #EEEEEE;
+}
+
+.navbar-default{
+    background-color: #3B414C;
+    border: 0px;
+    border-radius: 0px;
+    color: #FFFFFF;
+}
+
+.header_icon_image {
+    height: 120px;
+    margin-bottom: 20px;
+}
+
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}

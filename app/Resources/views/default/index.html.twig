@@ -1,0 +1,48 @@
+{% extends 'template/base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xs-12 col-md-3">
+                <a href="{{ path('add_customer',{'shop': shop}) }}" class="thumbnail">
+                    <div class="text-center">
+                        <img class="nav_icons" src="{{ asset('/img/icons/user-2.png') }}" alt="...">
+                        <h3>Klant toevoegen</h3>
+                    </div>
+                </a>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <a href="{{ path('all_customers',{'shop': shop}) }}" class="thumbnail">
+                    <div class="text-center">
+                        <img class="nav_icons" src="{{ asset('/img/icons/group-1.png') }}" alt="...">
+                        <h3>Klanten</h3>
+                    </div>
+                </a>
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="col-xs-12 col-md-3">
+                    <a href="{{ path('config_index') }}" class="thumbnail">
+                        <div class="text-center">
+                            <img class="nav_icons" src="{{ asset('/img/icons/settings.png') }}" alt="...">
+                            <h3>Configuratie</h3>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .thumbnail {
+            height: 160px;
+        }
+
+        .nav_icons {
+            height: 80px;
+        }
+    </style>
+{% endblock %}
