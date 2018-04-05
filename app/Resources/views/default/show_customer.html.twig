@@ -11,10 +11,9 @@
         </div>
         <div class="row" style="margin-bottom: 20px">
             <a href="{{ path('editCustomer',{'customerid': customer.id,'shop': shop}) }}">
-                <button type="button" class="btn btn-success">Gegevens aanpassen</button>
+                <button type="button" class="btn btn-success">Klant aanpassen</button>
             </a>
-            <button class="btn btn-danger" onclick="removeCustomerModal({{ customer.id }})"><i
-                        class="fa fa-remove icon"></i></button>
+            <button class="btn btn-danger" onclick="removeCustomerModal()">Klant verwijderen</button>
         </div>
         <div class="row">
             <div class="well col-xs-12">
@@ -159,7 +158,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-info" data-dismiss="modal">Nee</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteCustomer()" data-dismiss="modal">Ja</button>
+                    <a href="{{ path('deletecustomer',{'customerid': customer.id,'shop': shop}) }}">
+                        <button type="button" class="btn btn-success">Ja</button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -190,9 +191,8 @@
                 );
             });
 
-            function removeOffertemodal(offerteid) {
+            function removeOffertemodal() {
                 $('#myModal').modal();
-                $('#offerte_nr').val(offerteid);
             }
 
             function removeCustomerModal(customerID) {

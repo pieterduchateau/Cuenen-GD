@@ -173,4 +173,32 @@ class CustomerController extends Controller
             'form' => $form->createView()
         ));
     }
+
+    /**
+     * @Route("/{shop}/deletecustomer/{customerid}", name="deletecustomer")
+     */
+    public function deleteCustomer($shop,$customerid,Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $customer = $this->getDoctrine()
+            ->getRepository("AppBundle:Customer")
+            ->find($customerid);
+
+        $offertes = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array('customerNr' => $customer->getId()));
+
+        foreach ($offertes as $offerte)
+        {
+            $offerte_nr = $offerte->getOfferteNr();
+            $offerte_parameters = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array(
+                'offerteNr' => $offerte_nr));
+
+            foreach ($offerte_parameters as $parameter) {
+                $em->remove($parameter);
+            }
+            $em->remove($offerte);
+        }
+
+        return $this->redirectToRoute('show_customer',array('shop' => $shop,'customer_id' => $customerid));
+
+    }
 }
