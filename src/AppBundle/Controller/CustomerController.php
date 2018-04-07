@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\AppBundle;
 use AppBundle\Entity\Customer;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -180,15 +181,18 @@ class CustomerController extends Controller
     public function deleteCustomer($shop,$customerid,Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $filesystem = new Filesystem();
         $customer = $this->getDoctrine()
             ->getRepository("AppBundle:Customer")
             ->find($customerid);
 
+        //delete all the offertes for a customer
         $offertes = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array('customerNr' => $customer->getId()));
-
         foreach ($offertes as $offerte)
         {
             $offerte_nr = $offerte->getOfferteNr();
+
+            //remove offertes from customer
             $offerte_parameters = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array(
                 'offerteNr' => $offerte_nr));
 
@@ -196,9 +200,20 @@ class CustomerController extends Controller
                 $em->remove($parameter);
             }
             $em->remove($offerte);
+
+            //remove images from offertes from customer
+            $images = $this->getDoctrine()->getRepository("AppBundle:Files")->findBy(array(
+                'offerte_id' => $offerte_nr));
+
+            foreach ($images as $image) {
+                $em->remove($image);
+                $filesystem->remove($this->get('kernel')->getRootDir() . '/../web/uploads/images/' . $image->getFname());
+            }
         }
 
-        return $this->redirectToRoute('show_customer',array('shop' => $shop,'customer_id' => $customerid));
+        $em->remove($customer);
+        $em->flush();
+        return $this->redirectToRoute('all_customers',array('shop' => $shop));
 
     }
 }
