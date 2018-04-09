@@ -3,30 +3,67 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            <a href="{{ path('addimages',{'shop': shop, 'offerte_id': offerte_id}) }}">
-                <button class="btn btn-success">Afbeeldingen toevoegen</button>
-            </a>
-        </div>
-        <div class="row">
-            <div class='list-group gallery'>
-                {% if images|length == 0 %}
-                    <div class="alert alert-success" role="alert">
-                        <strong>Geen afbeeldingen gevonden voor deze offerte!</strong>
-                    </div>
-                {% endif %}
-                {% for image in images %}
-                <div class='col-sm-4 col-xs-6 col-md-3 col-lg-3 img-box'>
-                    <a class="thumbnail fancybox" rel="ligthbox" href="{{ image.furl }}">
-                        <img class="img-responsive" alt="" src="{{ asset('/img/file_icons/') }}{{ image.fextension }}.png"/>
-                        <span class="text-center">{{ image.fname }}</span>
-                    </a>
-                    <button class="btn btn-danger deletebtn" onclick="removeImagemodal('{{ image.fname }}')">Verwijderen</button>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Afbeelding toevoegen</h3>
                 </div>
-                {% endfor %}
+                <div class="panel-body">
+                    <a href="{{ path('addimages',{'shop': shop, 'offerte_id': offerte_id}) }}">
+                        <button class="btn btn-success">Toevoegen</button>
+                    </a>
+                </div>
+            </div>
+
+            {% if images|length == 0 %}
+                <div class="alert alert-success" role="alert">
+                    <strong>Geen afbeeldingen gevonden voor deze offerte!</strong>
+                </div>
+            {% endif %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Afbeeldingen</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <td></td>
+                        <td>Naam</td>
+                        <td>Link</td>
+                        <td>Extensie</td>
+                        <td>Grootte</td>
+                        <td>Acties</td>
+                        </thead>
+                        <tbody>
+                        {% for image in images %}
+                            <tr>
+                                <td><img src="{{ asset('/img/file_icons/') }}{{ image.fextension }}.png" alt="...">
+                                </td>
+                                <td>{{ image.fname }}</td>
+                                <td>{{ image.furl }}</td>
+                                <td>{{ image.fextension }}</td>
+                                <td>{{ (image.fsize / 1000000) | round(2) }}Mb</td>
+                                <td>
+                                    <a href="{{ image.furl }}" download="{{ image.fname }}">
+                                        <button class="btn btn-success"><span
+                                                    class="glyphicon glyphicon-download-alt"></span></button>
+                                    </a>
+                                    <button class="btn btn-danger" onclick="removeImagemodal('{{ image.fname }}')">
+                                        <span class="glyphicon glyphicon-remove"></span></button>
+                                    <a class="fancybox" rel="ligthbox" href="{{ image.furl }}">
+                                        <button class="btn btn-info"><span class="glyphicon glyphicon-zoom-in"></span>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -38,13 +75,15 @@
                 <div class="modal-body">
                     <div class="text-center">
                         <h4><strong>Bent u zeker dat u deze afbeelding wilt verwijderen?</strong></h4>
-                        <p>Na het verwijderen van de afbeelding zal het <strong>Niet mogelijk zijn</strong> deze terug te halen.</p>
+                        <p>Na het verwijderen van de afbeelding zal het <strong>Niet mogelijk zijn</strong> deze terug
+                            te halen.</p>
                         <input type="hidden" id="imageName">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-info" data-dismiss="modal">Nee</button>
-                    <button type="button" class="btn btn-danger" onclick="removeImage()" data-dismiss="modal">Ja</button>
+                    <button type="button" class="btn btn-danger" onclick="removeImage()" data-dismiss="modal">Ja
+                    </button>
                 </div>
             </div>
         </div>
@@ -65,10 +104,8 @@
             height: 400px;
         }
 
-        .deletebtn
-        {
-            margin-top: -25px;
-            width: 170px;
+        .imgbtn {
+            width: 100%;
         }
     </style>
 {% endblock %}
