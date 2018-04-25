@@ -59,6 +59,7 @@ class ImageController extends Controller
     public function addimages($shop,$offerte_id,Request $request)
     {
 
+        $extensions = array('jpeg','png','jpg','pdf');
         $files = new Files();
         $form = $this->createFormBuilder($files)
             ->add('file', FileType::class, array('label' => 'File'))
@@ -80,7 +81,7 @@ class ImageController extends Controller
             $files->setFname($file->getClientOriginalName());
             $files->setFsize($file->getClientSize());
             $files->setOfferteId($offerte_id);
-            if ($file->isValid()) {
+            if ($file->isValid() && in_array($file->guessExtension(),$extensions) ) {
                 $url = $this->getParameter('image_directory');
                 $url = str_replace(" ", "", $url);
                 $name = $offerte_id . "_" . $count . "_" . $file->getClientOriginalName()  .  "." . $file->guessExtension();
@@ -94,8 +95,8 @@ class ImageController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($files);
                 $em->flush();
+                return $this->redirectToRoute('images',array('shop' => $shop,'offerte_id' => $offerte_id));
             }
-            return $this->redirectToRoute('images',array('shop' => $shop,'offerte_id' => $offerte_id));
         }
         return $this->render('default/add_image.html.twig', array(
             'shop' => $shop,
