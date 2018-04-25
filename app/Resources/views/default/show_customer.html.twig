@@ -191,8 +191,9 @@
                 );
             });
 
-            function removeOffertemodal() {
+            function removeOffertemodal($offertenr) {
                 $('#myModal').modal();
+                $('#offerte_nr').val($offertenr);
             }
 
             function removeCustomerModal(customerID) {
