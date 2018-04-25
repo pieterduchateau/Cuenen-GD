@@ -8,7 +8,7 @@ imports:
 parameters:
     locale: en
     image_directory: '%kernel.root_dir%/../web/uploads/images'
-    public_image_directory: 'http://192.168.56.5:8000/uploads/images'
+    public_image_directory: 'http://192.168.0.232:8000/uploads/images'
 
 framework:
     #esi: ~
