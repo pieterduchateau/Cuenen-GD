@@ -148,7 +148,7 @@ class OfferteController extends Controller
         $offerte_nr = $request->request->get('offerte_id');
 
         $offerte_parameters = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array(
-            'offerteNr' => $offerte_nr));
+            'offerteNr' => 29));
 
         foreach ($offerte_parameters as $parameter) {
             $em->remove($parameter);
