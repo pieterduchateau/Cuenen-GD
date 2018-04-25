@@ -81,7 +81,7 @@ class ImageController extends Controller
             $files->setFname($file->getClientOriginalName());
             $files->setFsize($file->getClientSize());
             $files->setOfferteId($offerte_id);
-            if ($file->isValid()) {
+            if ($file->isValid() && in_array($file->guessExtension(),$extensions)) {
                 $url = $this->getParameter('image_directory');
                 $url = str_replace(" ", "", $url);
                 $name = $offerte_id . "_" . $count . "_" . $file->getClientOriginalName();
