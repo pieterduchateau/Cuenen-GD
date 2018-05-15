@@ -67,9 +67,9 @@ class Customer
     private $shop;
 
     /**
-     * @ORM\Column(name="dateInit",type="date", length=60)
+     * @ORM\Column(name="place",type="string")
      */
-    private $date_init;
+    private $place;
 
     /**
      * @return mixed
@@ -218,22 +218,6 @@ class Customer
     /**
      * @return mixed
      */
-    public function getDateInit()
-    {
-        return $this->date_init;
-    }
-
-    /**
-     * @param mixed $date_init
-     */
-    public function setDateInit($date_init)
-    {
-        $this->date_init = $date_init;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getShop()
     {
         return $this->shop;
@@ -246,6 +230,23 @@ class Customer
     {
         $this->shop = $shop;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPlace()
+    {
+        return $this->place;
+    }
+
+    /**
+     * @param mixed $place
+     */
+    public function setPlace($place)
+    {
+        $this->place = $place;
+    }
+
 
 
 

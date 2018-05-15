@@ -44,9 +44,7 @@ class CustomerController extends Controller
             ->add('last_name', TextType::class,array('label' => 'Achternaam :'))
             ->add('address', TextType::class,array('label' => 'Adres :'))
             ->add('postcode', NumberType::class,array('label' => 'Postcode :'))
-            ->add('date_init', DateType::class,array(
-                'label' => 'Datum aanwezig :',
-                'widget' => 'single_text'))
+            ->add('place', TextType::class,array('label' => 'Plaats :'))
             ->add('email', EmailType::class,array('label' => 'Email :'))
             ->add('phone', TextType::class,array('label' => 'Telefoon/GSM :'))
             ->add('btwnumber', TextType::class,array(
