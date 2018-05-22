@@ -27,7 +27,7 @@ class CustomerController extends Controller
         $customers = $this->getDoctrine()
             ->getRepository("AppBundle:Customer")
             ->findByshop($shop);
-        return $this->render('default/all_customers.html.twig',array(
+        return $this->render('default/all_customers.html.twig', array(
             'shop' => $shop,
             'customers' => $customers
         ));
@@ -40,17 +40,17 @@ class CustomerController extends Controller
     {
         $customer = new Customer();
         $form = $this->createFormBuilder($customer)
-            ->add('first_name', TextType::class,array('label' => 'Voornaam :'))
-            ->add('last_name', TextType::class,array('label' => 'Achternaam :'))
-            ->add('address', TextType::class,array('label' => 'Adres :'))
-            ->add('postcode', NumberType::class,array('label' => 'Postcode :'))
-            ->add('place', TextType::class,array('label' => 'Plaats :'))
-            ->add('email', EmailType::class,array('label' => 'Email :'))
-            ->add('phone', TextType::class,array('label' => 'Telefoon/GSM :'))
-            ->add('btwnumber', TextType::class,array(
+            ->add('first_name', TextType::class, array('label' => 'Voornaam :'))
+            ->add('last_name', TextType::class, array('label' => 'Achternaam :'))
+            ->add('address', TextType::class, array('label' => 'Adres :'))
+            ->add('postcode', NumberType::class, array('label' => 'Postcode :'))
+            ->add('place', TextType::class, array('label' => 'Plaats :'))
+            ->add('email', EmailType::class, array('label' => 'Email :'))
+            ->add('phone', TextType::class, array('label' => 'Telefoon/GSM :'))
+            ->add('btwnumber', TextType::class, array(
                 'label' => 'BTW-nummer :',
                 'required' => false))
-            ->add('info', TextareaType::class,array(
+            ->add('info', TextareaType::class, array(
                 'label' => 'Extra info :',
                 'required' => false))
             ->add('save', SubmitType::class, array('label' => 'Klant toevoegen'))
@@ -65,10 +65,10 @@ class CustomerController extends Controller
             $em->persist($customer);
             $em->flush();
 
-            return $this->redirectToRoute('all_customers',array('shop' => $shop));
+            return $this->redirectToRoute('all_customers', array('shop' => $shop));
         }
 
-        return $this->render('default/add_customer.html.twig',array(
+        return $this->render('default/add_customer.html.twig', array(
             'shop' => $shop,
             'form' => $form->createView()
         ));
@@ -77,106 +77,68 @@ class CustomerController extends Controller
     /**
      * @Route("/{shop}/customer/{customer_id}", name="show_customer")
      */
-    public function show_customer($shop,$customer_id)
+    public function show_customer($shop, $customer_id)
     {
         $customer = $this->getDoctrine()
             ->getRepository("AppBundle:Customer")
             ->find($customer_id);
 
-        $em = $this->getDoctrine()->getManager();
+        $offertes = $this->getDoctrine()
+            ->getRepository("AppBundle:Offerte")
+            ->findBy(array('customerNr' => $customer_id));
 
-        $offertesAddressquery = $em->createQueryBuilder()
-            ->select('offerte')
-            ->from('AppBundle:Offerte','offerte')
-            ->where('offerte.customerNr = :nr')
-            ->andWhere('offerte.paraName = :address')
-            ->setParameter('nr', $customer_id)
-            ->setParameter('address', "deliveryAddress")
-            ->distinct()
-            ->getQuery();
-        $offertesAddress = $offertesAddressquery->getResult();
-
-        $offertesDateQuery= $em->createQueryBuilder()
-            ->select('offerte')
-            ->from('AppBundle:Offerte','offerte')
-            ->where('offerte.customerNr = :nr')
-            ->andWhere('offerte.paraName = :date')
-            ->setParameter('nr', $customer_id)
-            ->setParameter('date', "deliveryDate")
-            ->distinct()
-            ->getQuery();
-        $offertesDates = $offertesDateQuery->getResult();
-
-        $offertesTitleQuery= $em->createQueryBuilder()
-            ->select('offerte')
-            ->from('AppBundle:Offerte','offerte')
-            ->where('offerte.customerNr = :nr')
-            ->andWhere('offerte.paraName = :titel')
-            ->setParameter('nr', $customer_id)
-            ->setParameter('titel', "titel")
-            ->distinct()
-            ->getQuery();
-        $offerteTitels = $offertesTitleQuery->getResult();
-
-        return $this->render('default/show_customer.html.twig',array(
-            'shop' => $shop,
+        return $this->render('default/show_customer.html.twig', array(
             'customer' => $customer,
-            'offertesAddresses' => $offertesAddress,
-            'offertesDates' => $offertesDates,
-            'offerteTitels' => $offerteTitels
-        ));
+            'offertes' => $offertes,
+            'shop' => $shop));
     }
 
     /**
      * @Route("/{shop}/editcustomer/{customerid}", name="editCustomer")
      */
-    public function editCustomer($shop,$customerid,Request $request)
+    public function editCustomer($shop, $customerid, Request $request)
     {
-        $customer = $this->getDoctrine()
-            ->getRepository("AppBundle:Customer")
-            ->find($customerid);
+        {
+            $customer = $this->getDoctrine()
+                ->getRepository("AppBundle:Customer")
+                ->find($customerid);
+            $form = $this->createFormBuilder($customer)
+                ->add('first_name', TextType::class, array('label' => 'Voornaam :'))
+                ->add('last_name', TextType::class, array('label' => 'Achternaam :'))
+                ->add('address', TextType::class, array('label' => 'Adres :'))
+                ->add('postcode', NumberType::class, array('label' => 'Postcode :'))
+                ->add('place', TextType::class, array('label' => 'Plaats :'))
+                ->add('email', EmailType::class, array('label' => 'Email :'))
+                ->add('phone', TextType::class, array('label' => 'Telefoon/GSM :'))
+                ->add('btwnumber', TextType::class, array(
+                    'label' => 'BTW-nummer :',
+                    'required' => false))
+                ->add('info', TextareaType::class, array(
+                    'label' => 'Extra info :',
+                    'required' => false))
+                ->add('save', SubmitType::class, array('label' => 'Klant aanpassen'))
+                ->getForm();
 
-        $form = $this->createFormBuilder($customer)
-            ->add('first_name', TextType::class,array('label' => 'Voornaam :'))
-            ->add('last_name', TextType::class,array('label' => 'Achternaam :'))
-            ->add('address', TextType::class,array('label' => 'Adres :'))
-            ->add('postcode', NumberType::class,array('label' => 'Postcode :'))
-            ->add('date_init', DateType::class,array(
-                'label' => 'Datum aanwezig :',
-                'widget' => 'single_text'))
-            ->add('email', EmailType::class,array('label' => 'Email :'))
-            ->add('phone', TextType::class,array('label' => 'Telefoon/GSM :'))
-            ->add('btwnumber', TextType::class,array(
-                'label' => 'BTW-nummer :',
-                'required' => false))
-            ->add('info', TextareaType::class,array(
-                'label' => 'Extra info :',
-                'required' => false))
-            ->add('save', SubmitType::class, array('label' => 'Klant aanpassen'))
-            ->getForm();
+            $form->handleRequest($request);
 
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $customer->setShop($shop);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($customer);
-            $em->flush();
-
-            return $this->redirectToRoute('show_customer',array('shop' => $shop,'customer_id' => $customerid));
+            if ($form->isSubmitted() && $form->isValid()) {
+                $customer->setShop($shop);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($customer);
+                $em->flush();
+                return $this->redirectToRoute('show_customer', array('shop' => $shop, 'customer_id' => $customerid));
+            }
+            return $this->render('default/edit_customer.html.twig', array(
+                'shop' => $shop,
+                'form' => $form->createView()
+            ));
         }
-
-        return $this->render('default/edit_customer.html.twig',array(
-            'shop' => $shop,
-            'form' => $form->createView()
-        ));
     }
 
     /**
      * @Route("/{shop}/deletecustomer/{customerid}", name="deletecustomer")
      */
-    public function deleteCustomer($shop,$customerid,Request $request)
+    public function deleteCustomer($shop, $customerid, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $filesystem = new Filesystem();
@@ -186,32 +148,32 @@ class CustomerController extends Controller
 
         //delete all the offertes for a customer
         $offertes = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array('customerNr' => $customer->getId()));
-        foreach ($offertes as $offerte)
-        {
-            $offerte_nr = $offerte->getOfferteNr();
+        foreach ($offertes as $offerte) {
+            $offerte_id = $offerte->getId();
 
             //remove offertes from customer
-            $offerte_parameters = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array(
-                'offerteNr' => $offerte_nr));
+            $offerte_parameters = $this->getDoctrine()->getRepository("AppBundle:Offerte_objects")->findBy(array(
+                'id' => $offerte_id));
 
             foreach ($offerte_parameters as $parameter) {
                 $em->remove($parameter);
             }
-            $em->remove($offerte);
 
             //remove images from offertes from customer
             $images = $this->getDoctrine()->getRepository("AppBundle:Files")->findBy(array(
-                'offerte_id' => $offerte_nr));
+                'offerte_id' => $offerte_id));
 
             foreach ($images as $image) {
                 $em->remove($image);
                 $filesystem->remove($this->get('kernel')->getRootDir() . '/../web/uploads/images/' . $image->getFname());
             }
+
+            $em->remove($offerte);
         }
 
         $em->remove($customer);
         $em->flush();
-        return $this->redirectToRoute('all_customers',array('shop' => $shop));
+        return $this->redirectToRoute('all_customers', array('shop' => $shop));
 
     }
 }

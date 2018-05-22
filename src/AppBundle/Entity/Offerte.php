@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -24,19 +25,54 @@ class Offerte
     private $customerNr;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $titel;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $deliveryAddress;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $postcode;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $place;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $delivery_date;
+
+    /**
      * @ORM\Column(type="integer")
      */
-    private $offerteNr;
+    private $korting;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      */
-    private $paraName;
+    private $extra_cost;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      */
-    private $paraValue;
+    private $BTW;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Offerte_objects", mappedBy="offerte")
+     */
+    private $objects;
+
+    public function __construct()
+    {
+        $this->objects = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -44,14 +80,6 @@ class Offerte
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -73,51 +101,148 @@ class Offerte
     /**
      * @return mixed
      */
-    public function getOfferteNr()
+    public function getTitel()
     {
-        return $this->offerteNr;
+        return $this->titel;
     }
 
     /**
-     * @param mixed $offerteNr
+     * @param mixed $titel
      */
-    public function setOfferteNr($offerteNr)
+    public function setTitel($titel)
     {
-        $this->offerteNr = $offerteNr;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getParaName()
-    {
-        return $this->paraName;
-    }
-
-    /**
-     * @param mixed $paraName
-     */
-    public function setParaName($paraName)
-    {
-        $this->paraName = $paraName;
+        $this->titel = $titel;
     }
 
     /**
      * @return mixed
      */
-    public function getParaValue()
+    public function getDeliveryAddress()
     {
-        return $this->paraValue;
+        return $this->deliveryAddress;
     }
 
     /**
-     * @param mixed $paraValue
+     * @param mixed $deliveryAddress
      */
-    public function setParaValue($paraValue)
+    public function setDeliveryAddress($deliveryAddress)
     {
-        $this->paraValue = $paraValue;
+        $this->deliveryAddress = $deliveryAddress;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPostcode()
+    {
+        return $this->postcode;
+    }
+
+    /**
+     * @param mixed $postcode
+     */
+    public function setPostcode($postcode)
+    {
+        $this->postcode = $postcode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlace()
+    {
+        return $this->place;
+    }
+
+    /**
+     * @param mixed $place
+     */
+    public function setPlace($place)
+    {
+        $this->place = $place;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeliveryDate()
+    {
+        return $this->delivery_date;
+    }
+
+    /**
+     * @param mixed $delivery_date
+     */
+    public function setDeliveryDate($delivery_date)
+    {
+        $this->delivery_date = $delivery_date;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getKorting()
+    {
+        return $this->korting;
+    }
+
+    /**
+     * @param mixed $korting
+     */
+    public function setKorting($korting)
+    {
+        $this->korting = $korting;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExtraCost()
+    {
+        return $this->extra_cost;
+    }
+
+    /**
+     * @param mixed $extra_cost
+     */
+    public function setExtraCost($extra_cost)
+    {
+        $this->extra_cost = $extra_cost;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBTW()
+    {
+        return $this->BTW;
+    }
+
+    /**
+     * @param mixed $BTW
+     */
+    public function setBTW($BTW)
+    {
+        $this->BTW = $BTW;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getObjects()
+    {
+        return $this->objects;
+    }
+
+    /**
+     * @param mixed $objects
+     */
+    public function setObjects($objects)
+    {
+        $this->objects = $objects;
+    }
+
+
 
 
 }
-

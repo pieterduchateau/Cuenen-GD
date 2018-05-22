@@ -42,8 +42,7 @@
                         <td><strong>Telefoon/GSM :</strong></td>
                         <td>{{ customer.phone }}</td>
                     </tr>
-                    {% if customer.btwnumber == NULL %}
-                    {% else %}
+                    {% if customer.btwnumber != NULL %}
                         <tr>
                             <td><strong>BTW-nummer :</strong></td>
                             <td>{{ customer.btwnumber }}</td>
@@ -81,33 +80,33 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for key,offerteAddress in offertesAddresses %}
+                {% for offerte in offertes %}
                     <tr>
-                        <td>{{ offerteAddress.offerteNr }}</td>
-                        <td>{{ offerteTitels[key].paraValue }}</td>
-                        <td>{{ offertesDates[key].paraValue }}</td>
-                        <td>{{ offerteAddress.paraValue }}</td>
+                        <td>{{ offerte.id }}</td>
+                        <td>{{ offerte.titel }}</td>
+                        <td>{{ offerte.delivery_date|date("d/m/Y") }}</td>
+                        <td>{{ offerte.deliveryAddress }}</td>
                         <td width="240px">
-                            <a href="/offerte/{{ offerteAddress.offerteNr }}">
+                            <a href="/offerte/{{ offerte.id }}">
                                 <button style="margin-right: 2px;" class="btn btn-success"><i
                                             class="fa fa-file-pdf-o icon"></i></button>
                             </a>
-                            <a href="/laadbon/{{ offerteAddress.offerteNr }}">
+                            <a href="/laadbon/{{ offerte.id }}">
                                 <button style="margin-right: 2px;" class="btn btn-success"><i
                                             class="fa fa-truck icon"></i></button>
                             </a>
                             </a>
-                            <a href="/{{ shop }}/images/{{ offerteAddress.offerteNr }}">
+                            <a href="/{{ shop }}/images/{{ offerte.id }}">
                                 <button style="margin-right: 2px;" class="btn btn-success"><i
                                             class="fa fa-photo icon"></i></button>
                             </a>
                             <a href="{{ path('editOfferte',{
                                 'shop': shop,
-                                'offerteNr': offerteAddress.offerteNr}) }}">
+                                'offerteNr': offerte.id}) }}">
                                 <button style="margin-right: 2px;" class="btn btn-success"><i
                                             class="fa fa-edit icon"></i></button>
                             </a>
-                                <button style="margin-right: 2px;" class="btn btn-danger" onclick="removeOffertemodal({{ offerteAddress.offerteNr }})"><i
+                                <button style="margin-right: 2px;" class="btn btn-danger" onclick="removeOffertemodal({{ offerte.id }})"><i
                                         class="fa fa-remove icon"></i></button>
 
                         </td>

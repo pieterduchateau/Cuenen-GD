@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 // src/AppBundle/Entity/User.php
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -246,6 +247,7 @@ class Customer
     {
         $this->place = $place;
     }
+
 
 
 

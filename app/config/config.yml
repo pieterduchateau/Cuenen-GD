@@ -8,7 +8,7 @@ imports:
 parameters:
     locale: en
     image_directory: '%kernel.root_dir%/../web/uploads/images'
-    public_image_directory: 'http://192.168.0.232/uploads/images'
+    public_image_directory: 'http://192.168.33.10/uploads/images'
 
 framework:
     #esi: ~
@@ -37,6 +37,7 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form_themes: ['bootstrap_4_layout.html.twig']
 
 # Doctrine Configuration
 doctrine:

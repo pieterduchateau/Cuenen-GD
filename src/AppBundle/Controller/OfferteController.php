@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Offerte;
+use AppBundle\Entity\Offerte_objects;
+use AppBundle\Form\offerte_form;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -97,46 +99,70 @@ class OfferteController extends Controller
     /**
      * @Route("/{shop}/editOfferte/{offerteNr}", name="editOfferte")
      */
-    public function editOfferte($shop, $offerteNr)
+    public function editOfferte($shop, $offerteNr, Request $request)
     {
 
-        $offerteParameters = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array(
-            'offerteNr' => $offerteNr));
+        $em = $this->getDoctrine()->getManager();
+
+        $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array('id' => $offerteNr));
 
 
-        if($shop == "CE")
-        {
-            return $this->render('default/edit_offerte.html.twig', array(
-                'shop' => $shop,
-                'customerID' => $offerteParameters[0]->getCustomerNr(),
-                'parameters' => $offerteParameters
-            ));
-        }else{
-            return $this->render('default/edit_offerte_GM.html.twig', array(
-                'shop' => $shop,
-                'customerID' => $offerteParameters[0]->getCustomerNr(),
-                'parameters' => $offerteParameters
-            ));
+        $form = $this->createForm(offerte_form::class, $offerte);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+//            $formdata = $form->getData();
+//
+//            foreach ($formdata->objects as $object)
+//            {
+//                $object->setOfferte($offerte);
+//                $em->persist($object);
+//            }
+//
+//            $em->persist($offerte);
+//            $em->flush();
+            return $this->redirectToRoute('show_customer',array('shop' => $shop, 'customer_id' => $offerte->getCustomerNr()));
         }
+
+        return $this->render('forms/add_offerte.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 
     /**
      * @Route("/{shop}/addOfferte/{customerId}", name="addOfferte")
      */
-    public function addOfferte($shop, $customerId)
+    public function addOfferte(Request $request, $shop, $customerId)
     {
-        if($shop == "CE")
-        {
-            return $this->render('default/add_offerte_cue.html.twig', array(
-                'shop' => $shop,
-                'customerID' => $customerId
-            ));
-        }else{
-            return $this->render('default/add_offerte_GM.html.twig', array(
-                'shop' => $shop,
-                'customerID' => $customerId
-            ));
+        $em = $this->getDoctrine()->getManager();
+
+        //create a new offerte
+        $offerte = new Offerte();
+
+        //add the new unused offerte number to the offerte
+        $offerte->setCustomerNr($customerId);
+        $form = $this->createForm(offerte_form::class, $offerte);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formdata = $form->getData();
+
+            foreach ($formdata->objects as $object)
+            {
+                $object->setOfferte($offerte);
+                $em->persist($object);
+            }
+
+            $em->persist($offerte);
+            $em->flush();
+            return $this->redirectToRoute('show_customer',array('shop' => $shop, 'customer_id' => $customerId));
         }
+
+        return $this->render('forms/add_offerte.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 
     /**
