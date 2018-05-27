@@ -67,7 +67,7 @@ class Offerte
     /**
      * @ORM\OneToMany(targetEntity="Offerte_objects", mappedBy="offerte")
      */
-    protected $objects;
+    public $objects;
 
     public function __construct()
     {

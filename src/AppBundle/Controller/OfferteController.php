@@ -145,12 +145,12 @@ class OfferteController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formdata = $form->getData();
-
-//            foreach ($formdata->objects as $object)
-//            {
-//                $object->addObject($offerte);
-//                $em->persist($object);
-//            }
+            foreach ($formdata->objects as $object)
+            {
+                $offerte->addObject($object);
+                $object->setOfferte($offerte);
+                $em->persist($object);
+            }
 
             $em->persist($offerte);
             $em->flush();
