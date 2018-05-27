@@ -67,7 +67,7 @@ class Offerte
     /**
      * @ORM\OneToMany(targetEntity="Offerte_objects", mappedBy="offerte")
      */
-    private $objects;
+    protected $objects;
 
     public function __construct()
     {
@@ -226,23 +226,40 @@ class Offerte
         $this->BTW = $BTW;
     }
 
+
+
+
     /**
-     * @return mixed
+     * Add object
+     *
+     * @param \AppBundle\Entity\Offerte_objects $object
+     *
+     * @return Offerte
+     */
+    public function addObject(\AppBundle\Entity\Offerte_objects $object)
+    {
+        $this->objects[] = $object;
+
+        return $this;
+    }
+
+    /**
+     * Remove object
+     *
+     * @param \AppBundle\Entity\Offerte_objects $object
+     */
+    public function removeObject(\AppBundle\Entity\Offerte_objects $object)
+    {
+        $this->objects->removeElement($object);
+    }
+
+    /**
+     * Get objects
+     *
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getObjects()
     {
         return $this->objects;
     }
-
-    /**
-     * @param mixed $objects
-     */
-    public function setObjects($objects)
-    {
-        $this->objects = $objects;
-    }
-
-
-
-
 }

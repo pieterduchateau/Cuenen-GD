@@ -45,7 +45,7 @@ class Offerte_objects
     private $totaal;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Offerte")
+     * @ORM\ManyToOne(targetEntity="Offerte", inversedBy="objects")
      * @ORM\JoinColumn(name="offerte_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $offerte;

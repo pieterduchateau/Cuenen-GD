@@ -137,10 +137,7 @@ class OfferteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        //create a new offerte
         $offerte = new Offerte();
-
-        //add the new unused offerte number to the offerte
         $offerte->setCustomerNr($customerId);
         $form = $this->createForm(offerte_form::class, $offerte);
 
@@ -149,11 +146,11 @@ class OfferteController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $formdata = $form->getData();
 
-            foreach ($formdata->objects as $object)
-            {
-                $object->setOfferte($offerte);
-                $em->persist($object);
-            }
+//            foreach ($formdata->objects as $object)
+//            {
+//                $object->addObject($offerte);
+//                $em->persist($object);
+//            }
 
             $em->persist($offerte);
             $em->flush();
