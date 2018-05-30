@@ -148,26 +148,14 @@ class CustomerController extends Controller
 
         //delete all the offertes for a customer
         $offertes = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array('customerNr' => $customer->getId()));
-        foreach ($offertes as $offerte) {
-            $offerte_id = $offerte->getId();
 
-            //remove offertes from customer
-            $offerte_parameters = $this->getDoctrine()->getRepository("AppBundle:Offerte_objects")->findBy(array(
-                'id' => $offerte_id));
-
-            foreach ($offerte_parameters as $parameter) {
-                $em->remove($parameter);
+        foreach ($offertes as $offerte)
+        {
+            $files = $this->getDoctrine()->getRepository("AppBundle:files")->findBy(array('offerte_id' => $offerte->getId()));
+            foreach ($files as $file)
+            {
+                $em->remove($file);
             }
-
-            //remove images from offertes from customer
-            $images = $this->getDoctrine()->getRepository("AppBundle:Files")->findBy(array(
-                'offerte_id' => $offerte_id));
-
-            foreach ($images as $image) {
-                $em->remove($image);
-                $filesystem->remove($this->get('kernel')->getRootDir() . '/../web/uploads/images/' . $image->getFname());
-            }
-
             $em->remove($offerte);
         }
 

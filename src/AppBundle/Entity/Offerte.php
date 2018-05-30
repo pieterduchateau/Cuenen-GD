@@ -65,9 +65,9 @@ class Offerte
     private $BTW;
 
     /**
-     * @ORM\OneToMany(targetEntity="Offerte_objects", mappedBy="offerte")
+     * @ORM\OneToMany(targetEntity="Offerte_objects", mappedBy="offerte", cascade={"persist", "remove"}))
      */
-    public $objects;
+    protected $objects;
 
     public function __construct()
     {
@@ -239,6 +239,7 @@ class Offerte
     public function addObject(\AppBundle\Entity\Offerte_objects $object)
     {
         $this->objects[] = $object;
+        $object->setOfferte($this);
 
         return $this;
     }
@@ -251,6 +252,7 @@ class Offerte
     public function removeObject(\AppBundle\Entity\Offerte_objects $object)
     {
         $this->objects->removeElement($object);
+//        $object->setOfferte(null);
     }
 
     /**

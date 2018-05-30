@@ -21,6 +21,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Lock\Lock;
 use Symfony\Component\Lock\Store\SemaphoreStore;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\Validation;
@@ -142,7 +143,14 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('csrf_protection')
-                    ->canBeEnabled()
+                    ->treatFalseLike(array('enabled' => false))
+                    ->treatTrueLike(array('enabled' => true))
+                    ->treatNullLike(array('enabled' => true))
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        // defaults to framework.session.enabled && !class_exists(FullStack::class) && interface_exists(CsrfTokenManagerInterface::class)
+                        ->booleanNode('enabled')->defaultNull()->end()
+                    ->end()
                 ->end()
             ->end()
         ;
@@ -453,7 +461,16 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('storage_id')->defaultValue('session.storage.native')->end()
                         ->scalarNode('handler_id')->defaultValue('session.handler.native_file')->end()
-                        ->scalarNode('name')->end()
+                        ->scalarNode('name')
+                            ->validate()
+                                ->ifTrue(function ($v) {
+                                    parse_str($v, $parsed);
+
+                                    return implode('&', array_keys($parsed)) !== (string) $v;
+                                })
+                                ->thenInvalid('Session name %s contains illegal character(s)')
+                            ->end()
+                        ->end()
                         ->scalarNode('cookie_lifetime')->end()
                         ->scalarNode('cookie_path')->end()
                         ->scalarNode('cookie_domain')->end()

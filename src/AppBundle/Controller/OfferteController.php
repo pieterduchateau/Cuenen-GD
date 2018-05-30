@@ -5,10 +5,12 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Offerte;
 use AppBundle\Entity\Offerte_objects;
 use AppBundle\Form\offerte_form;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Forms;
 use Spipu\Html2Pdf\Html2Pdf;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -106,59 +108,63 @@ class OfferteController extends Controller
 
         $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array('id' => $offerteNr));
 
+        $originalObjects = new ArrayCollection();
+
+        foreach ($offerte->getObjects() as $obj)
+        {
+            $originalObjects->add($obj);
+        }
 
         $form = $this->createForm(offerte_form::class, $offerte);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            $formdata = $form->getData();
-//
-//            foreach ($formdata->objects as $object)
-//            {
-//                $object->setOfferte($offerte);
-//                $em->persist($object);
-//            }
-//
-//            $em->persist($offerte);
-//            $em->flush();
+
+            foreach ($originalObjects as $obj) {
+                if (false === $offerte->getObjects()->contains($obj)) {
+                    $em->remove($obj);
+                }
+            }
+            $em->persist($offerte);
+            $em->flush();
             return $this->redirectToRoute('show_customer',array('shop' => $shop, 'customer_id' => $offerte->getCustomerNr()));
         }
 
-        return $this->render('forms/add_offerte.html.twig', array(
+        return $this->render('forms/edit_offerte.html.twig', array(
             'form' => $form->createView(),
+            'shop' => $shop,
+            'customer_id' => $offerte->getCustomerNr()
         ));
     }
 
     /**
      * @Route("/{shop}/addOfferte/{customerId}", name="addOfferte")
+     * @param Request $request
+     * @param $shop
+     * @param $customerId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function addOfferte(Request $request, $shop, $customerId)
     {
-        $em = $this->getDoctrine()->getManager();
 
+        $em = $this->getDoctrine()->getManager();
         $offerte = new Offerte();
         $offerte->setCustomerNr($customerId);
         $form = $this->createForm(offerte_form::class, $offerte);
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $formdata = $form->getData();
-            foreach ($formdata->objects as $object)
-            {
-                $offerte->addObject($object);
-                $object->setOfferte($offerte);
-                $em->persist($object);
-            }
-
             $em->persist($offerte);
             $em->flush();
             return $this->redirectToRoute('show_customer',array('shop' => $shop, 'customer_id' => $customerId));
+
+
         }
 
         return $this->render('forms/add_offerte.html.twig', array(
             'form' => $form->createView(),
+            'shop' => $shop
         ));
     }
 
@@ -168,14 +174,12 @@ class OfferteController extends Controller
     public function removeOfferte(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $offerte_nr = $request->request->get('offerte_id');
+        $offerte_id = $request->request->get('offerte_id');
 
-        $offerte_parameters = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array(
-            'offerteNr' => $offerte_nr));
+        $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
+            'id' => $offerte_id));
 
-        foreach ($offerte_parameters as $parameter) {
-            $em->remove($parameter);
-        }
+        $em->remove($offerte);
 
         $em->flush();
         return new JsonResponse();

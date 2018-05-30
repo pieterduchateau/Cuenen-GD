@@ -44,7 +44,6 @@
                         "{% filter escape %}
                     {{ include('forms/data-prototype-objects.html.twig', { 'form': form.objects.vars.prototype }) }}
                 {% endfilter %}">
-
                         </tbody>
                     </table>
                 </div>
@@ -101,7 +100,7 @@
                 </div>
             </div>
             <div class="col-lg-12 col-xs-12">
-                {{ form_row(form.save, {'label': 'Offerte Aanmaken'}) }}
+                {{ form_row(form.save, {'label': 'Offerte aanpassen'}) }}
             </div>
             {{ form_end(form) }}
         </div>
@@ -111,67 +110,45 @@
     <script>
         // setup an "add a tag" link
         var $newLinkLi = $('<div></div>');
-
         $('document').ready(function () {
-
             $('#offerte_form_objects').closest('legend').remove();
             // Get the ul that holds the collection of tags
             var $collectionHolder = $('tbody.objects');
-
             // add the "add a tag" anchor and li to the tags ul
             $collectionHolder.append($newLinkLi);
-
             // count the current form inputs we have (e.g. 2), use that as the new
             // index when inserting a new item (e.g. 2)
             $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
             //set a first row for products.
-            addobjectForm($collectionHolder, $newLinkLi);
-
             $('#addproduct').on('click', function (e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
-
                 // add a new tag form (see code block below)
                 addobjectForm($collectionHolder, $newLinkLi);
             });
-
-
         });
-
         function addobjectForm($collectionHolder, $newLinkLi) {
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
-
             // get the new index
             var index = $collectionHolder.data('index');
-
             // Replace '$$name$$' in the prototype's HTML to
             prototype = prototype.replace(/_name_/g, index.toString());
             // instead be a number based on how many items we have
             var newForm = prototype;
-
             // increase the index with one for the next item
             $collectionHolder.data('index', index + 1);
-
             // Display the form in the page in an li, before the "Add a tag" link li
             var $newFormLi = $('<tr></tr>').append(newForm);
-
             // also add a remove button, just for this example
-            $newFormLi.append('<td><button type="button" class="btn btn-danger remove-object">X</button></td>');
-
             $newLinkLi.before($newFormLi);
-
             // handle the removal, just for this example
             $('.remove-object').click(function (e) {
                 e.preventDefault();
-
                 $(this).closest('tr').remove();
-
                 return false;
             });
         }
-
         function generateTotalsTable() {
             $('#objectTable > tr').each(function() {
                 $aantal = $('td:nth-child(3)', this).children("input").val();
@@ -179,36 +156,28 @@
                 $('td:nth-child(5)', this).children("input").val($aantal * $prijs);
             });
         }
-
         function generateSubtotal()
         {
-           $subtotal = 0;
+            $subtotal = 0;
             $('#objectTable > tr').each(function() {
                 $rowTotal = $('td:nth-child(5)', this).children("input").val();
                 $subtotal = parseInt($subtotal) + parseInt($rowTotal);
             });
-
             $('#subtotal').val($subtotal);
-
         }
-        
+
         function generateTotal() {
             $subtotal = $('#subtotal').val();
             $korting = $('#offerte_form_korting').val();
             $extra_cost = $('#offerte_form_extra_cost').val();
             $btw = parseInt($('#offerte_form_BTW').val()) / 100 + 1;
-
             $kortingBedrag = $subtotal / 100 * $korting;
             $helpertotal = $subtotal - $kortingBedrag + parseInt($extra_cost);
             $('#offerteTotal').val(Number($helpertotal * $btw).toFixed(2));
-
         }
     </script>
 {% endblock %}
 {% block stylesheets %}
     <style>
-
     </style>
 {% endblock %}
-
-

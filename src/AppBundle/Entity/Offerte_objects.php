@@ -46,7 +46,7 @@ class Offerte_objects
 
     /**
      * @ORM\ManyToOne(targetEntity="Offerte", inversedBy="objects")
-     * @ORM\JoinColumn(name="offerte_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="offerte_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     private $offerte;
 

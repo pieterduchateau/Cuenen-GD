@@ -1,0 +1,191 @@
+{% extends 'template/base.html.twig' %}
+{% block body %}
+    <div class="features-boxed">
+        <div class="container">
+            {{ form_start(form) }}
+            <div class="panel panel-default">
+                <div class="panel-heading">Basis informatie</div>
+                <div class="panel-body">
+                    {# render the task's only field: description #}
+                    <div class="col-lg-6 col-xs-12">
+                        <h4>Klantnummer </h4> {{ form_widget(form.customerNr,{ 'attr':{'readonly':'readonly'} }) }}
+                    </div>
+                    <div class="col-lg-12">
+                        {{ form_row(form.titel, {'label': 'Titel'}) }}
+                        {{ form_row(form.deliveryAddress, {'label': 'Leveradres'}) }}
+                    </div>
+                    <div class="col-lg-6 col-xs-12">
+                        {{ form_row(form.postcode) }}
+                    </div>
+                    <div class="col-lg-6 col-xs-12">
+                        {{ form_row(form.place, {'label': 'Stad'}) }}
+                    </div>
+                    <div class="col-lg-12 col-xs-12">
+                        {{ form_row(form.delivery_date, {'label': 'Leverdatum'}) }}
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Producten
+                    <button class="btn btn-success btn-xs" id="addproduct">Product Toevoegen</button><button type="button" id="calculateTotals" onclick="generateTotalsTable()" class="btn btn-xs btn-info" style="margin-left: 10px">Totalen berekenen</button>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">code</th>
+                            <th scope="col">omschrijving</th>
+                            <th scope="col">aantal</th>
+                            <th scope="col">prijs</th>
+                            <th scope="col">totaal</th>
+                        </tr>
+                        </thead>
+                        <tbody id="objectTable" class="objects" data-prototype=
+                        "{% filter escape %}
+                    {{ include('forms/data-prototype-objects.html.twig', { 'form': form.objects.vars.prototype }) }}
+                {% endfilter %}">
+                        {% for object in form.objects %}
+                            <tr>
+                                {{ include('forms/data-prototype-objects.html.twig', { 'form': object }) }}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Berekeningen</div>
+                <div class="panel-body">
+                    <table>
+                        <tr>
+                            <td>
+                                Subtotaal
+                            </td>
+                            <td>
+                                <input type="text" id="subtotal" disabled="disabled" class="form-control">
+                            </td>
+                            <td>
+                                <button type="button" id="CalculateSubtotal" class="btn btn-xs btn-info" style="margin-left: 10px" onclick="generateSubtotal()">Subtotaal berekenen</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Korting ( in % )
+                            </td>
+                            <td>
+                                {{ form_widget(form.korting) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Opbouw / Afbouw + Vervoer
+                            </td>
+                            <td>
+                                {{ form_widget(form.extra_cost) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                BTW ( in % )
+                            </td>
+                            <td>
+                                {{ form_widget(form.BTW) }}
+                            </td>
+                        </tr>
+                        <td>
+                            Totaal
+                        </td>
+                        <td>
+                            <input type="text" id="offerteTotal" readonly class="form-control">
+                        </td>
+                        <td>
+                            <button type="button" id="CalculateSubtotal" class="btn btn-xs btn-info" style="margin-left: 10px" onclick="generateTotal()">Totaal berekenen</button>
+                        </td>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-2 col-xs-12">
+                {{ form_row(form.save, {'label': 'Offerte aanpassen'}) }}
+            </div>
+            <div class="col-lg-2 col-xs-12">
+               <a href="{{ path('show_customer',{'shop': shop,'customer_id': customer_id}) }}"><button type="button" class="btn btn-info">Annuleren</button></a>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        // setup an "add a tag" link
+        var $newLinkLi = $('<div></div>');
+        $('document').ready(function () {
+            $('#offerte_form_objects').closest('legend').remove();
+            // Get the ul that holds the collection of tags
+            var $collectionHolder = $('tbody.objects');
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            //set a first row for products.
+            $('#addproduct').on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                // add a new tag form (see code block below)
+                addobjectForm($collectionHolder, $newLinkLi);
+            });
+        });
+        function addobjectForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+            // get the new index
+            var index = $collectionHolder.data('index');
+            // Replace '$$name$$' in the prototype's HTML to
+            prototype = prototype.replace(/_name_/g, index.toString());
+            // instead be a number based on how many items we have
+            var newForm = prototype;
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<tr></tr>').append(newForm);
+            // also add a remove button, just for this example
+            $newLinkLi.before($newFormLi);
+            // handle the removal, just for this example
+            $('.remove-object').on('click',function (e) {
+                e.preventDefault();
+                $(this).closest('tr').remove();
+                return false;
+            });
+        }
+        function generateTotalsTable() {
+            $('#objectTable > tr').each(function() {
+                $aantal = $('td:nth-child(3)', this).children("input").val();
+                $prijs = $('td:nth-child(4)', this).children("input").val();
+                $('td:nth-child(5)', this).children("input").val($aantal * $prijs);
+            });
+        }
+        function generateSubtotal()
+        {
+            $subtotal = 0;
+            $('#objectTable > tr').each(function() {
+                $rowTotal = $('td:nth-child(5)', this).children("input").val();
+                $subtotal = parseInt($subtotal) + parseInt($rowTotal);
+            });
+            $('#subtotal').val($subtotal);
+        }
+
+        function generateTotal() {
+            $subtotal = $('#subtotal').val();
+            $korting = $('#offerte_form_korting').val();
+            $extra_cost = $('#offerte_form_extra_cost').val();
+            $btw = parseInt($('#offerte_form_BTW').val()) / 100 + 1;
+            $kortingBedrag = $subtotal / 100 * $korting;
+            $helpertotal = $subtotal - $kortingBedrag + parseInt($extra_cost);
+            $('#offerteTotal').val(Number($helpertotal * $btw).toFixed(2));
+        }
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    <style>
+    </style>
+{% endblock %}
