@@ -35,7 +35,7 @@ class Offerte
     private $deliveryAddress;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      */
     private $postcode;
 
@@ -55,7 +55,7 @@ class Offerte
     private $korting;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     private $extra_cost;
 

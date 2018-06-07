@@ -19,80 +19,88 @@ use Dompdf\Options;
 class OfferteController extends Controller
 {
     /**
-     * @Route("/offerte/{offerte_nr}", name="getOfferte")
+     * @Route("{shop}/offerte/{offerte_id}", name="offerte")
      */
-    public function getOfferte($offerte_nr)
+    public function offerte($offerte_id, $shop)
     {
-        $html2pdf = new Html2Pdf();
-        $offerte_parameters = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array(
-            'offerteNr' => $offerte_nr));
+        $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
+            'id' => $offerte_id));
 
-        $parameters = array();
-        $parameter_objects = array();
-        foreach ($offerte_parameters as $param) {
-            if ($param->getParaName() == "productrow") {
-                array_push($parameter_objects, $param->getParaValue());
-            } else {
-                $parameters[$param->getParaName()] = $param->getParaValue();
-            }
-        }
+        return $this->render('default/offerte.html.twig', array(
+            'offerte' => $offerte,
+            'shop' => $shop
+        ));
 
-        $parameters['producten'] = $parameter_objects;
-
-        $customer_Parameters = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
-            'id' => $offerte_parameters[0]->getCustomerNr()));
-
-        if($customer_Parameters->getShop() == "CE")
-        {
-            $html2pdf->writeHTML($this->render('template/offerte_cue.html.twig', array(
-                'offerteParameters' => $parameters,
-                'customerParameters' => $customer_Parameters
-            ))->getContent());
-            $html2pdf->output();
-        }else{
-            $html2pdf->writeHTML($this->render('template/offerte_GM.html.twig', array(
-                'offerteParameters' => $parameters,
-                'customerParameters' => $customer_Parameters
-            ))->getContent());
-            $html2pdf->output();
-        }
     }
 
     /**
-     * @Route("/laadbon/{laadbon_nr}", name="getlaadbon")
+     * @Route("{shop}/offerteToPdf/{offerte_nr}", name="offerteToPdf")
      */
-    public function getlaadbon($laadbon_nr)
+    public function offerteToPdf($shop, $offerte_nr)
     {
         $html2pdf = new Html2Pdf();
-        $offerte_parameters = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findBy(array(
-            'offerteNr' => $laadbon_nr));
+        $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
+            'id' => $offerte_nr));
 
-        $parameters = array();
-        $parameter_objects = array();
-        foreach ($offerte_parameters as $param) {
-            if ($param->getParaName() == "productrow") {
-                array_push($parameter_objects, $param->getParaValue());
-            } else {
-                $parameters[$param->getParaName()] = $param->getParaValue();
-            }
+        $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
+            'id' => $offerte->getCustomerNr()));
+
+        if ($shop == "CE") {
+            $template = "template/offerte_cue.html.twig";
+        } else {
+            $template = "template/offerte_GM.html.twig";
         }
 
-        $parameters['producten'] = $parameter_objects;
+        $html2pdf->writeHTML($this->render($template, array(
+            'offerte' => $offerte,
+            'customer' => $customer
+        ))->getContent());
+        $html2pdf->output();
+    }
 
-        $customer_Parameters = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
-            'id' => $offerte_parameters[0]->getCustomerNr()));
+    /**
+     * @Route("{shop}/laadbon/{laadbon_nr}", name="getlaadbon")
+     */
+    public
+    function getlaadbon($shop, $laadbon_nr)
+    {
+        $html2pdf = new Html2Pdf();
+        $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
+            'id' => $laadbon_nr));
 
-        if($customer_Parameters->getShop() == "CE")
-        {
-            $html2pdf->writeHTML($this->render('template/laadbon_cue.html.twig', array(
-                'offerteParameters' => $parameters,
-                'customerParameters' => $customer_Parameters
-            ))->getContent());
-            $html2pdf->output();
-        }else{
-            $html2pdf->writeHTML($this->render('template/laadbon_GM.html.twig', array(
-                'offerteParameters' => $parameters,
-                'customerParameters' => $customer_Parameters
+        $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
+            'id' => $offerte->getCustomerNr()));
+
+        if ($shop == "CE") {
+            $template = "template/laadbon_cue.html.twig";
+        } else {
+            $template = "template/laadbon_GM.html.twig";
+        }
+
+        $html2pdf->writeHTML($this->render($template, array(
+            'offerte' => $offerte,
+            'customer' => $customer
+        ))->getContent());
+        $html2pdf->output();
+    }
+
+    /**
+     * @Route("{shop}/factuur/{offerteId}", name="getfactuur")
+     */
+    public
+    function getfactuur($shop, $offerteId)
+    {
+        $html2pdf = new Html2Pdf();
+        $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
+            'id' => $offerteId));
+
+        $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
+            'id' => $offerte->getCustomerNr()));
+
+        if ($shop == "GM") {
+            $html2pdf->writeHTML($this->render("template/factuur_GM.html.twig", array(
+                'offerte' => $offerte,
+                'customer' => $customer
             ))->getContent());
             $html2pdf->output();
         }
@@ -101,7 +109,8 @@ class OfferteController extends Controller
     /**
      * @Route("/{shop}/editOfferte/{offerteNr}", name="editOfferte")
      */
-    public function editOfferte($shop, $offerteNr, Request $request)
+    public
+    function editOfferte($shop, $offerteNr, Request $request)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -110,8 +119,7 @@ class OfferteController extends Controller
 
         $originalObjects = new ArrayCollection();
 
-        foreach ($offerte->getObjects() as $obj)
-        {
+        foreach ($offerte->getObjects() as $obj) {
             $originalObjects->add($obj);
         }
 
@@ -128,7 +136,7 @@ class OfferteController extends Controller
             }
             $em->persist($offerte);
             $em->flush();
-            return $this->redirectToRoute('show_customer',array('shop' => $shop, 'customer_id' => $offerte->getCustomerNr()));
+            return $this->redirectToRoute('show_customer', array('shop' => $shop, 'customer_id' => $offerte->getCustomerNr()));
         }
 
         return $this->render('forms/edit_offerte.html.twig', array(
@@ -145,7 +153,8 @@ class OfferteController extends Controller
      * @param $customerId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function addOfferte(Request $request, $shop, $customerId)
+    public
+    function addOfferte(Request $request, $shop, $customerId)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -157,7 +166,7 @@ class OfferteController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($offerte);
             $em->flush();
-            return $this->redirectToRoute('show_customer',array('shop' => $shop, 'customer_id' => $customerId));
+            return $this->redirectToRoute('show_customer', array('shop' => $shop, 'customer_id' => $customerId));
 
 
         }
@@ -171,7 +180,8 @@ class OfferteController extends Controller
     /**
      * @Route("/removeOfferte", name="removeOfferte")
      */
-    public function removeOfferte(Request $request)
+    public
+    function removeOfferte(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $offerte_id = $request->request->get('offerte_id');
@@ -189,7 +199,8 @@ class OfferteController extends Controller
     /**
      * @Route("/{shop}/GenerateOfferte", name="GenerateOfferte")
      */
-    public function GenerateOfferte($shop, Request $request)
+    public
+    function GenerateOfferte($shop, Request $request)
     {
 
         $products = $request->get('parameters');
@@ -265,8 +276,7 @@ class OfferteController extends Controller
         $offerte5->setParaValue($titel);
         $em->persist($offerte5);
 
-        if($shop == "CE")
-        {
+        if ($shop == "CE") {
             //put parameters inside single string
             for ($i = 0; $i < sizeof($products['code']); $i++) {
                 $row = $products['code'][$i] . ",-," . $products['omschrijving'][$i] . ",-," . $products['aantal'][$i] . ",-," . $products['prijs'][$i];
@@ -279,8 +289,7 @@ class OfferteController extends Controller
                 $em->persist($offerte6);
 
             }
-        }else if($shop == "GM")
-        {
+        } else if ($shop == "GM") {
             $offerte6 = new Offerte();
             $offerte6->setCustomerNr($customerID);
             $offerte6->setOfferteNr($offertenr);

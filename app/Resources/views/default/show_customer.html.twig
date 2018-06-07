@@ -39,7 +39,7 @@
                         <td>{{ customer.email }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Telefoon/GSM :</strong></td>
+                        <td><strong>Tel. :</strong></td>
                         <td>{{ customer.phone }}</td>
                     </tr>
                     {% if customer.btwnumber != NULL %}
@@ -86,57 +86,11 @@
                         <td>{{ offerte.titel }}</td>
                         <td>{{ offerte.delivery_date|date("d/m/Y") }}</td>
                         <td>{{ offerte.deliveryAddress }}</td>
-                        <td width="240px">
-                            <a href="/offerte/{{ offerte.id }}">
-                                <button style="margin-right: 2px;" class="btn btn-success"><i
-                                            class="fa fa-file-pdf-o icon"></i></button>
-                            </a>
-                            <a href="/laadbon/{{ offerte.id }}">
-                                <button style="margin-right: 2px;" class="btn btn-success"><i
-                                            class="fa fa-truck icon"></i></button>
-                            </a>
-                            </a>
-                            <a href="/{{ shop }}/images/{{ offerte.id }}">
-                                <button style="margin-right: 2px;" class="btn btn-success"><i
-                                            class="fa fa-photo icon"></i></button>
-                            </a>
-                            <a href="{{ path('editOfferte',{
-                                'shop': shop,
-                                'offerteNr': offerte.id}) }}">
-                                <button style="margin-right: 2px;" class="btn btn-success"><i
-                                            class="fa fa-edit icon"></i></button>
-                            </a>
-                                <button style="margin-right: 2px;" class="btn btn-danger" onclick="removeOffertemodal({{ offerte.id }})"><i
-                                        class="fa fa-remove icon"></i></button>
-
-                        </td>
+                        <td class="text-center"><a href="{{ path('offerte',{'shop': shop, 'offerte_id': offerte.id}) }}"><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-folder-open"></span> </button> </a> </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <strong>Offerte verwijderen</strong>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <h4><strong>Bent u zeker dat u deze offerte wilt verwijderen?</strong></h4>
-                        <p>Bij het verwijderen van deze offerte worden ook al de foto's die bij deze offerte horen verwijderd.</p>
-                        <input type="hidden" id="offerte_nr">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Nee</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteOfferte()" data-dismiss="modal">Ja</button>
-                </div>
-            </div>
         </div>
     </div>
     <div class="modal fade" id="modalDeleteCustomer" tabindex="-1" role="dialog" aria-labelledby="modalDelete" aria-hidden="true">
@@ -189,29 +143,5 @@
                     }
                 );
             });
-
-            function removeOffertemodal($offertenr) {
-                $('#myModal').modal();
-                $('#offerte_nr').val($offertenr);
-            }
-
-            function removeCustomerModal(customerID) {
-                $('#modalDeleteCustomer').modal();
-                $('#customer_nr').val(customerID);
-            }
-
-            function deleteOfferte() {
-                var url = "/removeOfferte";
-                var data = $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: {
-                        "offerte_id": $('#offerte_nr').val()
-                    },
-                    success: function (data) {
-                        location.reload();
-                    }
-                }).responseText;
-            }
         </script>
     {% endblock %}

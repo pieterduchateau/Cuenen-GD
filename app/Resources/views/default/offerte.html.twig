@@ -1,0 +1,191 @@
+{% extends 'template/base.html.twig' %}
+{% block body %}
+<div class="features-boxed">
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2><span class="glyphicon glyphicon-list-alt"></span> <b>{{ offerte.titel }}</b></h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <form>
+                            <div class="form-group col-lg-8">
+                                <label for="leveradres">Leveradres</label>
+                                <input type="email" class="form-control" id="leveradres" disabled="disabled"
+                                       value="{{ offerte.deliveryAddress }}">
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label for="date">Leverdatum</label>
+                                <input type="date" class="form-control" id="date" disabled="disabled"
+                                       value="{{ offerte.delivery_date|date("Y-m-d") }}">
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="postcode">Postcode</label>
+                                <input type="number" class="form-control" id="postcode" disabled="disabled"
+                                       value="{{ offerte.postcode }}">
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="stad">Stad</label>
+                                <input type="text" class="form-control" id="stad" disabled="disabled"
+                                       value="{{ offerte.place }}">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="list-group">
+                            <a class="list-group-item" href="/{{ shop }}/offerteToPdf/{{ offerte.id }}">
+                                <span class="glyphicon glyphicon-file"></span> Offerte in PDF
+                            </a>
+                            {% if shop ==  "CE" %}
+                                <a class="list-group-item" href="/{{ shop }}/laadbon/{{ offerte.id }}">
+                                    <span class="glyphicon glyphicon-file"></span> Laadbon in PDF
+                                </a>
+                            {% else %}
+                                <a class="list-group-item" href="/{{ shop }}/factuur/{{ offerte.id }}">
+                                    <span class="glyphicon glyphicon-file"></span> Factuur in PDF
+                                </a>
+                            {% endif %}
+                            <a class="list-group-item" href="/{{ shop }}/images/{{ offerte.id }}">
+                                <span class="glyphicon glyphicon-picture"></span> Foto's
+                            </a>
+                            <a class="list-group-item" href="{{ path('editOfferte',{
+                                'shop': shop,
+                                'offerteNr': offerte.id}) }}">
+                                <span class="glyphicon glyphicon-pencil"></span> Offerte aanpassen
+                            </a>
+                            <button class="list-group-item btn-danger" onclick="removeOffertemodal({{ offerte.id }})"><i
+                                        class="fa fa-remove icon"></i> Offerte verwijderen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table table-bordered">
+                            <thead class="table">
+                            <tr>
+                                <th scope="col">Code</th>
+                                <th scope="col">Omschrijving</th>
+                                <th scope="col">Aantal</th>
+                                <th scope="col">Prijs</th>
+                                <th scope="col">Totaal</th>
+                            </tr>
+                            </thead>
+                            <tbody id="objectTableBody">
+                            {% for object in offerte.objects %}
+                                <tr>
+                                    <td width="10%">{{ object.code }}</td>
+                                    <td width="50%">{{ object.omschrijving }}</td>
+                                    <td width="10%">{{ object.aantal }}</td>
+                                    <td width="15%">{{ object.prijs }} Euro</td>
+                                    <td width="15%" class="totaal">{{ object.totaal }} Euro</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Korting :</td>
+                                <td>{{ offerte.korting }} %</td>
+                            </tr>
+                            <tr>
+                                <td>Opbouw/afbouw + transport :</td>
+                                <td>{{ offerte.extracost }} Euro</td>
+                            </tr>
+                            <tr>
+                                <td>BTW :</td>
+                                <td>{{ offerte.BTW }} %</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <h2><label for="totaal">Totaal</label></h2>
+                            <input type="text" class="form-control" id="totaal" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="offertemodal" tabindex="-1" role="dialog" aria-labelledby="offertemodal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>Offerte verwijderen</strong>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4><strong>Bent u zeker dat u deze offerte wilt verwijderen?</strong></h4>
+                    <p>Bij het verwijderen van deze offerte worden ook al de foto's die bij deze offerte horen
+                        verwijderd.</p>
+                    <input type="hidden" id="offerte_nr">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Nee</button>
+                <button type="button" class="btn btn-danger" onclick="deleteOfferte()" data-dismiss="modal">Ja</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(new function () {
+            CalculateTotal();
+        });
+
+        function CalculateTotal() {
+            $subtotaal = 0;
+            $('#objectTableBody  > tr > td.totaal').each(function () {
+                $helper = $(this).text().replace(' Euro', '');
+                $subtotaal += parseFloat($helper);
+            });
+
+            $sub2 = $subtotaal - ($subtotaal / 100 * {{ offerte.korting }});
+            $sub2 += {{ offerte.extracost }};
+            $btw = {{ offerte.btw }} / 100 + 1;
+            $totaalIncl = $sub2 * $btw;
+
+            $('#totaal').val($totaalIncl.toFixed(2) + " Euro");
+
+        }
+
+        function removeOffertemodal($offertenr) {
+            $('#offertemodal').modal();
+            $('#offerte_nr').val($offertenr);
+        }
+
+        function deleteOfferte() {
+            var url = "/removeOfferte";
+            var data = $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    "offerte_id": $('#offerte_nr').val()
+                },
+                success: function (data) {
+                    window.location.href = window.location.protocol + "//" + window.location.host + "/" + "{{ shop }}" + "/customer/" + {{ offerte.customerNr }};
+                }
+            }).responseText;
+        }
+
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    <style>
+
+    </style>
+{% endblock %}
+
+

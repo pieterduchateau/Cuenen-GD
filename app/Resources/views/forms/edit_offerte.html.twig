@@ -161,7 +161,7 @@
             $('#objectTable > tr').each(function() {
                 $aantal = $('td:nth-child(3)', this).children("input").val();
                 $prijs = $('td:nth-child(4)', this).children("input").val();
-                $('td:nth-child(5)', this).children("input").val($aantal * $prijs);
+                $('td:nth-child(5)', this).children("input").val(($aantal * $prijs).toFixed(2));
             });
         }
         function generateSubtotal()
@@ -169,18 +169,18 @@
             $subtotal = 0;
             $('#objectTable > tr').each(function() {
                 $rowTotal = $('td:nth-child(5)', this).children("input").val();
-                $subtotal = parseInt($subtotal) + parseInt($rowTotal);
+                $subtotal = parseFloat($subtotal) + parseFloat($rowTotal);
             });
-            $('#subtotal').val($subtotal);
+            $('#subtotal').val($subtotal.toFixed(2));
         }
 
         function generateTotal() {
             $subtotal = $('#subtotal').val();
             $korting = $('#offerte_form_korting').val();
             $extra_cost = $('#offerte_form_extra_cost').val();
-            $btw = parseInt($('#offerte_form_BTW').val()) / 100 + 1;
+            $btw = parseFloat($('#offerte_form_BTW').val()) / 100 + 1;
             $kortingBedrag = $subtotal / 100 * $korting;
-            $helpertotal = $subtotal - $kortingBedrag + parseInt($extra_cost);
+            $helpertotal = $subtotal - $kortingBedrag + parseFloat($extra_cost);
             $('#offerteTotal').val(Number($helpertotal * $btw).toFixed(2));
         }
     </script>

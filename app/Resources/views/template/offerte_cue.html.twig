@@ -3,29 +3,20 @@
     <table>
         <tbody>
         <tr>
-            <td>Naam :</td>
-            <td>{{ customerParameters.firstName }} {{ customerParameters.lastName }}</td>
+            <td width="90">Naam :</td>
+            <td width="225">{{ customer.firstName }} {{ customer.lastName }}</td>
+            <td width="90">Lever adres :</td>
+            <td width="225">{{ offerte.deliveryaddress }} {{ offerte.postcode }} {{ offerte.place }}</td>
         </tr>
         <tr>
-            <td>Adres :</td>
-            <td>{{ customerParameters.address }}</td>
-        </tr>
-        <tr>
-            <td>Postcode :</td>
-            <td>{{ customerParameters.postcode }}</td>
-            <td>Plaats :</td>
+            <td width="90">Adres :</td>
+            <td width="225">{{ customer.address }} {{ customer.postcode }} {{ customer.place }}</td>
+            <td width="90">Lever datum :</td>
+            <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
         </tr>
         <tr>
             <td>Telefoon :</td>
-            <td>{{ customerParameters.phone }}</td>
-        </tr>
-        <tr>
-            <td>Lever adres :</td>
-            <td>{{ offerteParameters['deliveryAddress']}}</td>
-        </tr>
-        <tr>
-            <td>Lever Datum :</td>
-            <td>{{ offerteParameters['deliveryDate']}}</td>
+            <td>{{ customer.phone }}</td>
         </tr>
         </tbody>
     </table>
@@ -48,40 +39,45 @@
         </thead>
         <tbody>
         {% set totaal = 0 %}
-        {% for rows in offerteParameters["producten"] %}
-            {% set rowsplit = rows|split(',-,') %}
+        {% for object in offerte.objects %}
             <tr>
-                <td class="data_table">{{ rowsplit[0] }}</td>
-                <td class="data_table">{{ rowsplit[1] }}</td>
-                <td class="data_table">{{ rowsplit[2] }}</td>
-                <td class="data_table">{{ rowsplit[3] }}</td>
-                <td class="data_table">{{ rowsplit[2] * rowsplit[3] }}</td>
-                {% set totaal = totaal + rowsplit[2] * rowsplit[3] %}
+                <td class="data_table">{{ object.code }}</td>
+                <td class="data_table">{{ object.omschrijving }}</td>
+                <td class="data_table">{{ object.aantal }}</td>
+                <td class="data_table">€ {{ object.prijs }}</td>
+                <td class="data_table">€ {{ object.totaal }}</td>
+                {% set totaal = totaal + object.totaal %}
             </tr>
         {% endfor %}
         <tr>
             <td></td>
             <td></td>
-            <td colspan="2" align="right" class="left-center">Korting </td>
-            <td class="data_table_foot">{{ offerteParameters['korting']}} %</td>
-            {% set korting = totaal / 100 * offerteParameters['korting'] %}
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
             <td colspan="2" align="right" class="left-center">Subtotaal </td>
-            <td class="data_table_foot">{{ totaal - korting }}</td>
+            <td class="data_table_foot">€ {{ totaal }} </td>
         </tr>
         <tr>
             <td></td>
             <td></td>
-            <td colspan="2" align="right" class="left-center">BTW 21% </td>
-            <td class="data_table_foot">{{ (totaal - korting) / 100 * 21 }}</td>
+            <td colspan="2" align="right" class="left-center">Korting </td>
+            <td class="data_table_foot">{{ offerte.korting }} %</td>
         </tr>
         <tr>
             <td></td>
-            <td colspan="3" align="right" class="left-center">Totaal te betalen </td>
-            <td class="data_table_foot">{{ totaal - korting }}</td>
+            <td colspan="3" align="right" class="left-center">Opbouw/afbouw + transport </td>
+            <td class="data_table_foot">€ {{ offerte.extracost }} </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="3" align="right" class="left-center">BTW </td>
+            <td class="data_table_foot">{{ offerte.btw }} %</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="3" align="right" class="left-center">Totaal </td>
+            {% set h1 = totaal - (totaal / 100 * offerte.korting) %}
+            {% set h2 = h1 + offerte.extracost %}
+            {% set h3 = h2 +  (h2 / 100 * offerte.btw)%}
+            <td class="data_table_foot">€ {{ h3|round(2) }} </td>
         </tr>
         </tbody>
     </table>

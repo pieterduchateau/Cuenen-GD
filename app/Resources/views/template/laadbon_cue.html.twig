@@ -3,53 +3,43 @@
     <table>
         <tbody>
         <tr>
-            <td>Naam :</td>
-            <td>{{ customerParameters.firstName }} {{ customerParameters.lastName }}</td>
+            <td width="90">Naam :</td>
+            <td width="225">{{ customer.firstName }} {{ customer.lastName }}</td>
+            <td width="90">Lever adres :</td>
+            <td width="225">{{ offerte.deliveryaddress }} {{ offerte.postcode }} {{ offerte.place }}</td>
         </tr>
         <tr>
-            <td>Adres :</td>
-            <td>{{ customerParameters.address }}</td>
-        </tr>
-        <tr>
-            <td>Postcode :</td>
-            <td>{{ customerParameters.postcode }}</td>
-            <td>Plaats :</td>
+            <td width="90">Adres :</td>
+            <td width="225">{{ customer.address }} {{ customer.postcode }} {{ customer.place }}</td>
+            <td width="90">Lever datum :</td>
+            <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
         </tr>
         <tr>
             <td>Telefoon :</td>
-            <td>{{ customerParameters.phone }}</td>
-        </tr>
-        <tr>
-            <td>Lever adres :</td>
-            <td>{{ offerteParameters['deliveryAddress']}}</td>
-        </tr>
-        <tr>
-            <td>Lever Datum :</td>
-            <td>{{ offerteParameters['deliveryDate']}}</td>
+            <td>{{ customer.phone }}</td>
         </tr>
         </tbody>
     </table>
 </div>
 <div class="row">
     <table class="data_table" width="780px">
-        <col width="80">
-        <col width="580">
-        <col width="80">
+        <col width="75">
+        <col width="550">
+        <col width="75">
         <thead>
         <tr>
-        <th align="center" class="data_table">Code</th>
-        <th align="center" class="data_table">Omschrijving</th>
-        <th align="center" class="data_table">Aantal</th>
+            <th align="center" class="data_table">Code</th>
+            <th align="center" class="data_table">Omschrijving</th>
+            <th align="center" class="data_table">Aantal</th>
         </tr>
         </thead>
         <tbody>
         {% set totaal = 0 %}
-        {% for rows in offerteParameters["producten"] %}
-            {% set rowsplit = rows|split(',-,') %}
+        {% for object in offerte.objects %}
             <tr>
-                <td class="data_table">{{ rowsplit[0] }}</td>
-                <td class="data_table">{{ rowsplit[1] }}</td>
-                <td class="data_table">{{ rowsplit[2] }}</td>
+                <td class="data_table">{{ object.code }}</td>
+                <td class="data_table">{{ object.omschrijving }}</td>
+                <td class="data_table">{{ object.aantal }}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -1,58 +1,78 @@
-<img class="banner" src="img/GM/header_offerte.png"/><br>
-<div class="row top-info">
+<img class="banner" src="img/GM/header_offerte.JPG"/><br>
+<div class="row">
     <table>
         <tbody>
         <tr>
-            <td width="100">Naam :</td>
-            <td width="300">{{ customerParameters.firstName }} {{ customerParameters.lastName }}</td>
-            <td>Lever Datum :</td>
-            <td>{{ offerteParameters['deliveryDate']}}</td>
+            <td width="90">Naam :</td>
+            <td width="225">{{ customer.firstName }} {{ customer.lastName }}</td>
+            <td width="90">Lever adres :</td>
+            <td width="225">{{ offerte.deliveryaddress }} {{ offerte.postcode }} {{ offerte.place }}</td>
         </tr>
         <tr>
-            <td>Adres :</td>
-            <td width="300">{{ customerParameters.address }}</td>
-            <td>Lever adres :</td>
-            <td rowspan="2" width="30%">{{ offerteParameters['deliveryAddress']}}kakiekakdedreefstraat 10ddddddd</td>
-        </tr>
-        <tr>
-            <td>Postcode :</td>
-            <td width="300">{{ customerParameters.postcode }}</td>
+            <td width="90">Adres :</td>
+            <td width="225">{{ customer.address }} {{ customer.postcode }} {{ customer.place }}</td>
+            <td width="90">Lever datum :</td>
+            <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
         </tr>
         <tr>
             <td>Telefoon :</td>
-            <td width="300">{{ customerParameters.phone }}</td>
+            <td>{{ customer.phone }}</td>
         </tr>
         </tbody>
     </table>
 </div>
-<div class="row">
-    <table class="data_table" width="780px">
-        <col width="740">
-        <thead>
+<table class="data_table" width="780px">
+    <col width="555">
+    <col width="50">
+    <col width="50">
+    <col width="50">
+    <thead>
+    <tr>
+        <th align="center" class="data_table">Omschrijving</th>
+        <th align="center" class="data_table">Aantal</th>
+        <th align="center" class="data_table">Prijs</th>
+        <th align="center" class="data_table">Totaal</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set totaal = 0 %}
+    {% for object in offerte.objects %}
         <tr>
-            <th align="center" class="data_table">Omschrijving</th>
+            <td class="data_table">{{ object.omschrijving }}</td>
+            <td class="data_table">{{ object.aantal }}</td>
+            <td class="data_table">{{ object.prijs }}</td>
+            <td class="data_table">{{ object.totaal }}</td>
+            {% set totaal = totaal + object.totaal %}
         </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td class="data_table"><pre>{{ offerteParameters["producten"][0] }}</pre></td>
-        </tr>
-        </tbody>
-    </table>
-</div> <img class="bannerfooter" src="img/GM/footer_offerte.png"/><br>
-
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td colspan="2" align="right" class="left-center">Subtotaal</td>
+        <td class="data_table_foot">{{ totaal }} </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="2" align="right" class="left-center">Korting</td>
+        <td class="data_table_foot">{{ offerte.korting }} %</td>
+    </tr>
+    <tr>
+        <td colspan="3" align="right" class="left-center">BTW</td>
+        <td class="data_table_foot">{{ offerte.btw }} %</td>
+    </tr>
+    </tbody>
+</table>
+<img class="bannerfooter" src="img/GM/footer_offerte.JPG"/><br>
 <style>
 
     .banner {
-        width: 400px;
+        width: 780px;
     }
 
-    .bannerfooter
-    {
-        position:absolute;
+    .bannerfooter {
+        position: absolute;
         bottom: 168px;
-        width: 760px;
-        background:#6cf;
+        width: 780px;
+        background: #6cf;
     }
 
     table.data_table, th.data_table, td.data_table {
@@ -63,21 +83,12 @@
         border-collapse: collapse;
     }
 
-    .top-info
-    {
-        font-family: Arial;
-        font-size: 16px;
-        background-color: #ebebeb;
-        margin-left: -20px;
-        padding-left: 20px;
-        width: 780px;
-        margin-bottom: 20px;
-        height: 100px;
-        padding-top: 20px;
+    .data_table_foot {
+        border: 1px solid black;
+        border-left: 1px solid black;
     }
 
-    pre
-    {
-        font-family: Arial;
+    .left-center {
+        border-right: 1px solid black;
     }
 </style>

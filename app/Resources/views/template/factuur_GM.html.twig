@@ -1,4 +1,4 @@
-<img class="banner" src="img/GM/header_offerte.JPG"/><br>
+<img class="banner" src="img/GM/header_factuur.JPG"/><br>
 <div class="row customer_info">
     <table>
         <tbody>
@@ -38,7 +38,7 @@
     {% set totaal = 0 %}
     {% for object in offerte.objects %}
         <tr>
-            <td class="data_table">{{ object.omschrijving }}</td>
+            <td align="left" class="data_table">{{ object.omschrijving }}</td>
             <td class="data_table">{{ object.aantal }}</td>
             <td class="data_table">€ {{ object.prijs }}</td>
             <td class="data_table">€ {{ object.totaal }}</td>
@@ -60,10 +60,10 @@
         <td class="data_table_foot">{{ offerte.btw }} %</td>
     </tr>
     <tr>
-        <td colspan="3" align="right" class="left-center">Totaal </td>
+        <td colspan="3" align="right" class="left-center">Totaal</td>
         {% set h1 = totaal - (totaal / 100 * offerte.korting) %}
         {% set h2 = h1 + offerte.extracost %}
-        {% set h3 = h2 +  (h2 / 100 * offerte.btw)%}
+        {% set h3 = h2 +  (h2 / 100 * offerte.btw) %}
         <td class="data_table_foot">€ {{ h3|round(2) }} </td>
     </tr>
     </tbody>
@@ -72,7 +72,8 @@
 <style>
 
     .banner {
-        width: 450px;
+        width: 780px;
+        margin-top: -20px;
     }
 
     .bannerfooter {
@@ -97,6 +98,10 @@
 
     .left-center {
         border-right: 1px solid black;
+    }
+
+    .data_table {
+        text-align: center;
     }
 
     .customer_info {

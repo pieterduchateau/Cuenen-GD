@@ -35,12 +35,12 @@ class Offerte_objects
     private $aantal;
 
     /**
-     * @ORM\Column(type="decimal")
+     * @ORM\Column(type="float")
      */
     private $prijs;
 
     /**
-     * @ORM\Column(type="decimal")
+     * @ORM\Column(type="float")
      */
     private $totaal;
 
