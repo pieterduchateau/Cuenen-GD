@@ -1,4 +1,36 @@
-
+<style>
+    .banner {
+        width: 450px;
+    }
+    .bannerfooter {
+        position: absolute;
+        bottom: 168px;
+        width: 780px;
+    }
+    table.data_table, th.data_table, td.data_table {
+        border: 1px solid black;
+    }
+    table {
+        border-collapse: collapse;
+    }
+    .data_table_foot {
+        border: 1px solid black;
+        border-left: 1px solid black;
+    }
+    .left-center {
+        border-right: 1px solid black;
+    }
+    .customer_info {
+        background-color: #F2F2F2;
+        margin-left: -30px;
+        margin-right: -30px;
+        margin-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+        padding-top: 20px;
+        height: 80px;
+    }
+</style>
 <page backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">
     <page_header>
         <img class="banner" src="img/GM/header_offerte.JPG"/><br>
@@ -25,45 +57,37 @@
             </table>
         </div>
         <table class="data_table" width="780px">
-            <col width="530">
-            <col width="50">
-            <col width="75">
-            <col width="50">
+            <col width="670">
+            <col width="80">
             <thead>
             <tr>
                 <th align="center" class="data_table">Omschrijving</th>
-                <th align="center" class="data_table">Aantal</th>
                 <th align="center" class="data_table">Prijs</th>
-                <th align="center" class="data_table">Totaal</th>
             </tr>
             </thead>
             <tbody>
             {% set totaal = 0 %}
             {% for object in offerte.objects %}
                 <tr>
-                    <td class="data_table">{{ object.omschrijving }}</td>
-                    <td class="data_table">{{ object.aantal }}</td>
+                    <td class="data_table"><pre>{{ object.omschrijving }}</pre></td>
                     <td class="data_table">€ {{ object.prijs }}</td>
-                    <td class="data_table">€ {{ object.totaal }}</td>
                     {% set totaal = totaal + object.totaal %}
                 </tr>
             {% endfor %}
             <tr>
-                <td></td>
-                <td colspan="2" align="right" class="left-center">Subtotaal</td>
+                <td colspan="1" align="right" class="left-center">Subtotaal</td>
                 <td class="data_table_foot">€ {{ totaal }} </td>
             </tr>
             <tr>
-                <td></td>
-                <td colspan="2" align="right" class="left-center">Korting</td>
+                <td colspan="1" align="right" class="left-center">Korting</td>
                 <td class="data_table_foot">{{ offerte.korting }} %</td>
             </tr>
             <tr>
-                <td colspan="3" align="right" class="left-center">BTW</td>
+                <td colspan="1" align="right" class="left-center">BTW</td>
                 <td class="data_table_foot">{{ offerte.btw }} %</td>
             </tr>
             <tr>
-                <td colspan="3" align="right" class="left-center">Totaal </td>
+                <td colspan="1" align="right" class="left-center">Totaal </td>
                 {% set h1 = totaal - (totaal / 100 * offerte.korting) %}
                 {% set h2 = h1 + offerte.extracost %}
                 {% set h3 = h2 +  (h2 / 100 * offerte.btw)%}
