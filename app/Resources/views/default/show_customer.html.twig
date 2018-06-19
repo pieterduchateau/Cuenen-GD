@@ -86,14 +86,19 @@
                         <td>{{ offerte.titel }}</td>
                         <td>{{ offerte.delivery_date|date("d/m/Y") }}</td>
                         <td>{{ offerte.deliveryAddress }}</td>
-                        <td class="text-center"><a href="{{ path('offerte',{'shop': shop, 'offerte_id': offerte.id}) }}"><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-folder-open"></span> </button> </a> </td>
+                        <td class="text-center"><a
+                                    href="{{ path('offerte',{'shop': shop, 'offerte_id': offerte.id}) }}">
+                                <button type="button" class="btn btn-info"><span
+                                            class="glyphicon glyphicon-folder-open"></span></button>
+                            </a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="modal fade" id="modalDeleteCustomer" tabindex="-1" role="dialog" aria-labelledby="modalDelete" aria-hidden="true">
+    <div class="modal fade" id="modalDeleteCustomer" tabindex="-1" role="dialog" aria-labelledby="modalDelete"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -105,7 +110,8 @@
                 <div class="modal-body">
                     <div class="text-center">
                         <h4><strong>Bent u zeker dat u deze Klant wilt verwijderen?</strong></h4>
-                        <p>Bij het verwijderen van deze klant worden ook al de foto's en offertes die bij deze klant horen verwijderd.</p>
+                        <p>Bij het verwijderen van deze klant worden ook al de foto's en offertes die bij deze klant
+                            horen verwijderd.</p>
                         <input type="hidden" id="customer_nr">
                     </div>
                 </div>
@@ -121,7 +127,7 @@
 {% endblock %}
     {% block stylesheets %}
         <style>
-            a:hover{
+            a:hover {
                 text-decoration: none;
             }
         </style>
@@ -130,6 +136,7 @@
         <script>
             $(document).ready(new function () {
                 var table = $('#offertes_table').DataTable({
+                        "order": [[1, "DESC"]],
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Dutch.json"
                         },

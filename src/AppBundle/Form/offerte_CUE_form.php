@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-class offerte_form extends AbstractType
+class offerte_CUE_form extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -24,7 +24,7 @@ class offerte_form extends AbstractType
         $builder->add('BTW');
 
         $builder->add('objects', CollectionType::class, array(
-            'entry_type' => offerte_objects_form::class,
+            'entry_type' => offerte_CUE_objects_form::class,
             'entry_options' => array('label' => false),
             'allow_add' => true,
             'allow_delete' => true,

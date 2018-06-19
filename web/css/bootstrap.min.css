@@ -174,7 +174,8 @@ legend {
 }
 
 textarea {
-    overflow: auto
+    overflow: auto;
+    resize: vertical;
 }
 
 optgroup {
@@ -1795,16 +1796,16 @@ kbd kbd {
 
 pre {
     display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
+    padding: 0px;
+    margin: 0px;
     font-size: 13px;
     line-height: 1.42857143;
     color: #333;
     word-break: break-all;
     word-wrap: break-word;
     background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px
+    border: 0px solid #ccc;
+    border-radius: 0px
 }
 
 pre code {

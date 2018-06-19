@@ -27,18 +27,32 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">Producten
-                    <button class="btn btn-success btn-xs" id="addproduct">Product Toevoegen</button><button type="button" id="calculateTotals" onclick="generateTotalsTable()" class="btn btn-xs btn-info" style="margin-left: 10px">Totalen berekenen</button>
+                    <button class="btn btn-success btn-xs" id="addproduct">Product Toevoegen</button>
+                    <button type="button" id="calculateTotals" onclick="generateTotalsTable()"
+                            class="btn btn-xs btn-info" style="margin-left: 10px">Totalen berekenen
+                    </button>
                 </div>
                 <div class="panel-body">
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th scope="col">code</th>
-                            <th scope="col">omschrijving</th>
-                            <th scope="col">aantal</th>
-                            <th scope="col">prijs</th>
-                            <th scope="col">totaal</th>
-                        </tr>
+                        {% if shop == "CE" %}
+                            {{ shop }}
+                            <tr>
+                                <th scope="col">code</th>
+                                <th scope="col">omschrijving</th>
+                                <th scope="col">aantal</th>
+                                <th scope="col">prijs</th>
+                                <th scope="col">totaal</th>
+                            </tr>
+                        {% elseif shop == "GM" %}
+                            <tr>
+                                <th scope="col" style="visibility: hidden">code</th>
+                                <th scope="col">omschrijving</th>
+                                <th scope="col" style="visibility: hidden">aantal</th>
+                                <th scope="col">prijs</th>
+                                <th scope="col">totaal</th>
+                            </tr>
+                        {% endif %}
                         </thead>
                         <tbody id="objectTable" class="objects" data-prototype=
                         "{% filter escape %}
@@ -65,7 +79,9 @@
                                 <input type="text" id="subtotal" disabled="disabled" class="form-control">
                             </td>
                             <td>
-                                <button type="button" id="CalculateSubtotal" class="btn btn-xs btn-info" style="margin-left: 10px" onclick="generateSubtotal()">Subtotaal berekenen</button>
+                                <button type="button" id="CalculateSubtotal" class="btn btn-xs btn-info"
+                                        style="margin-left: 10px" onclick="generateSubtotal()">Subtotaal berekenen
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -78,7 +94,11 @@
                         </tr>
                         <tr>
                             <td>
-                                Opbouw / Afbouw + Vervoer
+                                {% if shop == "CE" %}
+                                    Opbouw / Afbouw + Vervoer
+                                {% else %}
+                                    Plaatsing
+                                {% endif %}
                             </td>
                             <td>
                                 {{ form_widget(form.extra_cost) }}
@@ -99,7 +119,9 @@
                             <input type="text" id="offerteTotal" readonly class="form-control">
                         </td>
                         <td>
-                            <button type="button" id="CalculateSubtotal" class="btn btn-xs btn-info" style="margin-left: 10px" onclick="generateTotal()">Totaal berekenen</button>
+                            <button type="button" id="CalculateSubtotal" class="btn btn-xs btn-info"
+                                    style="margin-left: 10px" onclick="generateTotal()">Totaal berekenen
+                            </button>
                         </td>
                     </table>
                 </div>
@@ -108,7 +130,9 @@
                 {{ form_row(form.save, {'label': 'Offerte aanpassen'}) }}
             </div>
             <div class="col-lg-2 col-xs-12">
-               <a href="{{ path('show_customer',{'shop': shop,'customer_id': customer_id}) }}"><button type="button" class="btn btn-info">Annuleren</button></a>
+                <a href="{{ path('show_customer',{'shop': shop,'customer_id': customer_id}) }}">
+                    <button type="button" class="btn btn-info">Annuleren</button>
+                </a>
             </div>
             {{ form_end(form) }}
         </div>
@@ -135,6 +159,12 @@
                 addobjectForm($collectionHolder, $newLinkLi);
             });
         });
+
+        function deleteRow(e) {
+            $(e).closest('tr').remove();
+            return false;
+        }
+
         function addobjectForm($collectionHolder, $newLinkLi) {
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
@@ -150,24 +180,19 @@
             var $newFormLi = $('<tr></tr>').append(newForm);
             // also add a remove button, just for this example
             $newLinkLi.before($newFormLi);
-            // handle the removal, just for this example
-            $('.remove-object').on('click',function (e) {
-                e.preventDefault();
-                $(this).closest('tr').remove();
-                return false;
-            });
         }
+
         function generateTotalsTable() {
-            $('#objectTable > tr').each(function() {
+            $('#objectTable > tr').each(function () {
                 $aantal = $('td:nth-child(3)', this).children("input").val();
                 $prijs = $('td:nth-child(4)', this).children("input").val();
                 $('td:nth-child(5)', this).children("input").val(($aantal * $prijs).toFixed(2));
             });
         }
-        function generateSubtotal()
-        {
+
+        function generateSubtotal() {
             $subtotal = 0;
-            $('#objectTable > tr').each(function() {
+            $('#objectTable > tr').each(function () {
                 $rowTotal = $('td:nth-child(5)', this).children("input").val();
                 $subtotal = parseFloat($subtotal) + parseFloat($rowTotal);
             });
@@ -176,9 +201,15 @@
 
         function generateTotal() {
             $subtotal = $('#subtotal').val();
-            $korting = $('#offerte_form_korting').val();
-            $extra_cost = $('#offerte_form_extra_cost').val();
-            $btw = parseFloat($('#offerte_form_BTW').val()) / 100 + 1;
+            {% if shop == "CE" %}
+            $korting = $('#offerte_cue_form_korting').val();
+            $extra_cost = $('#offerte_cue_form_extra_cost').val();
+            $btw = parseFloat($('#offerte_cue_form_BTW').val()) / 100 + 1;
+            {% elseif shop == "GM" %}
+            $korting = $('#offerte_gm_form_korting').val();
+            $extra_cost = $('#offerte_gm_form_extra_cost').val();
+            $btw = parseFloat($('#offerte_gm_form_BTW').val()) / 100 + 1;
+            {% endif %}
             $kortingBedrag = $subtotal / 100 * $korting;
             $helpertotal = $subtotal - $kortingBedrag + parseFloat($extra_cost);
             $('#offerteTotal').val(Number($helpertotal * $btw).toFixed(2));

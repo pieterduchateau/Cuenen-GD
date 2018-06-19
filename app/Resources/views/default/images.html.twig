@@ -28,7 +28,6 @@
                         <thead>
                         <td></td>
                         <td>Naam</td>
-                        <td>Link</td>
                         <td>Extensie</td>
                         <td>Grootte</td>
                         <td>Acties</td>
@@ -39,7 +38,6 @@
                                 <td><img src="{{ asset('/img/file_icons/') }}{{ image.fextension }}.png" alt="...">
                                 </td>
                                 <td>{{ image.fname }}</td>
-                                <td>{{ image.furl }}</td>
                                 <td>{{ image.fextension }}</td>
                                 <td>{{ (image.fsize / 1000000) | round(2) }}Mb</td>
                                 <td>

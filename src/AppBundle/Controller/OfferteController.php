@@ -4,7 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Offerte;
 use AppBundle\Entity\Offerte_objects;
-use AppBundle\Form\offerte_form;
+use AppBundle\Form\offerte_CUE_form;
+use AppBundle\Form\offerte_GM_form;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,9 +39,11 @@ class OfferteController extends Controller
      */
     public function offerteToPdf($shop, $offerte_nr)
     {
-        $html2pdf = new Html2Pdf();
         $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
             'id' => $offerte_nr));
+
+        $html2pdf = new Html2Pdf('P', 'A4', 'en');
+        $html2pdf->pdf->SetTitle($offerte->getTitel());
 
         $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
             'id' => $offerte->getCustomerNr()));
@@ -64,9 +67,11 @@ class OfferteController extends Controller
     public
     function getlaadbon($shop, $laadbon_nr)
     {
-        $html2pdf = new Html2Pdf();
         $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
             'id' => $laadbon_nr));
+
+        $html2pdf = new Html2Pdf();
+        $html2pdf->pdf->SetTitle($offerte->getTitel());
 
         $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
             'id' => $offerte->getCustomerNr()));
@@ -90,9 +95,11 @@ class OfferteController extends Controller
     public
     function getfactuur($shop, $offerteId)
     {
-        $html2pdf = new Html2Pdf();
         $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
             'id' => $offerteId));
+
+        $html2pdf = new Html2Pdf();
+        $html2pdf->pdf->SetTitle($offerte->getTitel());
 
         $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
             'id' => $offerte->getCustomerNr()));
@@ -123,7 +130,12 @@ class OfferteController extends Controller
             $originalObjects->add($obj);
         }
 
-        $form = $this->createForm(offerte_form::class, $offerte);
+        if($shop == "CE")
+        {
+            $form = $this->createForm(offerte_CUE_form::class, $offerte);
+        }else{
+            $form = $this->createForm(offerte_GM_form::class, $offerte);
+        }
 
         $form->handleRequest($request);
 
@@ -136,7 +148,7 @@ class OfferteController extends Controller
             }
             $em->persist($offerte);
             $em->flush();
-            return $this->redirectToRoute('show_customer', array('shop' => $shop, 'customer_id' => $offerte->getCustomerNr()));
+            return $this->redirectToRoute('offerte', array('shop' => $shop, 'offerte_id' => $offerteNr));
         }
 
         return $this->render('forms/edit_offerte.html.twig', array(
@@ -160,7 +172,12 @@ class OfferteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $offerte = new Offerte();
         $offerte->setCustomerNr($customerId);
-        $form = $this->createForm(offerte_form::class, $offerte);
+        if($shop == "CE")
+        {
+            $form = $this->createForm(offerte_CUE_form::class, $offerte);
+        }else{
+            $form = $this->createForm(offerte_GM_form::class, $offerte);
+        }
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -313,4 +330,14 @@ class OfferteController extends Controller
             'customer_id' => $customerID));
 
     }
+
+    /**
+     * @Route("test", name="test")
+     */
+    public function test()
+    {
+        return $this->render('template/offerte_GM.html.twig');
+
+    }
+
 }
