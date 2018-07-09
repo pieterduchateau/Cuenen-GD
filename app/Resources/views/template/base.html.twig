@@ -13,6 +13,7 @@
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.min.css">
         <link rel="stylesheet" href="{{ asset('/css/default.css') }}">
+        <link rel="stylesheet" href="{{ asset('/calendar/fullcalendar.css') }}">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
         {% block stylesheets %}{% endblock %}
     </head>
@@ -55,6 +56,9 @@
         crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+<script src="{{ asset('/calendar/moment.js') }}"></script>
+<script src="{{ asset('/calendar/fullcalendar.js') }}"></script>
+<script src="{{ asset('/calendar/locale/nl-be.js') }}"></script>
 {% block javascripts %}
 {% endblock %}
 </body>

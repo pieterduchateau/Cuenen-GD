@@ -36,7 +36,6 @@
                     <table class="table">
                         <thead>
                         {% if shop == "CE" %}
-                            {{ shop }}
                             <tr>
                                 <th scope="col">code</th>
                                 <th scope="col">omschrijving</th>
@@ -158,6 +157,11 @@
                 // add a new tag form (see code block below)
                 addobjectForm($collectionHolder, $newLinkLi);
             });
+
+            //preload all the total prices
+            generateTotalsTable();
+            generateSubtotal();
+            generateTotal();
         });
 
         function deleteRow(e) {
@@ -191,6 +195,7 @@
         }
 
         function generateSubtotal() {
+            generateTotalsTable();
             $subtotal = 0;
             $('#objectTable > tr').each(function () {
                 $rowTotal = $('td:nth-child(5)', this).children("input").val();
@@ -200,6 +205,8 @@
         }
 
         function generateTotal() {
+            generateTotalsTable();
+            generateSubtotal();
             $subtotal = $('#subtotal').val();
             {% if shop == "CE" %}
             $korting = $('#offerte_cue_form_korting').val();

@@ -1,0 +1,56 @@
+{% extends 'template/base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div id='calendar'></div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+
+
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $('#calendar').fullCalendar({
+                locale: 'nl-be',
+                events: {
+                    url: '/getEvents',
+                    type: 'POST',
+                    data: {
+                        shop: '{{ shop }}'
+                    },
+                    success: function (data) {
+                        var events = [];
+                        jQuery.each(data, function (index, item) {
+                            events.push({id: item.id, title: item.title,start: item.start});
+                        });
+                    },
+                    error: function() {
+                        alert('Woeps ! er is een probleem met het zoeken naar de projecten!');
+                    },
+                    color: 'green',   // a non-ajax option
+                    textColor: 'white' // a non-ajax option
+                },
+                header: {
+                    left: 'month,agendaWeek,agendaDay',
+                    center: 'title'
+                    ,right: 'prev,today,next' },
+                eventClick: function(calEvent, jsEvent, view) {
+                    window.location.href = "offerte/" + calEvent.id;
+                }
+            });
+            var calendar = $('#calendar').fullCalendar('getCalendar');
+
+            calendar.on('dayClick', function(date, jsEvent, view) {
+                console.log('clicked on ' + date.format());
+            });
+        });
+
+    </script>
+{% endblock %}
+
+

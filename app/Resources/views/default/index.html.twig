@@ -20,6 +20,14 @@
                     </div>
                 </a>
             </div>
+            <div class="col-xs-12 col-md-3">
+                <a href="{{ path('calendar',{'shop': shop}) }}" class="thumbnail">
+                    <div class="text-center">
+                        <img class="nav_icons" src="{{ asset('/img/icons/cal.png') }}" alt="...">
+                        <h3>Kalender</h3>
+                    </div>
+                </a>
+            </div>
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="col-xs-12 col-md-3">
                     <a href="{{ path('config_index') }}" class="thumbnail">
