@@ -7,7 +7,10 @@ use AppBundle\Entity\Offerte_objects;
 use AppBundle\Form\offerte_CUE_form;
 use AppBundle\Form\offerte_GM_form;
 use Doctrine\Common\Collections\ArrayCollection;
+use http\Env\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +18,7 @@ use Symfony\Component\Form\Forms;
 use Spipu\Html2Pdf\Html2Pdf;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Psr\Log\LoggerInterface;
 
 
 class OfferteController extends Controller
@@ -39,14 +43,13 @@ class OfferteController extends Controller
      */
     public function offerteToPdf($shop, $offerte_nr)
     {
+        set_time_limit(0);
         $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
             'id' => $offerte_nr));
-
-        $html2pdf = new Html2Pdf('P', 'A4', 'en');
-        $html2pdf->pdf->SetTitle($offerte->getTitel());
-
         $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
             'id' => $offerte->getCustomerNr()));
+        $html2pdf = new HTML2PDF('P', 'A4', 'en', true, 'UTF-8', array(0, 0, 0, 0));
+        $html2pdf->pdf->SetTitle($offerte->getTitel());
 
         if ($shop == "CE") {
             $template = "template/offerte_cue.html.twig";
@@ -54,11 +57,18 @@ class OfferteController extends Controller
             $template = "template/offerte_GM.html.twig";
         }
 
-        $html2pdf->writeHTML($this->render($template, array(
+        $htmldata = $this->renderView($template ,array(
             'offerte' => $offerte,
             'customer' => $customer
-        ))->getContent());
-        $html2pdf->output();
+        ));
+
+        $html2pdf->writeHTML($htmldata);
+
+        try {
+            $html2pdf->output($offerte->getTitel() . '.pdf');
+        } catch (Html2PdfException $e) {
+
+        }
     }
 
     /**
@@ -67,14 +77,13 @@ class OfferteController extends Controller
     public
     function getlaadbon($shop, $laadbon_nr)
     {
+        set_time_limit(0);
         $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
             'id' => $laadbon_nr));
-
-        $html2pdf = new Html2Pdf();
-        $html2pdf->pdf->SetTitle($offerte->getTitel());
-
         $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
             'id' => $offerte->getCustomerNr()));
+        $html2pdf = new HTML2PDF('P', 'A4', 'en', true, 'UTF-8', array(0, 0, 0, 0));
+        $html2pdf->pdf->SetTitle($offerte->getTitel());
 
         if ($shop == "CE") {
             $template = "template/laadbon_cue.html.twig";
@@ -82,11 +91,18 @@ class OfferteController extends Controller
             $template = "template/laadbon_GM.html.twig";
         }
 
-        $html2pdf->writeHTML($this->render($template, array(
+        $htmldata = $this->renderView($template ,array(
             'offerte' => $offerte,
             'customer' => $customer
-        ))->getContent());
-        $html2pdf->output();
+        ));
+
+        $html2pdf->writeHTML($htmldata);
+
+        try {
+            $html2pdf->output($offerte->getTitel() . '.pdf');
+        } catch (Html2PdfException $e) {
+
+        }
     }
 
     /**
@@ -210,124 +226,6 @@ class OfferteController extends Controller
 
         $em->flush();
         return new JsonResponse();
-
-    }
-
-    /**
-     * @Route("/{shop}/GenerateOfferte", name="GenerateOfferte")
-     */
-    public
-    function GenerateOfferte($shop, Request $request)
-    {
-
-        $products = $request->get('parameters');
-        $deliveryAddress = $request->get('leveradres');
-        $titel = $request->get('titel');
-        $postcode = $request->get('postcode');
-        $deliveryDate = $request->get('leverdatum');
-        $customerID = $request->get('customerID');
-        $korting = $request->get('korting');
-
-        if ($request->request->has('offerteID')) {
-            $offertenr = $request->get('offerteID');
-
-            //delete old offerte
-            $em = $this->getDoctrine()->getManager();
-            $offerteparams = $em->getRepository("AppBundle:Offerte")->findBy(array(
-                'offerteNr' => $offertenr
-            ));
-
-            foreach ($offerteparams as $param) {
-                $em->remove($param);
-                $em->flush();
-            }
-        } else {
-            $offerteConfig = $this->getDoctrine()
-                ->getRepository("AppBundle:Config")
-                ->findOneBy(array(
-                    'paraName' => 'offertenr'
-                ));
-
-            $offertenr = $offerteConfig->getParaValue();
-
-            //set new offertenr
-            $offerteConfig->setParaValue($offertenr + 1);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($offerteConfig);
-        }
-
-
-        //set parameters for offerte
-        $offerte1 = new Offerte();
-        $offerte1->setCustomerNr($customerID);
-        $offerte1->setOfferteNr($offertenr);
-        $offerte1->setParaName('deliveryAddress');
-        $offerte1->setParaValue($deliveryAddress);
-        $em->persist($offerte1);
-
-        $offerte2 = new Offerte();
-        $offerte2->setCustomerNr($customerID);
-        $offerte2->setOfferteNr($offertenr);
-        $offerte2->setParaName('postcode');
-        $offerte2->setParaValue($postcode);
-        $em->persist($offerte2);
-
-        $offerte3 = new Offerte();
-        $offerte3->setCustomerNr($customerID);
-        $offerte3->setOfferteNr($offertenr);
-        $offerte3->setParaName('deliveryDate');
-        $offerte3->setParaValue($deliveryDate);
-        $em->persist($offerte3);
-
-        $offerte4 = new Offerte();
-        $offerte4->setCustomerNr($customerID);
-        $offerte4->setOfferteNr($offertenr);
-        $offerte4->setParaName('korting');
-        $offerte4->setParaValue($korting);
-        $em->persist($offerte4);
-
-        $offerte5 = new Offerte();
-        $offerte5->setCustomerNr($customerID);
-        $offerte5->setOfferteNr($offertenr);
-        $offerte5->setParaName('titel');
-        $offerte5->setParaValue($titel);
-        $em->persist($offerte5);
-
-        if ($shop == "CE") {
-            //put parameters inside single string
-            for ($i = 0; $i < sizeof($products['code']); $i++) {
-                $row = $products['code'][$i] . ",-," . $products['omschrijving'][$i] . ",-," . $products['aantal'][$i] . ",-," . $products['prijs'][$i];
-
-                $offerte6 = new Offerte();
-                $offerte6->setCustomerNr($customerID);
-                $offerte6->setOfferteNr($offertenr);
-                $offerte6->setParaName('productrow');
-                $offerte6->setParaValue($row);
-                $em->persist($offerte6);
-
-            }
-        } else if ($shop == "GM") {
-            $offerte6 = new Offerte();
-            $offerte6->setCustomerNr($customerID);
-            $offerte6->setOfferteNr($offertenr);
-            $offerte6->setParaName('productrow');
-            $offerte6->setParaValue($products);
-            $em->persist($offerte6);
-
-            $offerte7 = new Offerte();
-            $offerte7->setCustomerNr($customerID);
-            $offerte7->setOfferteNr($offertenr);
-            $offerte7->setParaName('subtotaal');
-            $offerte7->setParaValue($request->get('subtotaal'));
-            $em->persist($offerte7);
-        }
-
-        $em->flush();
-
-
-        return $this->redirectToRoute('show_customer', array(
-            'shop' => $shop,
-            'customer_id' => $customerID));
 
     }
 

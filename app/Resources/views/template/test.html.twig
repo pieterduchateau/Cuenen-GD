@@ -37,7 +37,7 @@
             </tr>
             </thead>
             <tbody>
-            <col width="550">
+            <col width="670">
             <col width="80">
             {% set totaal = 0 %}
             {% for object in offerte.objects %}
@@ -50,10 +50,6 @@
             <tr>
                 <td colspan="1" align="right" class="left-center">Subtotaal</td>
                 <td class="data_table_foot">€ {{ totaal }} </td>
-            </tr>
-            <tr>
-                <td colspan="1" align="right" class="left-center">Opbouw/afbouw + transport :</td>
-                <td class="data_table_foot">€ {{ offerte.extracost }} </td>
             </tr>
             <tr>
                 <td colspan="1" align="right" class="left-center">Korting</td>
@@ -80,7 +76,7 @@
 
 <style>
     .banner {
-        width: 400px;
+        width: 700px;
     }
 
     .bannerfooter {
