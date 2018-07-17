@@ -84,7 +84,7 @@
                     <tr>
                         <td>{{ offerte.id }}</td>
                         <td>{{ offerte.titel }}</td>
-                        <td>{{ offerte.delivery_date|date("d/m/Y") }}</td>
+                        <td>{{ offerte.deliverydate|date("d/m/Y") }}</td>
                         <td>{{ offerte.deliveryAddress }}</td>
                         <td class="text-center"><a
                                     href="{{ path('offerte',{'shop': shop, 'offerte_id': offerte.id}) }}">

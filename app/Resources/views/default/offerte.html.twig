@@ -20,14 +20,14 @@
                         <div class="col-lg-8">
                             <form>
                                 <div class="form-group col-lg-8">
-                                    <label for="leveradres">Leveradres</label>
+                                    <label for="leveradres">Leveradres </label>
                                     <input type="email" class="form-control" id="leveradres" disabled="disabled"
                                            value="{{ offerte.deliveryAddress }}">
                                 </div>
                                 <div class="form-group col-lg-4">
-                                    <label for="date">Leverdatum</label>
+                                    <label for="date">Leverdatum </label>
                                     <input type="date" class="form-control" id="date" disabled="disabled"
-                                           value="{{ offerte.delivery_date|date("Y-m-d") }}">
+                                           value="{{ offerte.deliverydate|date("Y-m-d") }}">
                                 </div>
                                 <div class="form-group col-lg-6">
                                     <label for="postcode">Postcode</label>
