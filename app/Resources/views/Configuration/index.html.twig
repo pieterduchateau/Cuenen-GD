@@ -1,14 +1,23 @@
 {% extends 'Configuration/Config_base.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><strong>Databse backup :</strong></div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                {% if "now"|date_modify("-1 day")|date('Y/m/d-H:i:s') < backup_date %}
+                <div class="panel-heading"><strong>Database backup : <span
+                                class="label label-success">{{ backup_date }}</span></strong></div>
+                <div class="panel-body alert-success">
+                    <h3><img src="{{ asset('/img/icons/database.png') }}"> <span
+                                class="pull-right top-info-box">Success</span></h3>
+                    {% else %}
+                    <div class="panel-heading"><strong>Database backup : <span
+                                    class="label label-danger">{{ backup_date }}</span></strong></div>
                     <div class="panel-body alert-danger">
-                        <h1><img src="{{ asset('/img/icons/database.png') }}"> <span
-                                    class="pull-right top-info-box">FAILED</span></h1>
+                        <h3><img src="{{ asset('/img/icons/database.png') }}"> <span
+                                    class="pull-right top-info-box">FAILED</span></h3>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -16,7 +25,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading"><strong>Amount offertes :</strong></div>
                     <div class="panel-body alert-info">
-                        <h1><img src="{{ asset('/img/icons/folder.png') }}"><span class="pull-right top-info-box"> 0</span></h1>
+                        <h1><img src="{{ asset('/img/icons/folder.png') }}"><span
+                                    class="pull-right top-info-box"> 0</span></h1>
                     </div>
                 </div>
             </div>
@@ -24,7 +34,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading"><strong>Customers :</strong></div>
                     <div class="panel-body alert-info">
-                        <h1><img src="{{ asset('/img/icons/team.png') }}"><span class="pull-right top-info-box"> 0</span></h1>
+                        <h1><img src="{{ asset('/img/icons/team.png') }}"><span
+                                    class="pull-right top-info-box"> 0</span></h1>
                     </div>
                 </div>
             </div>
@@ -47,12 +58,12 @@
             </div>
         </div>
     </div>
-{% endblock %}
+    {% endblock %}
 
-{% block stylesheets %}
-    <style>
-        .top-info-box {
-            margin-top: 13px;
-        }
-    </style>
-{% endblock %}
+    {% block stylesheets %}
+        <style>
+            .top-info-box {
+                margin-top: 13px;
+            }
+        </style>
+    {% endblock %}

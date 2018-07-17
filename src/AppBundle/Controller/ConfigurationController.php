@@ -17,9 +17,17 @@ class ConfigurationController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $users = $em->getRepository("AppBundle:User")->findAll();
-        $offertes = $em->getRepository("AppBundle:User")->findAll();
+        $config_db_update = $config = $em->getRepository("AppBundle:Config")->findOneBy(array(
+            'paraName' => 'last_update'));
+        $h1 =  str_replace('.sql','',$config_db_update->getParaValue());
+        $h2 = explode('-',$h1);
+        $h2[0] = str_replace('_','/',$h2[0]);
+        $h2[1] = str_replace('_',':',$h2[1]);
+
+        $date = $h2[0] .'-' . $h2[1];
         return $this->render('Configuration/index.html.twig', array(
-            'users' => $users
+            'users' => $users,
+            'backup_date' => $date
         ));
 
     }
