@@ -41,10 +41,10 @@
             </thead>
             <tbody>
             <col width="50">
-            <col width="475">
+            <col width="425">
             <col width="50">
             <col width="50">
-            <col width="50">
+            <col width="100">
             {% set totaal = 0 %}
             {% for object in offerte.objects %}
                 <tr>
@@ -89,9 +89,12 @@
                 <td class="data_table_foot">€ {{ h3|round(2) }} </td>
             </tr>
             </tbody>
-        </table>
-    </div>
+        </table><br>
+    </div><br>
     <div>
+        <br>
+        <br>
+        <br>
         <img class="bannerfooter" src="img/cue/offerte_footer.JPG"/>
     </div>
 </page>

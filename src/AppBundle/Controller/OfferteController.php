@@ -61,7 +61,6 @@ class OfferteController extends Controller
             'offerte' => $offerte,
             'customer' => $customer
         ));
-
         $html2pdf->writeHTML($htmldata);
 
         try {
