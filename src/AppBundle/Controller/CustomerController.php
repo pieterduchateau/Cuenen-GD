@@ -151,7 +151,7 @@ class CustomerController extends Controller
 
         foreach ($offertes as $offerte)
         {
-            $files = $this->getDoctrine()->getRepository("AppBundle:files")->findBy(array('offerte_id' => $offerte->getId()));
+            $files = $this->getDoctrine()->getRepository("AppBundle:Files")->findBy(array('offerte_id' => $offerte->getId()));
             foreach ($files as $file)
             {
                 $em->remove($file);
