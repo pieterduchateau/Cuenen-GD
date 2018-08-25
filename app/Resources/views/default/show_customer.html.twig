@@ -11,9 +11,9 @@
         </div>
         <div class="row" style="margin-bottom: 20px">
             <a href="{{ path('editCustomer',{'customerid': customer.id,'shop': shop}) }}">
-                <button type="button" class="btn btn-success">Klant aanpassen</button>
+                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Klant aanpassen</button>
             </a>
-            <button class="btn btn-danger" onclick="removeCustomerModal()">Klant verwijderen</button>
+            <button class="btn btn-danger" onclick="removeCustomerModal()"><span class="glyphicon glyphicon-minus-sign"></span> Klant verwijderen</button>
         </div>
         <div class="row">
             <div class="well col-xs-12">
@@ -64,7 +64,7 @@
             <a href="{{ path('addOfferte',{
                 'shop': shop,
                 'customerId': customer.id}) }}">
-                <button type="button" class="btn btn-success">Offerte toevoegen</button>
+                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Offerte toevoegen</button>
             </a>
         </div>
         <div class="row" style="margin-top: 15px">
@@ -73,7 +73,8 @@
                 <thead>
                 <tr>
                     <th>id</th>
-                    <th width="500px">Titel</th>
+                    <th>Offerte nummer</th>
+                    <th width="400px">Titel</th>
                     <th>Leverdatum</th>
                     <th>Leveradres</th>
                     <th></th>
@@ -83,6 +84,7 @@
                 {% for offerte in offertes %}
                     <tr>
                         <td>{{ offerte.id }}</td>
+                        <td>{{ offerte.offertenr }}</td>
                         <td>{{ offerte.titel }}</td>
                         <td>{{ offerte.deliverydate|date("d/m/Y") }}</td>
                         <td>{{ offerte.deliveryAddress }}</td>

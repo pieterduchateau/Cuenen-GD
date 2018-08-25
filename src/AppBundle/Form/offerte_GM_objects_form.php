@@ -13,9 +13,6 @@ class offerte_GM_objects_form extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('code', HiddenType::class, array(
-            'data' => '1',
-        ));
         $builder->add('omschrijving', TextareaType::class);
         $builder->add('aantal', HiddenType::class, array(
             'data' => '1',

@@ -14,6 +14,7 @@ class offerte_GM_form extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('customerNr');
+        $builder->add('offerteNr');
         $builder->add('titel');
         $builder->add('deliveryAddress');
         $builder->add('postcode');

@@ -19,15 +19,10 @@
                     <div class="row">
                         <div class="col-lg-8">
                             <form>
-                                <div class="form-group col-lg-8">
+                                <div class="form-group col-lg-12">
                                     <label for="leveradres">Leveradres </label>
                                     <input type="email" class="form-control" id="leveradres" disabled="disabled"
                                            value="{{ offerte.deliveryAddress }}">
-                                </div>
-                                <div class="form-group col-lg-4">
-                                    <label for="date">Leverdatum </label>
-                                    <input type="date" class="form-control" id="date" disabled="disabled"
-                                           value="{{ offerte.deliverydate|date("Y-m-d") }}">
                                 </div>
                                 <div class="form-group col-lg-6">
                                     <label for="postcode">Postcode</label>
@@ -38,6 +33,16 @@
                                     <label for="stad">Stad</label>
                                     <input type="text" class="form-control" id="stad" disabled="disabled"
                                            value="{{ offerte.place }}">
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label for="leveradres">Offerte Nummer </label>
+                                    <input type="email" class="form-control" id="leveradres" disabled="disabled"
+                                           value="{{ offerte.offertenr }}">
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label for="date">Datum </label>
+                                    <input type="date" class="form-control" id="date" disabled="disabled"
+                                           value="{{ offerte.deliverydate|date("Y-m-d") }}">
                                 </div>
                             </form>
                         </div>
@@ -76,7 +81,6 @@
                                 <thead class="table">
                                 {% if shop == "CE" %}
                                     <tr>
-                                        <th scope="col">Code</th>
                                         <th scope="col">Omschrijving</th>
                                         <th scope="col">Aantal</th>
                                         <th scope="col">Prijs</th>
@@ -93,8 +97,7 @@
                                 {% for object in offerte.objects %}
                                     {% if shop == "CE" %}
                                         <tr>
-                                            <td width="10%">{{ object.code }}</td>
-                                            <td width="50%">
+                                            <td width="60%">
                                                 <pre>{{ object.omschrijving }}</pre>
                                             </td>
                                             <td width="10%">{{ object.aantal }}</td>

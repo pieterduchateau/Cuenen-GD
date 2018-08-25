@@ -4,11 +4,14 @@
         <div class="container">
             {{ form_start(form) }}
             <div class="panel panel-default">
-                <div class="panel-heading">Basis informatie</div>
+                <div class="panel-heading">Informatie</div>
                 <div class="panel-body">
                     {# render the task's only field: description #}
                     <div class="col-lg-6 col-xs-12">
                         <h4>Klantnummer </h4> {{ form_widget(form.customerNr,{ 'attr':{'readonly':'readonly'} }) }}
+                    </div>
+                    <div class="col-lg-6 col-xs-12">
+                        <h4>Offerte Nummer </h4> {{ form_widget(form.offerteNr) }}
                     </div>
                     <div class="col-lg-12">
                         {{ form_row(form.titel, {'label': 'Titel'}) }}
@@ -21,7 +24,7 @@
                         {{ form_row(form.place, {'label': 'Stad'}) }}
                     </div>
                     <div class="col-lg-12 col-xs-12">
-                        {{ form_row(form.delivery_date, {'label': 'Leverdatum'}) }}
+                        {{ form_row(form.delivery_date, {'label': 'Datum'}) }}
                     </div>
                 </div>
             </div>
@@ -37,7 +40,6 @@
                         <thead>
                         {% if shop == "CE" %}
                             <tr>
-                                <th scope="col">code</th>
                                 <th scope="col">omschrijving</th>
                                 <th scope="col">aantal</th>
                                 <th scope="col">prijs</th>
@@ -45,7 +47,6 @@
                             </tr>
                         {% elseif shop == "GM" %}
                             <tr>
-                                <th scope="col" style="visibility: hidden">code</th>
                                 <th scope="col">omschrijving</th>
                                 <th scope="col" style="visibility: hidden">aantal</th>
                                 <th scope="col">prijs</th>
@@ -188,9 +189,9 @@
 
         function generateTotalsTable() {
             $('#objectTable > tr').each(function () {
-                $aantal = $('td:nth-child(3)', this).children("input").val();
-                $prijs = $('td:nth-child(4)', this).children("input").val();
-                $('td:nth-child(5)', this).children("input").val(($aantal * $prijs).toFixed(2));
+                $aantal = $('td:nth-child(2)', this).children("input").val();
+                $prijs = $('td:nth-child(3)', this).children("input").val();
+                $('td:nth-child(4)', this).children("input").val(($aantal * $prijs).toFixed(2));
             });
         }
 
@@ -198,7 +199,7 @@
             generateTotalsTable();
             $subtotal = 0;
             $('#objectTable > tr').each(function () {
-                $rowTotal = $('td:nth-child(5)', this).children("input").val();
+                $rowTotal = $('td:nth-child(4)', this).children("input").val();
                 $subtotal = parseFloat($subtotal) + parseFloat($rowTotal);
             });
             $('#subtotal').val($subtotal.toFixed(2));

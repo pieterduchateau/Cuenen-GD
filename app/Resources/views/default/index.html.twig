@@ -2,7 +2,6 @@
 
 {% block body %}
     <div class="container">
-
         <div class="row">
             <div class="col-xs-12 col-md-3">
                 <a href="{{ path('add_customer',{'shop': shop}) }}" class="thumbnail">
@@ -39,14 +38,27 @@
                 </div>
             {% endif %}
         </div>
-
     </div>
 {% endblock %}
 
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+
+        });
+
+    </script>
+{% endblock %}
 {% block stylesheets %}
     <style>
         .thumbnail {
             height: 160px;
+            border-radius: 0px;
+        }
+
+        .thumbnail:hover {
+            background-color: #333;
+            color: white;
         }
 
         .nav_icons {
@@ -54,3 +66,5 @@
         }
     </style>
 {% endblock %}
+
+

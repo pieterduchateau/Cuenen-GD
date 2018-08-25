@@ -20,11 +20,6 @@ class Offerte_objects
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $code;
-
-    /**
      * @ORM\Column(type="string")
      */
     private $omschrijving;
@@ -64,22 +59,6 @@ class Offerte_objects
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param mixed $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
     }
 
     /**

@@ -25,6 +25,11 @@ class Offerte
     private $customerNr;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $offerteNr;
+
+    /**
      * @ORM\Column(type="string")
      */
     private $titel;
@@ -201,6 +206,24 @@ class Offerte
     {
         return $this->extra_cost;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOfferteNr()
+    {
+        return $this->offerteNr;
+    }
+
+    /**
+     * @param mixed $offerteNr
+     */
+    public function setOfferteNr($offerteNr)
+    {
+        $this->offerteNr = $offerteNr;
+    }
+
+
 
     /**
      * @param mixed $extra_cost

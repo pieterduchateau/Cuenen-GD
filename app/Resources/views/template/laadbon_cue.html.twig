@@ -18,12 +18,16 @@
             <tr>
                 <td width="90">Adres :</td>
                 <td width="225">{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
-                <td width="90">Lever datum :</td>
+                <td width="90">Datum :</td>
                 <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
             </tr>
             <tr>
                 <td>Telefoon :</td>
                 <td>{{ customer.phone }}</td>
+            </tr>
+            <tr>
+                <td>Offerte nummer :</td>
+                <td>{{ offerte.offertenr }}</td>
             </tr>
             </tbody>
         </table>
@@ -32,20 +36,17 @@
         <table>
             <thead>
             <tr>
-                <th align="center" class="data_table">Code</th>
                 <th align="center" class="data_table">Omschrijving</th>
                 <th align="center" class="data_table">Aantal</th>
             </tr>
             </thead>
             <tbody>
-            <col width="50">
-            <col width="600">
+            <col width="650">
             <col width="50">
 
             {% set totaal = 0 %}
             {% for object in offerte.objects %}
                 <tr>
-                    <td class="data_table center-block">{{ object.code }}</td>
                     <td class="data_table">
                         <pre>{{ object.omschrijving }}</pre>
                     </td>

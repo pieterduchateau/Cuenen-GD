@@ -18,12 +18,16 @@
             <tr>
                 <td width="90">Adres :</td>
                 <td width="225">{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
-                <td width="90">Lever datum :</td>
+                <td width="90">Datum :</td>
                 <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
             </tr>
             <tr>
                 <td>Telefoon :</td>
                 <td>{{ customer.phone }}</td>
+            </tr>
+            <tr>
+                <td>Offerte nummer :</td>
+                <td>{{ offerte.offertenr }}</td>
             </tr>
             </tbody>
         </table>
@@ -32,7 +36,6 @@
         <table>
             <thead>
             <tr>
-                <th align="center" class="data_table">Code</th>
                 <th align="center" class="data_table">Omschrijving</th>
                 <th align="center" class="data_table">Aantal</th>
                 <th align="center" class="data_table">Prijs</th>
@@ -40,15 +43,13 @@
             </tr>
             </thead>
             <tbody>
-            <col width="50">
-            <col width="425">
+            <col width="475">
             <col width="50">
             <col width="50">
             <col width="100">
             {% set totaal = 0 %}
             {% for object in offerte.objects %}
                 <tr>
-                    <td class="data_table center-block">{{ object.code }}</td>
                     <td class="data_table">
                         <pre>{{ object.omschrijving }}</pre>
                     </td>
@@ -60,28 +61,23 @@
             {% endfor %}
             <tr>
                 <td></td>
-                <td></td>
                 <td colspan="2" align="right" class="left-center">Subtotaal</td>
                 <td class="data_table_foot">€ {{ totaal }} </td>
             </tr>
             <tr>
                 <td></td>
-                <td></td>
                 <td colspan="2" align="right" class="left-center">Korting</td>
                 <td class="data_table_foot">{{ offerte.korting }} %</td>
             </tr>
             <tr>
-                <td></td>
                 <td colspan="3" align="right" class="left-center">Opbouw/afbouw + transport</td>
                 <td class="data_table_foot">€ {{ offerte.extracost }} </td>
             </tr>
             <tr>
-                <td></td>
                 <td colspan="3" align="right" class="left-center">BTW</td>
                 <td class="data_table_foot">{{ offerte.btw }} %</td>
             </tr>
             <tr>
-                <td></td>
                 <td colspan="3" align="right" class="left-center">Totaal</td>
                 {% set h1 = totaal - (totaal / 100 * offerte.korting) %}
                 {% set h2 = h1 + offerte.extracost %}
@@ -89,14 +85,11 @@
                 <td class="data_table_foot">€ {{ h3|round(2) }} </td>
             </tr>
             </tbody>
-        </table><br>
-    </div><br>
-    <div>
-        <br>
-        <br>
-        <br>
-        <img class="bannerfooter" src="img/cue/offerte_footer.JPG"/>
+        </table>
     </div>
+    <end_last_page end_height="40mm">
+        <img class="bannerfooter" src="img/cue/offerte_footer.JPG"/>
+    </end_last_page>
 </page>
 
 <style>

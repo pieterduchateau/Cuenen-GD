@@ -23,26 +23,37 @@
     <div class="container-fluid">
 
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" style="font-size: 27px;line-height: 33px" href="{{ path('homepage',{'shop': shop}) }}">
+            <div class="navbar-brand" style="font-size: 18px;line-height: 33px">
                 {% if shop == "CE" %}
                     Cue-events
                 {% elseif shop == "GM" %}
                     Gordijnen Myriam
                 {% endif %}
-            </a>
+                ,Hallo {{ app.user.username|capitalize }}
+            </div>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/select_shop"><button class="btn btn-success" style="margin-bottom: 0px">Wissel winkel</button></a></li>
-                <li><a href="/logout"><button class="btn btn-danger" style="margin-bottom: 0px">Afmelden</button></a></li>
+                <li><a href="{{ path('homepage',{'shop': shop}) }}">
+                        <button class="btn btn-info" style="margin-bottom: 0px">
+                            <span class="glyphicon glyphicon-home"></span> Home
+                        </button>
+                    </a></li>
+                <li><a href="/select_shop">
+                        <button class="btn btn-success" style="margin-bottom: 0px"><span class="glyphicon glyphicon-refresh"></span> Wissel winkel</button>
+                    </a></li>
+                <li><a href="/logout">
+                        <button class="btn btn-danger" style="margin-bottom: 0px"><span class="glyphicon glyphicon-log-out"></span> Afmelden</button>
+                    </a></li>
             </ul>
         </div>
     </div>

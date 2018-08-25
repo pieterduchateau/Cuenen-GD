@@ -18,12 +18,16 @@
             <tr>
                 <td width="90">Adres :</td>
                 <td width="225">{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
-                <td width="90">Lever datum :</td>
+                <td width="90">Datum :</td>
                 <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
             </tr>
             <tr>
                 <td>Telefoon :</td>
                 <td>{{ customer.phone }}</td>
+            </tr>
+            <tr>
+                <td>Offerte nummer :</td>
+                <td>{{ offerte.offertenr }}</td>
             </tr>
             </tbody>
         </table>
@@ -73,9 +77,9 @@
             </tbody>
         </table>
     </div>
-    <div>
-        <img class="bannerfooter" src="img/GM/footer_offerte.JPG"/><br>
-    </div>
+    <end_last_page end_height="35mm">
+        <img class="bannerfooter" src="img/GM/footer_offerte.JPG"/>
+    </end_last_page>
 </page>
 
 <style>
