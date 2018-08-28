@@ -6,11 +6,14 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col col-xs-6">
-                            <h3 class="panel-title"> <span class="glyphicon glyphicon-list-alt"></span> <b>{{ offerte.titel }}</b></h3>
+                            <h3 class="panel-title"><span class="glyphicon glyphicon-list-alt"></span>
+                                <b>{{ offerte.titel }}</b></h3>
                         </div>
                         <div class="col col-xs-6 text-right">
                             <a href="{{ path('show_customer',{'shop': shop, 'customer_id': offerte.customerNr}) }}">
-                            <button type="button" class="btn btn-sm btn-primary btn-create"><span class="glyphicon glyphicon-circle-arrow-left"></span> Terug</button>
+                                <button type="button" class="btn btn-sm btn-primary btn-create"><span
+                                            class="glyphicon glyphicon-circle-arrow-left"></span> Terug
+                                </button>
                             </a>
                         </div>
                     </div>
@@ -55,11 +58,10 @@
                                     <a class="list-group-item" href="/{{ shop }}/laadbon/{{ offerte.id }}">
                                         <span class="glyphicon glyphicon-file"></span> Laadbon in PDF
                                     </a>
-                                {% else %}
-                                    <a class="list-group-item" href="/{{ shop }}/factuur/{{ offerte.id }}">
-                                        <span class="glyphicon glyphicon-file"></span> Factuur in PDF
-                                    </a>
                                 {% endif %}
+                                <a class="list-group-item" href="/{{ shop }}/factuur/{{ offerte.id }}">
+                                    <span class="glyphicon glyphicon-file"></span> Factuur in PDF
+                                </a>
                                 <a class="list-group-item" href="/{{ shop }}/images/{{ offerte.id }}">
                                     <span class="glyphicon glyphicon-picture"></span> Foto's
                                 </a>

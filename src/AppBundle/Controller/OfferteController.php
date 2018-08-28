@@ -125,6 +125,12 @@ class OfferteController extends Controller
                 'customer' => $customer
             ))->getContent());
             $html2pdf->output();
+        }else{
+            $html2pdf->writeHTML($this->render("template/factuur_cue.html.twig", array(
+                'offerte' => $offerte,
+                'customer' => $customer
+            ))->getContent());
+            $html2pdf->output();
         }
     }
 
