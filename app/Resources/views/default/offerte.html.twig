@@ -122,12 +122,18 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <table class="table table-bordered">
+                                {% if shop == "CE" %}
+                                    <tr>
+                                        <td>Korting :</td>
+                                        <td>{{ offerte.korting }} %</td>
+                                    </tr>
+                                {% endif %}
                                 <tr>
-                                    <td>Korting :</td>
-                                    <td>{{ offerte.korting }} %</td>
-                                </tr>
-                                <tr>
-                                    <td>Opbouw/afbouw + transport :</td>
+                                    <td>{% if shop == "CE" %}
+                                            Opbouw / Afbouw + Vervoer :
+                                        {% else %}
+                                            Plaatsing :
+                                        {% endif %}</td>
                                     <td>{{ offerte.extracost }} Euro</td>
                                 </tr>
                                 <tr>

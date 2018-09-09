@@ -24,6 +24,8 @@
             <tr>
                 <td>Telefoon :</td>
                 <td>{{ customer.phone }}</td>
+                <td>Te betalen tegen :</td>
+                <td>{{ offerte.deliverydate|date_modify("+10 day")|date("d/m/Y") }}</td>
             </tr>
             <tr>
                 <td>Offerte nummer :</td>

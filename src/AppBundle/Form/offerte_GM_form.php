@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Offerte;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,7 +21,9 @@ class offerte_GM_form extends AbstractType
         $builder->add('postcode');
         $builder->add('place');
         $builder->add('delivery_date');
-        $builder->add('korting');
+        $builder->add('korting', HiddenType::class, array(
+            'data' => '0',
+        ));;
         $builder->add('extra_cost');
         $builder->add('BTW');
 

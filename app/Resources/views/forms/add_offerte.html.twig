@@ -79,14 +79,16 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                Korting ( in % )
-                            </td>
-                            <td>
-                                {{ form_widget(form.korting) }}
-                            </td>
-                        </tr>
+                        {% if shop == "CE" %}
+                            <tr>
+                                <td>
+                                    Korting ( in % )
+                                </td>
+                                <td>
+                                    {{ form_widget(form.korting) }}
+                                </td>
+                            </tr>
+                        {% endif %}
                         <tr>
                             <td>
                                 {% if shop == "CE" %}

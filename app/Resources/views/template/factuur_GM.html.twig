@@ -21,6 +21,8 @@
             <tr>
                 <td>Telefoon :</td>
                 <td>{{ customer.phone }}</td>
+                <td>Te betalen tegen :</td>
+                <td>{{ offerte.deliverydate|date_modify("+10 day")|date("d/m/Y") }}</td>
             </tr>
             <tr>
                 <td>Offerte nummer :</td>
@@ -44,7 +46,7 @@
             {% for object in offerte.objects %}
                 <tr>
                     <td class="data_table"><pre>{{ object.omschrijving }}</pre></td>
-                    <td class="data_table">€ {{ object.prijs }}</td>
+                    <td class="data_table" style="text-align: center">€ {{ object.prijs }}</td>
                     {% set totaal = totaal + object.totaal %}
                 </tr>
             {% endfor %}
@@ -53,12 +55,8 @@
                 <td class="data_table_foot">€ {{ totaal }} </td>
             </tr>
             <tr>
-                <td colspan="1" align="right" class="left-center">Opbouw/afbouw + transport :</td>
+                <td colspan="1" align="right" class="left-center">Plaatsing :</td>
                 <td class="data_table_foot">€ {{ offerte.extracost }} </td>
-            </tr>
-            <tr>
-                <td colspan="1" align="right" class="left-center">Korting</td>
-                <td class="data_table_foot">{{ offerte.korting }} %</td>
             </tr>
             <tr>
                 <td colspan="1" align="right" class="left-center">BTW</td>
