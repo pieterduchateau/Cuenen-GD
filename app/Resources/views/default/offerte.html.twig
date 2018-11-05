@@ -65,6 +65,9 @@
                                 <a class="list-group-item" href="/{{ shop }}/images/{{ offerte.id }}">
                                     <span class="glyphicon glyphicon-picture"></span> Foto's
                                 </a>
+                                <button class="list-group-item"
+                                        onclick="mailmodal({{ offerte.id }})"><span class="glyphicon glyphicon-envelope"></span> Email verzenden
+                                </button>
                                 <a class="list-group-item" href="{{ path('editOfferte',{
                                     'shop': shop,
                                     'offerteNr': offerte.id}) }}">
@@ -179,6 +182,41 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="mailmodal" tabindex="-1" role="dialog" aria-labelledby="mailmodal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Mail</strong>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <input type="hidden" id="offerte_nr_2">
+                        <input type="hidden" id="shop" value="{{ shop }}">
+                        <div class="form-group">
+                            <label for="sel1">Type bestand:</label>
+                            <select class="form-control" id="filetype">
+                                <option value="offerte">Offerte</option>
+                                <option value="factuur">Factuur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="comment">Mail:</label>
+                            <textarea class="form-control" rows="5" id="mailbody" style="width: 550px; height: 376px"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">annuleren</button>
+                    <button type="button" class="btn btn-danger" onclick="sendmail()" data-dismiss="modal">Verzenden
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block javascripts %}
     <script>
@@ -207,6 +245,28 @@
             $('#offerte_nr').val($offertenr);
         }
 
+        function mailmodal($offertenr) {
+            $('#mailmodal').modal();
+            $('#offerte_nr_2').val($offertenr);
+        }
+
+        function sendmail() {
+            var url = "/sendmail";
+            var data = $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    "body": $('#mailbody').val(),
+                    "file": $('#filetype option:selected').val(),
+                    "offerteID": $('#offerte_nr_2').val(),
+                    "shop": $('#shop').val()
+                },
+                success: function (data) {
+                    alert(data)
+                }
+            }).responseText;
+        }
+
         function deleteOfferte() {
             var url = "/removeOfferte";
             var data = $.ajax({
@@ -227,6 +287,10 @@
     <style>
         pre {
             background-color: white;
+        }
+
+        textarea{
+            resize: both;
         }
     </style>
 {% endblock %}

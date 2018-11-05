@@ -2,23 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Offerte;
-use AppBundle\Entity\Offerte_objects;
 use AppBundle\Form\offerte_CUE_form;
 use AppBundle\Form\offerte_GM_form;
 use Doctrine\Common\Collections\ArrayCollection;
-use http\Env\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Spipu\Html2Pdf\Exception\ExceptionFormatter;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Forms;
 use Spipu\Html2Pdf\Html2Pdf;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use Psr\Log\LoggerInterface;
 
 
 class OfferteController extends Controller
@@ -233,14 +226,4 @@ class OfferteController extends Controller
         return new JsonResponse();
 
     }
-
-    /**
-     * @Route("test", name="test")
-     */
-    public function test()
-    {
-        return $this->render('template/offerte_GM.html.twig');
-
-    }
-
 }

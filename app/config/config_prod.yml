@@ -25,3 +25,8 @@ services:
     twig.extension.debug:
         class: Twig_Extension_Debug
         tags: [{ name: 'twig.extension' }]
+
+swiftmailer:
+    transport: gmail
+    username:  duchateaupieter@gmail.com
+    password:  Pilomima987357
