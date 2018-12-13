@@ -163,7 +163,7 @@ EOT
             // Outputting information message
             $output->writeln(PHP_EOL . sprintf('Entity classes generated to "<info>%s</INFO>"', $destPath));
         } else {
-            $output->writeln('No Metadata Classes to process.');
+            $output->writeln('No Metadata Utils to process.');
         }
     }
 }

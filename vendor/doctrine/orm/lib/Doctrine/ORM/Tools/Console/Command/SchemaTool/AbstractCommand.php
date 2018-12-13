@@ -64,7 +64,7 @@ abstract class AbstractCommand extends Command
 
             return $this->executeSchemaCommand($input, $output, $tool, $metadatas);
         } else {
-            $output->writeln('No Metadata Classes to process.');
+            $output->writeln('No Metadata Utils to process.');
             return 0;
         }
     }

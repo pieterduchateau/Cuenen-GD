@@ -2,6 +2,13 @@
 {% block body %}
     <div class="features-boxed">
         <div class="container">
+            <div class="alert alert-success" role="alert" id="alert_success" hidden="hidden"><h4><img
+                            src="{{ asset('img/icons/success.png') }}" style="width: 30px"> Succesvol ! </h4></div>
+            <div class="alert alert-info" role="alert" id="alert_info" hidden="hidden"><h4><img
+                            src="{{ asset('img/icons/loading.gif') }}" style="width: 40px"> Laden ... Even geduld</h4>
+            </div>
+            <div class="alert alert-danger" role="alert" id="alert_Warning" hidden="hidden"><h4><img
+                            src="{{ asset('img/icons/error.png') }}" style="width: 30px"> Error!</h4></div>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
@@ -58,15 +65,21 @@
                                     <a class="list-group-item" href="/{{ shop }}/laadbon/{{ offerte.id }}">
                                         <span class="glyphicon glyphicon-file"></span> Laadbon in PDF
                                     </a>
+                                    <button class="list-group-item"
+                                            onclick="cue_offerte_modal()"><span
+                                                class="glyphicon glyphicon-file"></span> Factuur in PDF
+                                    </button>
+                                {% else %}
+                                    <a class="list-group-item" href="/{{ shop }}/factuur/{{ offerte.id }}">
+                                        <span class="glyphicon glyphicon-file"></span> Factuur in PDF
+                                    </a>
                                 {% endif %}
-                                <a class="list-group-item" href="/{{ shop }}/factuur/{{ offerte.id }}">
-                                    <span class="glyphicon glyphicon-file"></span> Factuur in PDF
-                                </a>
                                 <a class="list-group-item" href="/{{ shop }}/images/{{ offerte.id }}">
                                     <span class="glyphicon glyphicon-picture"></span> Foto's
                                 </a>
                                 <button class="list-group-item"
-                                        onclick="mailmodal({{ offerte.id }})"><span class="glyphicon glyphicon-envelope"></span> Email verzenden
+                                        onclick="mailmodal({{ offerte.id }})"><span
+                                            class="glyphicon glyphicon-envelope"></span> Email verzenden
                                 </button>
                                 <a class="list-group-item" href="{{ path('editOfferte',{
                                     'shop': shop,
@@ -167,17 +180,23 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-center">
-                        <h4><strong>Bent u zeker dat u deze offerte wilt verwijderen?</strong></h4>
-                        <p>Bij het verwijderen van deze offerte worden ook al de foto's die bij deze offerte horen
-                            verwijderd.</p>
-                        <input type="hidden" id="offerte_nr">
+                    <div class="col-lg-3 col-xs-3" style="margin-top: 15px">
+                        <i class="fas fa-exclamation-circle fa-5x"></i>
+                    </div>
+                    <div class="col-lg-9 col-xs-9">
+                        <div class="row">
+                            <h4><strong>Bent u zeker dat u deze offerte wilt verwijderen?</strong></h4>
+                            <p>Bij het verwijderen van deze offerte worden ook al de foto's die bij deze offerte
+                                horen verwijderd.</p>
+                            <input type="hidden" id="offerte_nr">
+                        </div>
+                        <div class="row" style="margin-top: 10px">
+                            <button type="button" class="btn btn-success btn-modal" data-dismiss="modal">Nee</button>
+                            <button type="button" class="btn btn-danger btn-modal" onclick="deleteOfferte()" data-dismiss="modal">Ja
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Nee</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteOfferte()" data-dismiss="modal">Ja
-                    </button>
                 </div>
             </div>
         </div>
@@ -197,15 +216,16 @@
                         <input type="hidden" id="offerte_nr_2">
                         <input type="hidden" id="shop" value="{{ shop }}">
                         <div class="form-group">
-                            <label for="sel1">Type bestand:</label>
+                            <label for="filetype">Type bestand:</label>
                             <select class="form-control" id="filetype">
                                 <option value="offerte">Offerte</option>
                                 <option value="factuur">Factuur</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="comment">Mail:</label>
-                            <textarea class="form-control" rows="5" id="mailbody" style="width: 550px; height: 376px"></textarea>
+                            <label for="mailbody">Mail:</label>
+                            <textarea class="form-control" rows="5" id="mailbody"
+                                      style="width: 550px; height: 376px"></textarea>
                         </div>
                     </div>
                 </div>
@@ -214,6 +234,37 @@
                     <button type="button" class="btn btn-danger" onclick="sendmail()" data-dismiss="modal">Verzenden
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cue_factuur_modal" tabindex="-1" role="dialog" aria-labelledby="cue_factuur_modal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Omschrijving Factuur</strong>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="{{ path('factuurwithobject') }}">
+                    <div class="modal-body">
+                        <div>
+                            <input type="hidden" id="offerte_nr_3" name="offerte_nr_3" value="32">
+                            <input type="hidden" id="shop" name="shop" value="{{ shop }}">
+                            <div class="form-group">
+                                <label for="factuurbody">Omschrijving :</label>
+                                <textarea class="form-control" rows="5" id="factuurbody" name="factuurbody"
+                                          style="width: 550px; height: 376px"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">annuleren</button>
+                        <button type="submit" class="btn btn-danger">Genereren
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -245,6 +296,10 @@
             $('#offerte_nr').val($offertenr);
         }
 
+        function cue_offerte_modal() {
+            $('#cue_factuur_modal').modal();
+        }
+
         function mailmodal($offertenr) {
             $('#mailmodal').modal();
             $('#offerte_nr_2').val($offertenr);
@@ -261,8 +316,18 @@
                     "offerteID": $('#offerte_nr_2').val(),
                     "shop": $('#shop').val()
                 },
+                beforeSend: function () {
+                    $('#alert_info').attr("hidden", false);
+                },
                 success: function (data) {
-                    alert(data)
+                    if (data === "1") {
+                        $('#alert_info').attr("hidden", true);
+                        $('#alert_success').attr("hidden", false).fadeOut(3000);
+
+                    } else {
+                        $('#alert_info').attr("hidden", true);
+                        $('#alert_Warning').attr("hidden", false).fadeOut(3000);
+                    }
                 }
             }).responseText;
         }
@@ -289,7 +354,7 @@
             background-color: white;
         }
 
-        textarea{
+        textarea {
             resize: both;
         }
     </style>

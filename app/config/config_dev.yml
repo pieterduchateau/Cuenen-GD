@@ -36,8 +36,3 @@ monolog:
         #chromephp:
         #    type: chromephp
         #    level: info
-
-swiftmailer:
-    transport: gmail
-    username:  duchateaupieter@gmail.com
-    password:  Pilomima987357

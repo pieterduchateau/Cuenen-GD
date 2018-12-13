@@ -26,7 +26,8 @@ framework:
     session:
         # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id: session.handler.native_file
-        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        save_path: '/var/lib/php/sessions'
+        # save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
     fragments: ~
     http_method_override: true
     assets: ~
@@ -63,8 +64,18 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: '%mailer_transport%'
-    host: '%mailer_host%'
-    username: '%mailer_user%'
-    password: '%mailer_password%'
-    spool: { type: memory }
+    default_mailer: mailer
+    mailers:
+        mailer:
+            transport: %mailer_transport%
+            host:      %mailer_host%
+            username:  %mailer_user%
+            password:  %mailer_password%
+        mailer2:
+            transport: %mailer2_transport%
+            host:      %mailer2_host%
+            username:  %mailer2_user%
+            password:  %mailer2_password%
+            encryption: %mailer2_encryption%
+            timeout: %mailer2_timeout%
+            port: %mailer2_port%

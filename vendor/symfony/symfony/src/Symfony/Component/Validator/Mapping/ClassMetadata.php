@@ -132,7 +132,7 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     {
         $parentProperties = parent::__sleep();
 
-        // Don't store the cascading strategy. Classes never cascade.
+        // Don't store the cascading strategy. Utils never cascade.
         unset($parentProperties[array_search('cascadingStrategy', $parentProperties)]);
 
         return array_merge($parentProperties, array(

@@ -11,9 +11,13 @@
         </div>
         <div class="row" style="margin-bottom: 20px">
             <a href="{{ path('editCustomer',{'customerid': customer.id,'shop': shop}) }}">
-                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Klant aanpassen</button>
+                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Klant
+                    aanpassen
+                </button>
             </a>
-            <button class="btn btn-danger" onclick="removeCustomerModal()"><span class="glyphicon glyphicon-minus-sign"></span> Klant verwijderen</button>
+            <button class="btn btn-danger" onclick="removeCustomerModal()"><span
+                        class="glyphicon glyphicon-minus-sign"></span> Klant verwijderen
+            </button>
         </div>
         <div class="row">
             <div class="well col-xs-12">
@@ -59,44 +63,54 @@
                 </table>
             </div>
         </div>
-        <hr>
-        <div class="row">
-            <a href="{{ path('addOfferte',{
-                'shop': shop,
-                'customerId': customer.id}) }}">
-                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Offerte toevoegen</button>
-            </a>
-        </div>
         <div class="row" style="margin-top: 15px">
-            <table id="offertes_table" class="table table-hover table-striped table-bordered"
-                   cellspacing="0" width="100%">
-                <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Offerte nummer</th>
-                    <th width="400px">Titel</th>
-                    <th>Leverdatum</th>
-                    <th>Leveradres</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for offerte in offertes %}
-                    <tr>
-                        <td>{{ offerte.id }}</td>
-                        <td>{{ offerte.offertenr }}</td>
-                        <td>{{ offerte.titel }}</td>
-                        <td>{{ offerte.deliverydate|date("d/m/Y") }}</td>
-                        <td>{{ offerte.deliveryAddress }}</td>
-                        <td class="text-center"><a
-                                    href="{{ path('offerte',{'shop': shop, 'offerte_id': offerte.id}) }}">
-                                <button type="button" class="btn btn-info"><span
-                                            class="glyphicon glyphicon-folder-open"></span></button>
-                            </a></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <div class="panel panel-basic">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        <h2 class="paneltitle">Offertes</h2>
+                    </div>
+                    <div class="panel-title pull-right"><h1 class="paneltitle"><a class="btn btn-success"
+                                                                                  href="{{ path('addOfferte',{
+                                                                                      'shop': shop,
+                                                                                      'customerId': customer.id}) }}"><span
+                                        class="mbr-iconfont fa-plus-square fa"></span> Offerte toevoegen</a></h1></div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-body" style="margin:10px 10px;">
+                    <div class="row justify-content-center features">
+                        <div class="col">
+                            <table id="offertes_table" class="table table-striped table-hover" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Offerte nummer</th>
+                                    <th width="400px">Titel</th>
+                                    <th>Leverdatum</th>
+                                    <th>Leveradres</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for offerte in offertes %}
+                                    <tr>
+                                        <td>{{ offerte.id }}</td>
+                                        <td>{{ offerte.offertenr }}</td>
+                                        <td>{{ offerte.titel }}</td>
+                                        <td>{{ offerte.deliverydate|date("d/m/Y") }}</td>
+                                        <td>{{ offerte.deliveryAddress }}</td>
+                                        <td class="text-center"><a
+                                                    href="{{ path('offerte',{'shop': shop, 'offerte_id': offerte.id}) }}">
+                                                <button type="button" class="btn btn-success"><span
+                                                            class="glyphicon glyphicon-folder-open"></span></button>
+                                            </a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="modalDeleteCustomer" tabindex="-1" role="dialog" aria-labelledby="modalDelete"
@@ -110,18 +124,25 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-center">
-                        <h4><strong>Bent u zeker dat u deze Klant wilt verwijderen?</strong></h4>
-                        <p>Bij het verwijderen van deze klant worden ook al de foto's en offertes die bij deze klant
-                            horen verwijderd.</p>
-                        <input type="hidden" id="customer_nr">
+                    <div class="col-lg-3 col-xs-3" style="margin-top: 15px">
+                        <i class="fas fa-exclamation-circle fa-5x"></i>
+                    </div>
+                    <div class="col-lg-9 col-xs-9">
+                        <div class="row">
+                            <h4><strong>Bent u zeker dat u deze Klant wilt verwijderen?</strong></h4>
+                            <p>Bij het verwijderen van deze klant worden ook al de foto's en offertes die bij deze klant
+                                horen verwijderd.</p>
+                            <input type="hidden" id="customer_nr">
+                        </div>
+                        <div class="row" style="margin-top: 10px">
+                            <a href="{{ path('deletecustomer',{'customerid': customer.id,'shop': shop}) }}">
+                                <button type="button" class="btn btn-danger btn-modal">Ja</button>
+                            </a>
+                            <button type="button" class="btn btn-success btn-modal" data-dismiss="modal">Nee</button>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Nee</button>
-                    <a href="{{ path('deletecustomer',{'customerid': customer.id,'shop': shop}) }}">
-                        <button type="button" class="btn btn-success">Ja</button>
-                    </a>
                 </div>
             </div>
         </div>
@@ -153,8 +174,7 @@
                 );
             });
 
-            function removeCustomerModal()
-            {
+            function removeCustomerModal() {
                 $('#modalDeleteCustomer').modal();
             }
         </script>

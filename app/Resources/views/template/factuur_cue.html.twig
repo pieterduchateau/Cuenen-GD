@@ -1,95 +1,99 @@
-<page backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">
+<page backtop="55mm" backbottom="55mm" backleft="10mm" backright="10mm">
     <page_header>
-
+        <img class="banner" src="img/cue/offerte_header.JPG"/><br>
     </page_header>
     <page_footer>
-
+        <img class="bannerfooter" src="img/cue/offerte_footer.JPG"/>
     </page_footer>
-    <img class="banner" src="img/cue/offerte_header.JPG"/><br>
     <div class="row customer_info">
         <table>
             <tbody>
             <tr>
                 <td width="90">Naam :</td>
-                <td width="225">{{ customer.firstName }} {{ customer.lastName }}</td>
-                <td width="90">Lever adres :</td>
-                <td width="225">{{ offerte.deliveryaddress }} , {{ offerte.postcode }} {{ offerte.place }}</td>
-            </tr>
-            <tr>
-                <td width="90">Adres :</td>
-                <td width="225">{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
-                <td width="90">Datum :</td>
-                <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
+                <td width="300">{{ customer.firstName }} {{ customer.lastName }}</td>
+                <td>Offerte :</td>
+                <td>{{ offerte.offertenr }}</td>
             </tr>
             <tr>
                 <td>Telefoon :</td>
                 <td>{{ customer.phone }}</td>
-                <td>Te betalen tegen :</td>
-                <td>{{ offerte.deliverydate|date_modify("+10 day")|date("d/m/Y") }}</td>
+                <td width="90">Datum :</td>
+                <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
             </tr>
             <tr>
-                <td>Offerte nummer :</td>
-                <td>{{ offerte.offertenr }}</td>
+                <td width="90">Adres :</td>
+                <td colspan="3">{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
+            </tr>
+            <tr>
+                <td width="90">Lever adres :</td>
+                <td colspan="3">{{ offerte.deliveryaddress }} , {{ offerte.postcode }} {{ offerte.place }}</td>
             </tr>
             </tbody>
         </table>
     </div>
+    <table>
+        <thead>
+        <tr>
+            <th align="center" class="data_header">Omschrijving</th>
+            <th align="center" class="data_header">Totaal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <col width="550">
+        <col width="100">
+        {% set totaal = 0 %}
+        {% for object in offerte.objects %}
+            {% set totaal = totaal + object.totaal %}
+        {% endfor %}
+        <tr>
+            <td class="data_table textarea">
+                <pre>{{ body }}</pre>
+            </td>
+            <td class="data_table center-block">€ {{ totaal }}</td>
+        </tr>
+        </tbody>
+    </table>
     <div>
         <table>
-            <thead>
-            <tr>
-                <th align="center" class="data_table">Omschrijving</th>
-                <th align="center" class="data_table">Totaal</th>
-            </tr>
-            </thead>
             <tbody>
-            <col width="550">
+            <col width="568">
             <col width="100">
-            {% set totaal = 0 %}
-            {% for object in offerte.objects %}
-                    {% set totaal = totaal + object.totaal %}
-            {% endfor %}
             <tr>
-                <td class="data_table" style="text-align: center">
-                   <h4>Te betalen bedrag :</h4>
-                </td>
-                <td class="data_table center-block">€ {{ totaal }}</td>
+                <td class="data_table">Korting</td>
+                <td class="data_table" style="text-align: right;">{{ offerte.korting }} %</td>
             </tr>
             <tr>
-                <td align="right" class="left-center">Korting</td>
-                <td class="data_table_foot">{{ offerte.korting }} %</td>
+                <td class="data_table">Opbouw/afbouw + transport</td>
+                <td class="data_table" style="text-align: right;">€ {{ offerte.extracost }} </td>
             </tr>
             <tr>
-                <td align="right" class="left-center">Opbouw/afbouw + transport</td>
-                <td class="data_table_foot">€ {{ offerte.extracost }} </td>
-            </tr>
-            <tr>
-                <td align="right" class="left-center">BTW</td>
-                <td class="data_table_foot">{{ offerte.btw }} %</td>
-            </tr>
-            <tr>
-                <td  align="right" class="left-center">Totaal</td>
+                <td class="data_table"><b>Totaal excl. btw</b></td>
                 {% set h1 = totaal - (totaal / 100 * offerte.korting) %}
                 {% set h2 = h1 + offerte.extracost %}
+                <td class="data_table" style="text-align: right;">€ {{ h2 }} </td>
+            </tr>
+            <tr>
+                <td class="data_table">BTW</td>
+                <td class="data_table" style="text-align: right;">{{ offerte.btw }} %</td>
+            </tr>
+            <tr>
+                <td class="data_table" style="background-color: grey; color: #FFFFFF"><b>Totaal incl. btw</b></td>
                 {% set h3 = h2 +  (h2 / 100 * offerte.btw) %}
-                <td class="data_table_foot">€ {{ h3|round(2) }} </td>
+                <td class="data_table" style="text-align: right;background-color: grey; color: #FFFFFF">
+                    € {{ h3|round(2) }} </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <end_last_page end_height="45mm">
-        <img class="bannerfooter" src="img/cue/offerte_footer.JPG"/>
-    </end_last_page>
 </page>
 
 <style>
     .banner {
-        width: 700px;
+        width: 800px;
     }
 
     .bannerfooter {
-        width: 700px;
-        background: #6cf;
+        width: 800px;
     }
 
     table {
@@ -101,8 +105,8 @@
         font-family: Arial, serif;
     }
 
-    table.data_table, th.data_table, td.data_table {
-        border: 1px solid #C0C0C0;
+    table.data_table, th.data_header, td.data_table {
+        border: 1px solid #0C0C0C;
     }
 
     .center-block {
@@ -121,12 +125,25 @@
     }
 
     .left-center {
-        border-right: 1px solid #C0C0C0;
+        border-right: 1px solid #0C0C0C;
         padding-right: 10px;
     }
 
     .data_table_foot {
-        text-align: center;
-        border: 1px solid #C0C0C0;
+        text-align: right;
+        border: 1px solid #0C0C0C;
+    }
+
+    .textarea {
+        padding-left: 10px;
+    }
+
+    .data_table {
+        padding-top: 5px;
+    }
+
+    .data_header {
+        background-color: grey;
+        color: #FFFFFF;
     }
 </style>

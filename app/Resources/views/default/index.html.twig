@@ -2,50 +2,65 @@
 
 {% block body %}
     <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-md-3">
-                <a href="{{ path('add_customer',{'shop': shop}) }}" class="thumbnail">
-                    <div class="text-center">
-                        <img class="nav_icons" src="{{ asset('/img/icons/user-2.png') }}" alt="...">
-                        <h3>Klant toevoegen</h3>
+
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <a href="{{ path('add_customer',{'shop': shop}) }}">
+                <div class="wrap">
+                    <div class="ico-wrap">
+                        <span class="mbr-iconfont fa-plus-square fa"></span>
                     </div>
-                </a>
-            </div>
-            <div class="col-xs-12 col-md-3">
-                <a href="{{ path('all_customers',{'shop': shop}) }}" class="thumbnail">
-                    <div class="text-center">
-                        <img class="nav_icons" src="{{ asset('/img/icons/group-1.png') }}" alt="...">
-                        <h3>Klanten</h3>
+                    <div class="text-wrap vcenter">
+                        <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Klant <span>toevoegen</span>
+                        </h2>
+                        <p class="mbr-fonts-style text1 mbr-text display-6">Klant toevoegen aan klantensysteem</p>
                     </div>
-                </a>
-            </div>
-            <div class="col-xs-12 col-md-3">
-                <a href="{{ path('calendar',{'shop': shop}) }}" class="thumbnail">
-                    <div class="text-center">
-                        <img class="nav_icons" src="{{ asset('/img/icons/cal.png') }}" alt="...">
-                        <h3>Kalender</h3>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xs-12 col-md-3">
-                <a href="{{ path('mails',{'shop': shop}) }}" class="thumbnail">
-                    <div class="text-center">
-                        <img class="nav_icons" src="{{ asset('/img/icons/envelope.png') }}" alt="...">
-                        <h3>Mails</h3>
-                    </div>
-                </a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div class="col-xs-12 col-md-3">
-                    <a href="{{ path('config_index') }}" class="thumbnail">
-                        <div class="text-center">
-                            <img class="nav_icons" src="{{ asset('/img/icons/settings.png') }}" alt="...">
-                            <h3>Configuratie</h3>
-                        </div>
-                    </a>
                 </div>
-            {% endif %}
+            </a>
         </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <a href="{{ path('all_customers',{'shop': shop}) }}">
+                <div class="wrap">
+                    <div class="ico-wrap">
+                        <span class="mbr-iconfont fa-address-book fa"></span>
+                    </div>
+                    <div class="text-wrap vcenter">
+                        <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Klanten <span></span>
+                        </h2>
+                        <p class="mbr-fonts-style text1 mbr-text display-6">Facturen  / Offertes bekijken van de klant</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <a href="{{ path('calendar',{'shop': shop}) }}">
+                <div class="wrap">
+                    <div class="ico-wrap">
+                        <span class="mbr-iconfont fa-calendar-alt fa"></span>
+                    </div>
+                    <div class="text-wrap vcenter">
+                        <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Kalender <span></span>
+                        </h2>
+                        <p class="mbr-fonts-style text1 mbr-text display-6">Kalender met geplande activiteiten</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <a href="{{ path('config_index') }}">
+                    <div class="wrap">
+                        <div class="ico-wrap">
+                            <span class="mbr-iconfont fa-cog fa"></span>
+                        </div>
+                        <div class="text-wrap vcenter">
+                            <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Configuration <span></span>
+                            </h2>
+                            <p class="mbr-fonts-style text1 mbr-text display-6">Administrator checks / aanpassingen</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -59,18 +74,57 @@
 {% endblock %}
 {% block stylesheets %}
     <style>
-        .thumbnail {
-            height: 160px;
-            border-radius: 0px;
+        section {
+            padding-top: 4rem;
+            padding-bottom: 5rem;
+            background-color: #f1f4fa;
         }
 
-        .thumbnail:hover {
-            background-color: #333;
+        .wrap {
+            display: flex;
+            background: white;
+            padding: 1rem 1rem 1rem 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 7px 7px 30px -5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .wrap:hover {
+            background-color: #984B43;
             color: white;
         }
 
-        .nav_icons {
-            height: 80px;
+        .ico-wrap {
+            margin: auto;
+        }
+
+        .mbr-iconfont {
+            font-size: 4.5rem !important;
+            color: #313131;
+            margin: 1rem;
+            padding-right: 1rem;
+        }
+
+        .vcenter {
+            margin: auto;
+        }
+
+        .mbr-section-title3 {
+            text-align: left;
+        }
+
+        h2 {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .display-5 {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1.4rem;
+        }
+
+        .mbr-bold {
+            font-weight: 700;
         }
     </style>
 {% endblock %}

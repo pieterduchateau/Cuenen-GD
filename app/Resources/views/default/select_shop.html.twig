@@ -8,12 +8,33 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
         <link rel="stylesheet"
               href="{{ asset('/css/bootstrap.min.css') }}">
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.min.css">
         <link rel="stylesheet" href="{{ asset('/css/default.css') }}">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+        <style>
+            body {
+                font-family: 'Varela Round', sans-serif;
+            }
+
+            .shopheader{
+                background-color: #984B43;
+                width: 100%;
+                height: 125px;
+            }
+
+            .thumbnail{
+                padding: 0px;
+            }
+
+            .shopheader_icon{
+                margin-top: 30px;
+            }
+        </style>
+        {% endblock %}
     </head>
 </head>
 <body>
@@ -30,17 +51,32 @@
 </nav>
 <div class="container">
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title text-center">Welkom</h3>
+        <div class="col-md-2"></div>
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <div class="shopheader text-center">
+                    <img class="shopheader_icon" src="{{ asset('img/icons/id.png') }}">
                 </div>
-                <div class="panel-body text-center">
-                    <a href="{{ path('homepage',{'shop': 'CE'}) }}"><div class="well">Cue-events</div></a>
-                    <a href="{{ path('homepage',{'shop': 'GM'}) }}"><div class="well">Gordijnen Myriam</div></a>
+                <div class="caption text-center">
+                    <h3>Cue Events</h3>
+                    <p>...</p>
+                    <p><a href="{{ path('homepage',{'shop': 'CE'}) }}" class="btn btn-success" role="button">Selecteren</a></p>
                 </div>
             </div>
         </div>
+        <div class="col-sm-6 col-md-4 center-block">
+            <div class="thumbnail">
+                <div class="shopheader text-center">
+                    <img class="shopheader_icon" src="{{ asset('img/icons/id.png') }}">
+                </div>
+                <div class="caption text-center">
+                    <h3>Gordijnen Myriam</h3>
+                    <p>...</p>
+                    <p><a href="{{ path('homepage',{'shop': 'GM'}) }}" class="btn btn-success" role="button">Selecteren</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
     </div>
 </div>
 </body>

@@ -2,41 +2,47 @@
 {% block body %}
     <div class="features-boxed">
         <div class="container">
-            <div class="row">
-                <div class="col-sm-8"><h1 style="padding-top: 20px;">Klanten :</h1></div>
-                <div class="col-sm-4"><img class="header_icon_image navbar-right" src="{{ asset('/img/icons/group-1.png') }}" alt="..."></div>
-                <hr>
-            </div>
-            <div class="row justify-content-center features">
-                <div class="col">
-                    <table id="customers_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                        <tr>
-                            <th>id</th>
-                            <th>Voornaam</th>
-                            <th>Achternaam</th>
-                            <th>Adres</th>
-                            <th>Postcode</th>
-                            <th>Plaats</th>
-                            <th>Email</th>
-                            <th>Telefoon/GSM</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for cust in customers %}
-                        <tr>
-                            <td>{{ cust.id }}</td>
-                            <td>{{ cust.firstname }}</td>
-                            <td>{{ cust.lastname }}</td>
-                            <td>{{ cust.address }}</td>
-                            <td>{{ cust.postcode }}</td>
-                            <td>{{ cust.place }}</td>
-                            <td>{{ cust.email }}</td>
-                            <td>{{ cust.phone }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+            <div class="panel panel-basic">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        <h1 class="paneltitle">Klanten</h1>
+                    </div>
+                    <div class="panel-title pull-right"><h1 class="paneltitle"><a class="btn btn-success" href="{{ path('add_customer',{'shop': shop}) }}"><span class="mbr-iconfont fa-plus-square fa"></span> Klant toevoegen</a></h1> </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-body" style="margin:10px 10px;">
+                    <div class="row justify-content-center features">
+                        <div class="col">
+                            <table id="customers_table" class="table table-striped table-hover"  width="100%">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Voornaam</th>
+                                    <th>Achternaam</th>
+                                    <th>Adres</th>
+                                    <th>Postcode</th>
+                                    <th>Plaats</th>
+                                    <th>Email</th>
+                                    <th>Telefoon/GSM</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for cust in customers %}
+                                    <tr>
+                                        <td>{{ cust.id }}</td>
+                                        <td>{{ cust.firstname }}</td>
+                                        <td>{{ cust.lastname }}</td>
+                                        <td>{{ cust.address }}</td>
+                                        <td>{{ cust.postcode }}</td>
+                                        <td>{{ cust.place }}</td>
+                                        <td>{{ cust.email }}</td>
+                                        <td>{{ cust.phone }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,6 +57,7 @@
                     "language": {
                         "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Dutch.json"
                     },
+                    "order": [[1, "asc"]],
                     "columnDefs": [
                         {
                             "targets": [0],

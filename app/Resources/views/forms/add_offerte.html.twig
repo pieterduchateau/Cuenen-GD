@@ -3,8 +3,14 @@
     <div class="features-boxed">
         <div class="container">
             {{ form_start(form) }}
-            <div class="panel panel-default">
-                <div class="panel-heading">Basis informatie</div>
+            <div class="panel panel-basic">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        <h1 class="paneltitle" style="font-size: 18px">Basis informatie</h1>
+                    </div>
+                    <div class="panel-title pull-right"></div>
+                    <div class="clearfix"></div>
+                </div>
                 <div class="panel-body">
                     {# render the task's only field: description #}
                     <div class="col-lg-6 col-xs-12">
@@ -28,12 +34,13 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">Producten
-                    <button class="btn btn-success btn-xs" id="addproduct">Product Toevoegen</button>
-                    <button type="button" id="calculateTotals" onclick="generateTotalsTable()"
-                            class="btn btn-xs btn-info" style="margin-left: 10px">Totalen berekenen
-                    </button>
+            <div class="panel panel-basic">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        <h1 class="paneltitle" style="font-size: 18px">Producten</h1>
+                    </div>
+                    <div class="panel-title pull-right"></div>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
                     <table class="table">
@@ -44,6 +51,7 @@
                                 <th scope="col">aantal</th>
                                 <th scope="col">prijs</th>
                                 <th scope="col">totaal</th>
+                                <th scope="col">Actie</th>
                             </tr>
                         {% elseif shop == "GM" %}
                             <tr>
@@ -51,6 +59,7 @@
                                 <th scope="col" style="visibility: hidden">aantal</th>
                                 <th scope="col">prijs</th>
                                 <th scope="col">totaal</th>
+                                <th scope="col">Actie</th>
                             </tr>
                         {% endif %}
                         </thead>
@@ -60,10 +69,22 @@
                 {% endfilter %}">
                         </tbody>
                     </table>
+                    <div class="pull-right">
+                        <button class="btn btn-success btn-xs" id="addproduct">Product Toevoegen</button>
+                        <button type="button" id="calculateTotals" onclick="generateTotalsTable();generateSubtotal()"
+                                class="btn btn-xs btn-info" style="margin-left: 10px">Totalen berekenen
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">Berekeningen</div>
+            <div class="panel panel-basic">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        <h1 class="paneltitle" style="font-size: 18px">Berekeningen</h1>
+                    </div>
+                    <div class="panel-title pull-right"></div>
+                    <div class="clearfix"></div>
+                </div>
                 <div class="panel-body">
                     <table>
                         <tr>
@@ -73,11 +94,6 @@
                             <td>
                                 <input type="text" id="subtotal" disabled="disabled" class="form-control">
                             </td>
-                            <td>
-                                <button type="button" id="CalculateSubtotal" class="btn btn-xs btn-info"
-                                        style="margin-left: 10px" onclick="generateSubtotal()">Subtotaal berekenen
-                                </button>
-                            </td>
                         </tr>
                         {% if shop == "CE" %}
                             <tr>
@@ -85,7 +101,7 @@
                                     Korting ( in % )
                                 </td>
                                 <td>
-                                    {{ form_widget(form.korting) }}
+                                    {{ form_widget(form.korting,{ 'attr': {'class': 'autoCounter'} }) }}
                                 </td>
                             </tr>
                         {% endif %}
@@ -98,7 +114,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {{ form_widget(form.extra_cost) }}
+                                {{ form_widget(form.extra_cost,{ 'attr': {'class': 'autoCounter'} }) }}
                             </td>
                         </tr>
                         <tr>
@@ -106,7 +122,7 @@
                                 BTW ( in % )
                             </td>
                             <td>
-                                {{ form_widget(form.BTW) }}
+                                {{ form_widget(form.BTW,{ 'attr': {'class': 'autoCounter'} }) }}
                             </td>
                         </tr>
                         <td>
@@ -144,6 +160,7 @@
             // index when inserting a new item (e.g. 2)
             $collectionHolder.data('index', $collectionHolder.find(':input').length);
             //set a first row for products.
+            addobjectForm($collectionHolder, $newLinkLi);
             $('#addproduct').on('click', function (e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();

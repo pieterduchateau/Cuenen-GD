@@ -224,7 +224,7 @@ EOT
                 'Converting Doctrine 1.X schema to "<info>%s</info>" mapping type in "<info>%s</info>"', $toType, $destPath
             ));
         } else {
-            $output->writeln('No Metadata Classes to process.');
+            $output->writeln('No Metadata Utils to process.');
         }
     }
 }

@@ -3519,8 +3519,8 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-success {
     color: #fff;
-    background-color: #5cb85c;
-    border-color: #4cae4c
+    background-color: #5CB85C;
+    border-color: #5CB85C
 }
 
 .btn-success.focus, .btn-success:focus {
@@ -3651,8 +3651,8 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-danger {
     color: #fff;
-    background-color: #d9534f;
-    border-color: #d43f3a
+    background-color: #ff0000;
+    border-color: #ff0000
 }
 
 .btn-danger.focus, .btn-danger:focus {
@@ -4876,8 +4876,8 @@ select[multiple].input-group-sm > .form-control, select[multiple].input-group-sm
 }
 
 .navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
-    color: #5e5e5e;
-    background-color: transparent
+    /*color: #5e5e5e;*/
+    /*background-color: transparent*/
 }
 
 .navbar-default .navbar-text {

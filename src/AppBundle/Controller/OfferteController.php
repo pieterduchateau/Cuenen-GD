@@ -47,10 +47,10 @@ class OfferteController extends Controller
         if ($shop == "CE") {
             $template = "template/offerte_cue.html.twig";
         } else {
-            $template = "template/offerte_GM.html.twig";
+            $template = "template/mail.html.twig";
         }
 
-        $htmldata = $this->renderView($template ,array(
+        $htmldata = $this->renderView($template, array(
             'offerte' => $offerte,
             'customer' => $customer
         ));
@@ -83,7 +83,7 @@ class OfferteController extends Controller
             $template = "template/laadbon_GM.html.twig";
         }
 
-        $htmldata = $this->renderView($template ,array(
+        $htmldata = $this->renderView($template, array(
             'offerte' => $offerte,
             'customer' => $customer
         ));
@@ -100,9 +100,9 @@ class OfferteController extends Controller
     /**
      * @Route("{shop}/factuur/{offerteId}", name="getfactuur")
      */
-    public
-    function getfactuur($shop, $offerteId)
+    public function getfactuur($shop, $offerteId)
     {
+
         $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
             'id' => $offerteId));
 
@@ -118,13 +118,43 @@ class OfferteController extends Controller
                 'customer' => $customer
             ))->getContent());
             $html2pdf->output();
-        }else{
+        } else {
             $html2pdf->writeHTML($this->render("template/factuur_cue.html.twig", array(
                 'offerte' => $offerte,
                 'customer' => $customer
             ))->getContent());
             $html2pdf->output();
         }
+    }
+
+    /**
+     * @Route("/factuurwithobject", name="factuurwithobject")
+     */
+    public function getfactuurwithobject(Request $request)
+    {
+        $shop = $request->request->get('shop');
+        $offerte_nr = $request->get('offerte_nr_3');
+        $bodyData = $request->get('factuurbody');
+
+        $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
+            'id' => $offerte_nr));
+
+        $html2pdf = new Html2Pdf();
+        $html2pdf->pdf->SetTitle($offerte->getTitel());
+
+        $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
+            'id' => $offerte->getCustomerNr()));
+
+
+        $html2pdf->writeHTML($this->render("template/factuur_cue.html.twig", array(
+            'offerte' => $offerte,
+            'customer' => $customer,
+            'body' => $bodyData
+        ))->getContent());
+
+
+        $html2pdf->output();
+
     }
 
     /**
@@ -144,10 +174,9 @@ class OfferteController extends Controller
             $originalObjects->add($obj);
         }
 
-        if($shop == "CE")
-        {
+        if ($shop == "CE") {
             $form = $this->createForm(offerte_CUE_form::class, $offerte);
-        }else{
+        } else {
             $form = $this->createForm(offerte_GM_form::class, $offerte);
         }
 
@@ -186,10 +215,9 @@ class OfferteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $offerte = new Offerte();
         $offerte->setCustomerNr($customerId);
-        if($shop == "CE")
-        {
+        if ($shop == "CE") {
             $form = $this->createForm(offerte_CUE_form::class, $offerte);
-        }else{
+        } else {
             $form = $this->createForm(offerte_GM_form::class, $offerte);
         }
 

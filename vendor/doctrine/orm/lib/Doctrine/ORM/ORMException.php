@@ -258,7 +258,7 @@ class ORMException extends Exception
      */
     public static function proxyClassesAlwaysRegenerating()
     {
-        return new self('Proxy Classes are always regenerating.');
+        return new self('Proxy Utils are always regenerating.');
     }
 
     /**

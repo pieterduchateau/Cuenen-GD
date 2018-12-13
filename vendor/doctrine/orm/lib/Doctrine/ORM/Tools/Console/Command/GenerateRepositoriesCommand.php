@@ -115,7 +115,7 @@ EOT
                 $output->writeln('No Repository classes were found to be processed.' );
             }
         } else {
-            $output->writeln('No Metadata Classes to process.' );
+            $output->writeln('No Metadata Utils to process.' );
         }
     }
 }

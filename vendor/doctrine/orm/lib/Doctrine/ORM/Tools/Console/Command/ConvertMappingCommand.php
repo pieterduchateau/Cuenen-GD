@@ -181,7 +181,7 @@ EOT
                 'Exporting "<info>%s</info>" mapping information to "<info>%s</info>"', $toType, $destPath
             ));
         } else {
-            $output->writeln('No Metadata Classes to process.');
+            $output->writeln('No Metadata Utils to process.');
         }
     }
 

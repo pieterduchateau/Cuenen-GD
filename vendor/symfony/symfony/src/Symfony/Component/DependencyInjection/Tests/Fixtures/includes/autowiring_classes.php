@@ -206,7 +206,7 @@ class MultipleArgumentsOptionalScalarNotReallyOptional
 }
 
 /*
- * Classes used for testing createResourceForClass
+ * Utils used for testing createResourceForClass
  */
 class ClassForResource
 {

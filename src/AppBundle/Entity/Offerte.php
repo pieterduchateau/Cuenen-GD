@@ -77,6 +77,7 @@ class Offerte
     public function __construct()
     {
         $this->objects = new ArrayCollection();
+        $this->delivery_date = new \DateTime();
     }
 
     /**
