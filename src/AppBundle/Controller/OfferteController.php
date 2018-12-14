@@ -47,7 +47,7 @@ class OfferteController extends Controller
         if ($shop == "CE") {
             $template = "template/offerte_cue.html.twig";
         } else {
-            $template = "template/mail.html.twig";
+            $template = "template/offerte_GM.html.twig";
         }
 
         $htmldata = $this->renderView($template, array(

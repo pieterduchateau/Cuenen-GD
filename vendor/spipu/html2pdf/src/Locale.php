@@ -44,7 +44,7 @@ class Locale
      */
     public static function load($code)
     {
-        if (self::$directory===null) {
+        if (self::$directory === null) {
             self::$directory = __DIR__ . '/locale/';
         }
 
@@ -53,20 +53,20 @@ class Locale
 
         // must be [a-z-0-9]
         if (!preg_match('/^([a-z0-9]+)$/isU', $code)) {
-            throw new Html2PdfException('language code ['.self::$code.'] invalid.');
+            throw new Html2PdfException('language code [' . self::$code . '] invalid.');
         }
 
         // save the code
         self::$code = $code;
 
         // get the name of the locale file
-        $file = self::$directory.self::$code.'.csv';
+        $file = self::$directory . self::$code . '.csv';
 
         // the file must exist
         if (!is_file($file)) {
             throw new Html2PdfException(
-                'language code ['.self::$code.'] unknown. '.
-                'You can create the translation file ['.$file.'] and push it on the Html2Pdf GitHub project.'
+                'language code [' . self::$code . '] unknown. ' .
+                'You can create the translation file [' . $file . '] and push it on the Html2Pdf GitHub project.'
             );
         }
 
@@ -75,7 +75,7 @@ class Locale
         $handle = fopen($file, 'r');
         while (!feof($handle)) {
             $line = fgetcsv($handle);
-            if (count($line)!=2) {
+            if (null != $line && count($line) != 2) {
                 continue;
             }
             self::$list[trim($line[0])] = trim($line[1]);

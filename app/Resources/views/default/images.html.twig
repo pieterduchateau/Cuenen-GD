@@ -3,59 +3,57 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            <div class="panel panel-default">
+            <div class="panel panel-basic">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Afbeelding toevoegen</h3>
+                    <div class="panel-title pull-left">
+                        <h2 class="paneltitle">Afbeeldingen</h2>
+                    </div>
+                    <div class="panel-title pull-right"><h1 class="paneltitle"><a class="btn btn-success"
+                                                                                  href="{{ path('addimages',{'shop': shop, 'offerte_id': offerte_id}) }}"><span
+                                        class="mbr-iconfont fa-plus-square fa"></span> Afbeelding toevoegen</a></h1>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
-                    <a href="{{ path('addimages',{'shop': shop, 'offerte_id': offerte_id}) }}">
-                        <button class="btn btn-success">Toevoegen</button>
-                    </a>
-                </div>
-            </div>
-
-            {% if images|length == 0 %}
-                <div class="alert alert-success" role="alert">
-                    <strong>Geen afbeeldingen gevonden voor deze offerte!</strong>
-                </div>
-            {% endif %}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Afbeeldingen</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-hover">
-                        <thead>
-                        <td></td>
-                        <td>Naam</td>
-                        <td>Extensie</td>
-                        <td>Grootte</td>
-                        <td>Acties</td>
-                        </thead>
-                        <tbody>
-                        {% for image in images %}
-                            <tr>
-                                <td><img src="{{ asset('/img/file_icons/') }}{{ image.fextension }}.png" alt="...">
-                                </td>
-                                <td>{{ image.fname }}</td>
-                                <td>{{ image.fextension }}</td>
-                                <td>{{ (image.fsize / 1000000) | round(2) }}Mb</td>
-                                <td>
-                                    <a href="{{ image.furl }}" download="{{ image.fname }}">
-                                        <button class="btn btn-success"><span
-                                                    class="glyphicon glyphicon-download-alt"></span></button>
-                                    </a>
-                                    <button class="btn btn-danger" onclick="removeImagemodal('{{ image.fname }}')">
-                                        <span class="glyphicon glyphicon-remove"></span></button>
-                                    <a class="fancybox" rel="ligthbox" href="{{ image.furl }}">
-                                        <button class="btn btn-info"><span class="glyphicon glyphicon-zoom-in"></span>
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    {% if images|length == 0 %}
+                        <div class="alert alert-success" role="alert">
+                            <strong>Geen afbeeldingen gevonden voor deze offerte!</strong>
+                        </div>
+                    {% else %}
+                        <table class="table table-hover">
+                            <thead>
+                            <td></td>
+                            <td>Naam</td>
+                            <td>Extensie</td>
+                            <td>Grootte</td>
+                            <td>Acties</td>
+                            </thead>
+                            <tbody>
+                            {% for image in images %}
+                                <tr>
+                                    <td><img src="{{ asset('/img/file_icons/') }}{{ image.fextension }}.png" alt="...">
+                                    </td>
+                                    <td>{{ image.fname }}</td>
+                                    <td>{{ image.fextension }}</td>
+                                    <td>{{ (image.fsize / 1000000) | round(2) }}Mb</td>
+                                    <td>
+                                        <a href="{{ image.furl }}" download="{{ image.fname }}">
+                                            <button class="btn btn-success"><span
+                                                        class="glyphicon glyphicon-download-alt"></span></button>
+                                        </a>
+                                        <button class="btn btn-danger" onclick="removeImagemodal('{{ image.fname }}')">
+                                            <span class="glyphicon glyphicon-remove"></span></button>
+                                        <a class="fancybox" rel="ligthbox" href="{{ image.furl }}">
+                                            <button class="btn btn-info"><span
+                                                        class="glyphicon glyphicon-zoom-in"></span>
+                                            </button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -88,52 +86,52 @@
     </div>
 {% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
-          media="screen">
-    <style>
-        .gallery {
-            display: inline-block;
-            margin-top: 20px;
-        }
+    {% block stylesheets %}
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
+              media="screen">
+        <style>
+            .gallery {
+                display: inline-block;
+                margin-top: 20px;
+            }
 
-        .img-box {
-            width: 200px;
-            height: 400px;
-        }
+            .img-box {
+                width: 200px;
+                height: 400px;
+            }
 
-        .imgbtn {
-            width: 100%;
-        }
-    </style>
-{% endblock %}
-{% block javascripts %}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $(".fancybox").fancybox({
-                openEffect: "none",
-                closeEffect: "none"
+            .imgbtn {
+                width: 100%;
+            }
+        </style>
+    {% endblock %}
+    {% block javascripts %}
+        <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $(".fancybox").fancybox({
+                    openEffect: "none",
+                    closeEffect: "none"
+                });
             });
-        });
 
-        function removeImagemodal(imageName) {
-            $('#myModal').modal();
-            $('#imageName').val(imageName);
-        }
+            function removeImagemodal(imageName) {
+                $('#myModal').modal();
+                $('#imageName').val(imageName);
+            }
 
-        function removeImage(imageName) {
-            var url = "/removeimage";
-            var data = $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                    "fname": $('#imageName').val()
-                },
-                success: function (data) {
-                    location.reload();
-                }
-            }).responseText;
-        }
-    </script>
-{% endblock %}
+            function removeImage(imageName) {
+                var url = "/removeimage";
+                var data = $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        "fname": $('#imageName').val()
+                    },
+                    success: function (data) {
+                        location.reload();
+                    }
+                }).responseText;
+            }
+        </script>
+    {% endblock %}

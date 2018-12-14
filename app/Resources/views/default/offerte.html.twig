@@ -9,21 +9,13 @@
             </div>
             <div class="alert alert-danger" role="alert" id="alert_Warning" hidden="hidden"><h4><img
                             src="{{ asset('img/icons/error.png') }}" style="width: 30px"> Error!</h4></div>
-            <div class="panel panel-default">
+            <div class="panel panel-basic">
                 <div class="panel-heading">
-                    <div class="row">
-                        <div class="col col-xs-6">
-                            <h3 class="panel-title"><span class="glyphicon glyphicon-list-alt"></span>
-                                <b>{{ offerte.titel }}</b></h3>
-                        </div>
-                        <div class="col col-xs-6 text-right">
-                            <a href="{{ path('show_customer',{'shop': shop, 'customer_id': offerte.customerNr}) }}">
-                                <button type="button" class="btn btn-sm btn-primary btn-create"><span
-                                            class="glyphicon glyphicon-circle-arrow-left"></span> Terug
-                                </button>
-                            </a>
-                        </div>
+                    <div class="panel-title pull-left">
+                        <h1 class="paneltitle" style="font-size: 18px"><i class="far fa-file-alt"></i> {{ offerte.titel }}</h1>
                     </div>
+                    <div class="panel-title pull-right"></div>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
                     <div class="row">
