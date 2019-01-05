@@ -28,7 +28,7 @@
                 <td width="90">Lever adres :</td>
                 <td colspan="3" >{{ offerte.deliveryaddress }} , {{ offerte.postcode }} {{ offerte.place }}</td>
             </tr>
-            {% if offerte.btwnummer is defined %}
+            {% if customer.btwnummer is defined %}
                 <tr>
                     <td width="90">BTW nummer :</td>
                     <td colspan="3">{{ offerte.btwnummer }}</td>

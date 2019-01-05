@@ -28,7 +28,7 @@
                 <td width="90">Lever adres :</td>
                 <td colspan="3">{{ offerte.deliveryaddress }} , {{ offerte.postcode }} {{ offerte.place }}</td>
             </tr>
-            {% if offerte.btwnummer is defined %}
+            {% if customer.btwnummer is defined %}
                 <tr>
                     <td width="90">BTW nummer :</td>
                     <td colspan="3">{{ offerte.btwnummer }}</td>
@@ -64,10 +64,6 @@
             <tbody>
             <col width="593">
             <col width="100">
-            <tr>
-                <td class="data_table">Korting</td>
-                <td class="data_table" style="text-align: right;">{{ offerte.korting }} %</td>
-            </tr>
             <tr>
                 <td class="data_table">Plaatsing</td>
                 <td class="data_table" style="text-align: right;">€ {{ offerte.extracost }} </td>
