@@ -58,7 +58,7 @@
                                         <span class="glyphicon glyphicon-file"></span> Laadbon in PDF
                                     </a>
                                     <button class="list-group-item"
-                                            onclick="cue_offerte_modal()"><span
+                                            onclick="cue_offerte_modal({{ offerte.id }})"><span
                                                 class="glyphicon glyphicon-file"></span> Factuur in PDF
                                     </button>
                                 {% else %}
@@ -214,10 +214,15 @@
                                 <option value="factuur">Factuur</option>
                             </select>
                         </div>
+                        <div class="form-group" id="omschrijvingTab" hidden="true">
+                            <label for="mailbody">Omschrijving:</label>
+                            <textarea class="form-control" rows="5" id="omschrijving"
+                                      style="width: 100%; height: 100px"></textarea>
+                        </div>
                         <div class="form-group">
                             <label for="mailbody">Mail:</label>
                             <textarea class="form-control" rows="5" id="mailbody"
-                                      style="width: 550px; height: 376px"></textarea>
+                                      style="width: 100%; height: 376px"></textarea>
                         </div>
                     </div>
                 </div>
@@ -242,7 +247,7 @@
                 <form method="post" action="{{ path('factuurwithobject') }}">
                     <div class="modal-body">
                         <div>
-                            <input type="hidden" id="offerte_nr_3" name="offerte_nr_3" value="32">
+                            <input type="hidden" id="offerte_nr_3" name="offerte_nr_3">
                             <input type="hidden" id="shop" name="shop" value="{{ shop }}">
                             <div class="form-group">
                                 <label for="factuurbody">Omschrijving :</label>
@@ -265,6 +270,16 @@
     <script>
         $(document).ready(new function () {
             CalculateTotal();
+            $shop = $('#shop').val();
+
+
+            $("#filetype").on('change', function(){
+                if($(this).val() === "factuur" && $shop === "CE" ) {
+                   $('#omschrijvingTab').removeAttr("hidden");
+                }else{
+                    $('#omschrijvingTab').attr("hidden",true);
+                }
+            });
         });
 
         function CalculateTotal() {
@@ -288,8 +303,9 @@
             $('#offerte_nr').val($offertenr);
         }
 
-        function cue_offerte_modal() {
+        function cue_offerte_modal($offertenr) {
             $('#cue_factuur_modal').modal();
+            $('#offerte_nr_3').val($offertenr);
         }
 
         function mailmodal($offertenr) {
@@ -306,16 +322,18 @@
                     "body": $('#mailbody').val(),
                     "file": $('#filetype option:selected').val(),
                     "offerteID": $('#offerte_nr_2').val(),
-                    "shop": $('#shop').val()
+                    "shop": $('#shop').val(),
+                    "omschrijving": $('#omschrijving').val()
                 },
                 beforeSend: function () {
                     $('#alert_info').attr("hidden", false);
+                    $('#alert_success').attr("style", 'display: display');
+                    $('#alert_success').attr("hidden", true);
                 },
                 success: function (data) {
                     if (data === "1") {
                         $('#alert_info').attr("hidden", true);
                         $('#alert_success').attr("hidden", false).fadeOut(3000);
-
                     } else {
                         $('#alert_info').attr("hidden", true);
                         $('#alert_Warning').attr("hidden", false).fadeOut(3000);

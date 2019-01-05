@@ -25,6 +25,7 @@ class MailController extends Controller
         $filetype = $request->request->get('file');
         $offerteId = $request->request->get('offerteID');
         $shop = $request->request->get('shop');
+        $omschrijving = $request->request->get('omschrijving');
 
         $offerte = $this->getDoctrine()->getRepository(Offerte::class)->findOneBy(array(
             'id' => $offerteId));
@@ -47,7 +48,8 @@ class MailController extends Controller
 
         $htmldata = $this->renderView('template/' . $template ,array(
             'offerte' => $offerte,
-            'customer' => $customer
+            'customer' => $customer,
+            'body' => $omschrijving
         ));
 
         $Mail->setRenderedView($htmldata);

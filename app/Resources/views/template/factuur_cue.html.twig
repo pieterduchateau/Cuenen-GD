@@ -28,6 +28,12 @@
                 <td width="90">Lever adres :</td>
                 <td colspan="3">{{ offerte.deliveryaddress }} , {{ offerte.postcode }} {{ offerte.place }}</td>
             </tr>
+            {% if offerte.btwnummer is defined %}
+                <tr>
+                    <td width="90">BTW nummer :</td>
+                    <td colspan="3">{{ offerte.btwnummer }}</td>
+                </tr>
+            {% endif %}
             </tbody>
         </table>
     </div>
@@ -121,7 +127,7 @@
         padding-left: 30px;
         padding-right: 30px;
         padding-top: 20px;
-        height: 80px;
+        height: 100px;
     }
 
     .left-center {

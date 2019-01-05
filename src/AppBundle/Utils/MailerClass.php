@@ -81,9 +81,9 @@ class MailerClass
 
             $message = (new \Swift_Message($subject))
                 ->setFrom($this->senderAdresses[$this->shop])
-                ->setTo('duchateaupieter@hotmail.com')
+                ->setTo($this->customer->getEmail())
                 ->attach(Swift_Attachment::fromPath($filepath)->setFilename($this->filetype . ".pdf"))
-                ->setBody($this->body);
+                ->addPart($this->body,'text/html');
 
 
             $this->mailer->send($message);
