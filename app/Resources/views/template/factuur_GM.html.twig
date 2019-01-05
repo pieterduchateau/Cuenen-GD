@@ -59,39 +59,42 @@
         {% endfor %}
         </tbody>
     </table>
-    <table class="pricingTable">
-        <tbody>
-        <col width="593">
-        <col width="100">
-        <tr>
-            <td class="data_table">Korting</td>
-            <td class="data_table" style="text-align: right;">{{ offerte.korting }} %</td>
-        </tr>
-        <tr>
-            <td class="data_table">Plaatsing</td>
-            <td class="data_table" style="text-align: right;">€ {{ offerte.extracost }} </td>
-        </tr>
-        <tr>
-            <td class="data_table"><b>Totaal excl. btw</b></td>
-            {% set h1 = totaal - (totaal / 100 * offerte.korting) %}
-            {% set h2 = h1 + offerte.extracost %}
-            <td class="data_table" style="text-align: right;">€ {{ h2 }} </td>
-        </tr>
-        <tr>
-            <td class="data_table">BTW</td>
-            <td class="data_table" style="text-align: right;">{{ offerte.btw }} %</td>
-        </tr>
-        <tr>
-            <td class="data_table" style="background-color: grey; color: #FFFFFF"><b>Totaal incl. btw</b></td>
-            {% set h3 = h2 +  (h2 / 100 * offerte.btw) %}
-            <td class="data_table" style="text-align: right;background-color: grey; color: #FFFFFF">
-                € {{ h3|round(2) }} </td>
-        </tr>
-        </tbody>
-    </table>
+    <div>
+        <table class="pricingTable">
+            <tbody>
+            <col width="593">
+            <col width="100">
+            <tr>
+                <td class="data_table">Korting</td>
+                <td class="data_table" style="text-align: right;">{{ offerte.korting }} %</td>
+            </tr>
+            <tr>
+                <td class="data_table">Plaatsing</td>
+                <td class="data_table" style="text-align: right;">€ {{ offerte.extracost }} </td>
+            </tr>
+            <tr>
+                <td class="data_table"><b>Totaal excl. btw</b></td>
+                {% set h1 = totaal - (totaal / 100 * offerte.korting) %}
+                {% set h2 = h1 + offerte.extracost %}
+                <td class="data_table" style="text-align: right;">€ {{ h2 }} </td>
+            </tr>
+            <tr>
+                <td class="data_table">BTW</td>
+                <td class="data_table" style="text-align: right;">{{ offerte.btw }} %</td>
+            </tr>
+            <tr>
+                <td class="data_table" style="background-color: grey; color: #FFFFFF"><b>Totaal incl. btw</b></td>
+                {% set h3 = h2 +  (h2 / 100 * offerte.btw) %}
+                <td class="data_table" style="text-align: right;background-color: grey; color: #FFFFFF">
+                    € {{ h3|round(2) }} </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </page>
 
 <style>
+
     .banner {
         width: 450px;
         margin-left: 50px;
@@ -155,7 +158,7 @@
         color: #FFFFFF;
     }
 
-    .pricingTable{
+    .pricingTable {
         margin-top: 20px;
     }
 </style>

@@ -3,8 +3,14 @@
     <div class="features-boxed">
         <div class="container">
             {{ form_start(form) }}
-            <div class="panel panel-default">
-                <div class="panel-heading">Informatie</div>
+            <div class="panel panel-basic">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        <h1 class="paneltitle" style="font-size: 18px">Basis informatie</h1>
+                    </div>
+                    <div class="panel-title pull-right"></div>
+                    <div class="clearfix"></div>
+                </div>
                 <div class="panel-body">
                     {# render the task's only field: description #}
                     <div class="col-lg-6 col-xs-12">
@@ -28,12 +34,13 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">Producten
-                    <button class="btn btn-success btn-xs" id="addproduct">Product Toevoegen</button>
-                    <button type="button" id="calculateTotals" onclick="generateTotalsTable()"
-                            class="btn btn-xs btn-info" style="margin-left: 10px">Totalen berekenen
-                    </button>
+            <div class="panel panel-basic">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        <h1 class="paneltitle" style="font-size: 18px">Producten</h1>
+                    </div>
+                    <div class="panel-title pull-right"></div>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
                     <table class="table">
@@ -65,10 +72,22 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    <div class="pull-right">
+                        <button class="btn btn-success btn-xs" id="addproduct">Product Toevoegen</button>
+                        <button type="button" id="calculateTotals" onclick="generateTotalsTable();generateSubtotal()"
+                                class="btn btn-xs btn-info" style="margin-left: 10px">Totalen berekenen
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">Berekeningen</div>
+            <div class="panel panel-basic">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        <h1 class="paneltitle" style="font-size: 18px">Berekeningen</h1>
+                    </div>
+                    <div class="panel-title pull-right"></div>
+                    <div class="clearfix"></div>
+                </div>
                 <div class="panel-body">
                     <table>
                         <tr>
@@ -78,11 +97,6 @@
                             <td>
                                 <input type="text" id="subtotal" disabled="disabled" class="form-control">
                             </td>
-                            <td>
-                                <button type="button" id="CalculateSubtotal" class="btn btn-xs btn-info"
-                                        style="margin-left: 10px" onclick="generateSubtotal()">Subtotaal berekenen
-                                </button>
-                            </td>
                         </tr>
                         {% if shop == "CE" %}
                             <tr>
@@ -90,7 +104,7 @@
                                     Korting ( in % )
                                 </td>
                                 <td>
-                                    {{ form_widget(form.korting) }}
+                                    {{ form_widget(form.korting,{ 'attr': {'class': 'autoCounter'} }) }}
                                 </td>
                             </tr>
                         {% endif %}
@@ -103,7 +117,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {{ form_widget(form.extra_cost) }}
+                                {{ form_widget(form.extra_cost,{ 'attr': {'class': 'autoCounter'} }) }}
                             </td>
                         </tr>
                         <tr>
@@ -111,7 +125,7 @@
                                 BTW ( in % )
                             </td>
                             <td>
-                                {{ form_widget(form.BTW) }}
+                                {{ form_widget(form.BTW,{ 'attr': {'class': 'autoCounter'} }) }}
                             </td>
                         </tr>
                         <td>
@@ -122,19 +136,14 @@
                         </td>
                         <td>
                             <button type="button" id="CalculateSubtotal" class="btn btn-xs btn-info"
-                                    style="margin-left: 10px" onclick="generateTotal()">Totaal berekenen
+                                    style="margin-left: 10px" onclick="generateTotal();generateTotalsTable();generateSubtotal()">Totaal berekenen
                             </button>
                         </td>
                     </table>
                 </div>
             </div>
-            <div class="col-lg-2 col-xs-12">
-                {{ form_row(form.save, {'label': 'Offerte aanpassen'}) }}
-            </div>
-            <div class="col-lg-2 col-xs-12">
-                <a href="{{ path('show_customer',{'shop': shop,'customer_id': customer_id}) }}">
-                    <button type="button" class="btn btn-info">Annuleren</button>
-                </a>
+            <div class="col-lg-12 col-xs-12">
+                {{ form_row(form.save, {'label': 'Offerte toevoegen'}) }}
             </div>
             {{ form_end(form) }}
         </div>
@@ -153,18 +162,13 @@
             // count the current form inputs we have (e.g. 2), use that as the new
             // index when inserting a new item (e.g. 2)
             $collectionHolder.data('index', $collectionHolder.find(':input').length);
-            //set a first row for products.
+
             $('#addproduct').on('click', function (e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
                 // add a new tag form (see code block below)
                 addobjectForm($collectionHolder, $newLinkLi);
             });
-
-            //preload all the total prices
-            generateTotalsTable();
-            generateSubtotal();
-            generateTotal();
         });
 
         function deleteRow(e) {
@@ -187,29 +191,32 @@
             var $newFormLi = $('<tr></tr>').append(newForm);
             // also add a remove button, just for this example
             $newLinkLi.before($newFormLi);
+            // handle the removal, just for this example
+            $('.remove-object').click(function (e) {
+                e.preventDefault();
+                $(this).closest('tr').remove();
+                return false;
+            });
         }
 
         function generateTotalsTable() {
             $('#objectTable > tr').each(function () {
                 $aantal = $('td:nth-child(2)', this).children("input").val();
                 $prijs = $('td:nth-child(3)', this).children("input").val();
-                $('td:nth-child(4)', this).children("input").val(($aantal * $prijs).toFixed(2));
+                $('td:nth-child(4)', this).children("input").val($aantal * $prijs);
             });
         }
 
         function generateSubtotal() {
-            generateTotalsTable();
             $subtotal = 0;
             $('#objectTable > tr').each(function () {
                 $rowTotal = $('td:nth-child(4)', this).children("input").val();
                 $subtotal = parseFloat($subtotal) + parseFloat($rowTotal);
             });
-            $('#subtotal').val($subtotal.toFixed(2));
+            $('#subtotal').val($subtotal);
         }
 
         function generateTotal() {
-            generateTotalsTable();
-            generateSubtotal();
             $subtotal = $('#subtotal').val();
             {% if shop == "CE" %}
             $korting = $('#offerte_cue_form_korting').val();
