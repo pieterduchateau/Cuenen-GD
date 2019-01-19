@@ -70,6 +70,16 @@ class User implements UserInterface, \Serializable
         return $this->password;
     }
 
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+
+
     public function getRoles()
     {
         return array($this->role);
