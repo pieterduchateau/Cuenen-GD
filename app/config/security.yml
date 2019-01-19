@@ -40,7 +40,7 @@ security:
 
     access_control:
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^//encodePassword, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/encodePassword/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/backup_db, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/config, role: ROLE_ADMIN }
         - { path: ^/, role: ROLE_USER }
