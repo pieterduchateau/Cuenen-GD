@@ -3,32 +3,42 @@
         <img class="banner" src="img/cue/offerte_header.JPG"/><br>
     </page_header>
     <page_footer>
-        <img class="bannerfooter" src="img/cue/offerte_footer.JPG"/>
+        <div class="page_footer">
+            <p><u>Algemene verkoopsvoorwaarden:</u></p>
+            <p style="font-size: 10px">Klachten in verband met deze factuur, de uitgevoerde werken en de leveringen moeten ons binnen de veertien dagen na uitgifte van deze facturen toekomen per aangetekend schrijven. Alle facturen zijn contant betaalbaar, tenzij anders
+                overeengekomen. Bij gebreke van betaling wordt het openstaande saldo van rechtswege en zonder ingebrekestelling verhoogd met 12%, met een minimum van 24,79€ ten titel van schadevergoeding. Bovendien is in geval van laattijdige betaling een intrest verschuldigd
+                op het openstaande saldo van 10% per jaar. Bij eventuele beslissing zijn enkel de rechtbanekn van het arrondissement Tongeren bevoegd.</p>
+        </div>
+        <img class="bannerfooter" src="img/cue/factuur_footer.JPG"/>
     </page_footer>
-    <div class="row customer_info">
+    <div class="customer_info">
         <table>
             <tbody>
             <tr>
-                <td width="90">Naam :</td>
-                <td width="300">{{ customer.firstName }} {{ customer.lastName }}</td>
                 <td>Offerte :</td>
                 <td>{{ offerte.offertenr }}</td>
-            </tr>
-            <tr>
-                <td>Telefoon :</td>
-                <td>{{ customer.phone }}</td>
                 <td width="90">Datum :</td>
                 <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
             </tr>
             <tr>
+                <td width="90">Naam :</td>
+                <td width="300">{{ customer.firstName }} {{ customer.lastName }}</td>
+                <td>Te betalen tegen :</td>
+                <td>{{ offerte.deliverydate|date_modify("+10 day")|date("d/m/Y") }}</td>
+            </tr>
+            <tr>
+                <td>Telefoon :</td>
+                <td>{{ customer.phone }}</td>
+            </tr>
+            <tr>
                 <td width="90">Adres :</td>
-                <td colspan="3">{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
+                <td colspan="3" >{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
             </tr>
             <tr>
                 <td width="90">Lever adres :</td>
-                <td colspan="3">{{ offerte.deliveryaddress }} , {{ offerte.postcode }} {{ offerte.place }}</td>
+                <td colspan="3" >{{ offerte.deliveryaddress }} , {{ offerte.postcode }} {{ offerte.place }}</td>
             </tr>
-            {% if customer.btwnumber is defined %}
+            {% if customer.btwnumber != NULL %}
                 <tr>
                     <td width="90">BTW nummer :</td>
                     <td colspan="3">{{ customer.btwnumber }}</td>
@@ -45,7 +55,7 @@
         </tr>
         </thead>
         <tbody>
-        <col width="550">
+        <col width="590">
         <col width="100">
         {% set totaal = 0 %}
         {% for object in offerte.objects %}
@@ -62,7 +72,7 @@
     <div>
         <table>
             <tbody>
-            <col width="568">
+            <col width="608">
             <col width="100">
             <tr>
                 <td class="data_table">Korting</td>
@@ -121,8 +131,8 @@
 
     .customer_info {
         background-color: #F2F2F2;
-        margin-left: -30px;
-        margin-right: -30px;
+        margin-left: -32px;
+        margin-right: -10px;
         margin-bottom: 20px;
         padding-left: 30px;
         padding-right: 30px;
@@ -140,16 +150,21 @@
         border: 1px solid #0C0C0C;
     }
 
-    .textarea {
+    .textarea{
         padding-left: 10px;
     }
 
-    .data_table {
+    .data_table{
         padding-top: 5px;
     }
 
-    .data_header {
+    .data_header{
         background-color: grey;
         color: #FFFFFF;
+    }
+
+    .page_footer{
+        padding-left: 25px;
+        padding-right: 25px;
     }
 </style>

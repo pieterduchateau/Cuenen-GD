@@ -139,21 +139,27 @@ class OfferteController extends Controller
         $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
             'id' => $offerte_nr));
 
-        $html2pdf = new Html2Pdf();
+        $html2pdf = new HTML2PDF('P', 'A4', 'en', true, 'UTF-8', array(0, 0, 0, 0));
         $html2pdf->pdf->SetTitle($offerte->getTitel());
 
         $customer = $this->getDoctrine()->getRepository("AppBundle:Customer")->findOneBy(array(
             'id' => $offerte->getCustomerNr()));
 
 
-        $html2pdf->writeHTML($this->render("template/factuur_cue.html.twig", array(
+       $template = "template/factuur_cue.html.twig";
+
+        $htmldata = $this->renderView($template, array(
             'offerte' => $offerte,
             'customer' => $customer,
             'body' => $bodyData
-        ))->getContent());
+        ));
+        $html2pdf->writeHTML($htmldata);
 
+        try {
+            $html2pdf->output($offerte->getTitel() . '.pdf');
+        } catch (Html2PdfException $e) {
 
-        $html2pdf->output();
+        }
 
     }
 
