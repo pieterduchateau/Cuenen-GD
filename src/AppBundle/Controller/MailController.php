@@ -33,20 +33,23 @@ class MailController extends Controller
             'id' => $offerte->getCustomerNr()));
 
 
-        if ($shop === 'GM')
+        if ($shop === 'GM') {
             $mailerobject = $this->get('swiftmailer.mailer.mailer');
-        else if ($shop === 'CE'){
-            $mailerobject = $this->get('swiftmailer.mailer.mailer2');
-        }
 
-        $Mail = new MailerClass($offerte,$customer,$shop,$mailerobject);
-        $Mail->setBody($this->renderView("mailtemplate/mail.html.twig", array(
-            'body' => $body
-        )));
+            $Mail = new MailerClass($offerte, $customer, $shop, $mailerobject);
+            $Mail->setBody($this->renderView("mailtemplate/mail_GM.html.twig", array('body' => $body)));
+        }
+        else if ($shop === 'CE') {
+            $mailerobject = $this->get('swiftmailer.mailer.mailer2');
+            $Mail = new MailerClass($offerte,$customer,$shop,$mailerobject);
+            $Mail->setBody($this->renderView("mailtemplate/mail_cue.html.twig", array(
+                'body' => $body
+            )));
+        }
 
         $template = $Mail->generatePDFTemplate($filetype);
 
-        $htmldata = $this->renderView('template/' . $template ,array(
+        $htmldata = $this->renderView('template/' . $template, array(
             'offerte' => $offerte,
             'customer' => $customer,
             'body' => $omschrijving

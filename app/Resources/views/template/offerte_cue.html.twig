@@ -70,10 +70,12 @@
             <tbody>
             <col width="607">
             <col width="100">
-            <tr>
-                <td class="data_table">Korting</td>
-                <td class="data_table" style="text-align: right;">{{ offerte.korting }} %</td>
-            </tr>
+            {% if not offerte.korting == 0 %}
+                <tr>
+                    <td class="data_table">Korting</td>
+                    <td class="data_table" style="text-align: right;">{{ offerte.korting }} %</td>
+                </tr>
+            {% endif %}
             <tr>
                 <td class="data_table">Opbouw/afbouw + transport</td>
                 <td class="data_table" style="text-align: right;">€ {{ offerte.extracost }} </td>
