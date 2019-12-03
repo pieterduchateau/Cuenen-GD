@@ -214,6 +214,10 @@
                                 <option value="factuur">Factuur</option>
                             </select>
                         </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="sendcopycheck">
+                            <label class="form-check-label" for="sendcopycheck">Verstuur copy naar mezelf</label>
+                        </div>
                         <div class="form-group" id="omschrijvingTab" hidden="true">
                             <label for="mailbody">Omschrijving:</label>
                             <textarea class="form-control" rows="5" id="omschrijving"
@@ -314,6 +318,9 @@
         }
 
         function sendmail() {
+            if($('#sendcopycheck').is(":checked")){
+                var sendcopycheck = "checked"
+            }
             var url = "/sendmail";
             var data = $.ajax({
                 url: url,
@@ -323,7 +330,8 @@
                     "file": $('#filetype option:selected').val(),
                     "offerteID": $('#offerte_nr_2').val(),
                     "shop": $('#shop').val(),
-                    "omschrijving": $('#omschrijving').val()
+                    "omschrijving": $('#omschrijving').val(),
+                    "sendcopycheck": sendcopycheck
                 },
                 beforeSend: function () {
                     $('#alert_info').attr("hidden", false);

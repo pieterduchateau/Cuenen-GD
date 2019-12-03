@@ -24,7 +24,6 @@ class CustomerController extends Controller
      */
     public function all_customers($shop)
     {
-
         $customers = $this->getDoctrine()
             ->getRepository("AppBundle:Customer")
             ->findByshop($shop);

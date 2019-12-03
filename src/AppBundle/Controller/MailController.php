@@ -26,6 +26,7 @@ class MailController extends Controller
         $offerteId = $request->request->get('offerteID');
         $shop = $request->request->get('shop');
         $omschrijving = $request->request->get('omschrijving');
+        $sendcopycheck = $request->request->get('sendcopycheck');
 
         $offerte = $this->getDoctrine()->getRepository(Offerte::class)->findOneBy(array(
             'id' => $offerteId));
@@ -36,12 +37,12 @@ class MailController extends Controller
         if ($shop === 'GM') {
             $mailerobject = $this->get('swiftmailer.mailer.mailer');
 
-            $Mail = new MailerClass($offerte, $customer, $shop, $mailerobject);
+            $Mail = new MailerClass($offerte, $customer, $shop, $mailerobject, $sendcopycheck);
             $Mail->setBody($this->renderView("mailtemplate/mail_GM.html.twig", array('body' => $body)));
         }
         else if ($shop === 'CE') {
             $mailerobject = $this->get('swiftmailer.mailer.mailer2');
-            $Mail = new MailerClass($offerte,$customer,$shop,$mailerobject);
+            $Mail = new MailerClass($offerte,$customer,$shop,$mailerobject, $sendcopycheck);
             $Mail->setBody($this->renderView("mailtemplate/mail_cue.html.twig", array(
                 'body' => $body
             )));

@@ -45,6 +45,22 @@
                 </div>
             </a>
         </div>
+        {% if shop == "CE" %}
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <a href="{{ path('inventorylist',{'shop': shop}) }}">
+                    <div class="wrap">
+                        <div class="ico-wrap">
+                            <span class="mbr-iconfont fa-list-ul fa"></span>
+                        </div>
+                        <div class="text-wrap vcenter">
+                            <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Inventarislijst / Prijslijst <span></span>
+                            </h2>
+                            <p class="mbr-fonts-style text1 mbr-text display-6">Lijst met producten en hun aantallen/prijzen</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
             <div class="col-lg-4 col-sm-6 col-xs-12">
                 <a href="{{ path('config_index') }}">

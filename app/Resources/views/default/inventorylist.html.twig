@@ -1,0 +1,174 @@
+{% extends 'template/base.html.twig' %}
+{% block body %}
+    <div class="features-boxed">
+        <div class="container">
+            <div class="alert alert-success" role="alert" id="alert_success" hidden="hidden"><h4><img
+                            src="{{ asset('img/icons/success.png') }}" style="width: 30px"> <span
+                            id="success_banner"></span></h4></div>
+            <div class="alert alert-danger" role="alert" id="alert_Warning" hidden="hidden"><h4><img
+                            src="{{ asset('img/icons/error.png') }}" style="width: 30px"> <span
+                            id="error_banner"></span></h4></div>
+            <div class="panel panel-basic">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        <h1 class="paneltitle">Inventarislijst</h1>
+                    </div>
+                    <div class="panel-title pull-right"><h1 class="paneltitle"><a class="btn btn-success" id="add_item"><span
+                                        class="mbr-iconfont fa-plus-square fa"></span> Item toevoegen</a></h1></div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-body" style="margin:10px 10px;">
+                    <div class="row justify-content-center features">
+                        <div class="col">
+                            <table id="item_table" class="table table-striped table-hover" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Omschrijving</th>
+                                    <th>Aantal</th>
+                                    <th>Prijs</th>
+                                    <th>Acties</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in items %}
+                                    <tr>
+                                        <td>{{ item.id }}</td>
+                                        <td>{{ item.description }}</td>
+                                        <td>{{ item.amount }}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td width="150px">
+                                            <a href="{{ item.image }}" type="button" class="btn btn-success"><span
+                                                        class="glyphicon glyphicon-picture"></span></a>
+                                            <button type="button" class="btn btn-danger"
+                                                    onclick="removeItem({{ item.id }})"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="add_item_inventorylist_modal" tabindex="-1" role="dialog"
+         aria-labelledby="add_item_inventorylist_modal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Item toevoegen</strong>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(form) }}
+                    {{ form_row(form.description) }}
+                    {{ form_row(form.amount) }}
+                    {{ form_row(form.price) }}
+                    {{ form_row(form.item, { 'attr': {'class': 'file-upload-btn'} }) }}
+                </div>
+                <div class="modal-footer">
+                    {{ form_row(form.upload, { 'attr': {'class': 'btn btn-success'} }) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDeleteItem" tabindex="-1" role="dialog" aria-labelledby="modalDeleteItem"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Item verwijderen</strong>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-3 col-xs-3" style="margin-top: 15px">
+                        <i class="fas fa-exclamation-circle fa-5x"></i>
+                    </div>
+                    <div class="col-lg-9 col-xs-9">
+                        <div class="row">
+                            <h4><strong>Bent u zeker dat u dot object wilt verwijderen?</strong></h4>
+                            <p>Bij het verwijderen van dit object worden ook al de foto's die bij dit object
+                                horen verwijderd.</p>
+                            <input type="hidden" id="customer_nr">
+                        </div>
+                        <div class="row" style="margin-top: 10px">
+                            <button type="button" class="btn btn-danger btn-modal" id="btn_modal_remove_item">Ja</button>
+                            <button type="button" class="btn btn-success btn-modal" data-dismiss="modal">Nee</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    <style>
+
+    </style>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        var itemID;
+        $(document).ready(new function () {
+            var table = $('#item_table').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Dutch.json"
+                    },
+                    "order": [[1, "asc"]],
+                    "columnDefs": [
+                        {
+                            "targets": [0],
+                            "visible": false,
+                            "searchable": false
+                        }
+                    ]
+                }
+            );
+
+            $('#btn_modal_remove_item').on('click', function () {
+                $.ajax({
+                    url: "/{{ shop }}/removeItem",
+                    data: {"itemID":itemID},
+                    type: 'post',
+                    success: function (response) {
+                        console.log(response);
+                        if (response.indexOf("success")) {
+                            location.reload();
+                        } else {
+                            $('#modalDeleteItem').modal('hide');
+                            $('#alert_info').attr("hidden", true);
+                            $('#error_banner').text(response);
+                            $('#alert_Warning').attr("hidden", false).fadeOut(3000);
+                        }
+                    }
+                });
+            });
+
+            {#$('#item_table tbody').on('click', 'tr', function () {#}
+            {#    var data = table.row(this).data();#}
+            {#    window.location.href = "/{{ shop }}/customer/" + data[0];#}
+            {#});#}
+
+            $('#add_item').on('click', function () {
+                $('#add_item_inventorylist_modal').modal();
+            });
+        });
+
+        function removeItem(item) {
+            itemID = item;
+            $('#modalDeleteItem').modal();
+        }
+    </script>
+{% endblock %}
+

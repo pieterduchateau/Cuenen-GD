@@ -24,6 +24,7 @@ class MailerClass
     private $shop;
     private $body;
     private $mailer;
+    private $sendcopycheck;
     private $senderAdresses = array(
         "CE" => "info@cue-events.eu",
         "GM" => "myriam.hex@telenet.Be");
@@ -31,12 +32,13 @@ class MailerClass
     /**
      * MailerClass constructor.
      */
-    public function __construct(Offerte $offerte,Customer $customer, $shop, \Swift_Mailer $mailer)
+    public function __construct(Offerte $offerte,Customer $customer, $shop, \Swift_Mailer $mailer, $sendcopycheck)
     {
         $this->offerte = $offerte;
         $this->customer = $customer;
         $this->shop = $shop;
         $this->mailer = $mailer;
+        $this->sendcopycheck = $sendcopycheck;
     }
 
     public function generatePDFTemplate($filetype)
@@ -85,6 +87,9 @@ class MailerClass
                 ->attach(Swift_Attachment::fromPath($filepath)->setFilename($this->filetype . ".pdf"))
                 ->addPart($this->body,'text/html');
 
+            if($this->sendcopycheck === "checked"){
+                $message->setBcc($this->senderAdresses[$this->shop]);
+            }
 
             $this->mailer->send($message);
 
