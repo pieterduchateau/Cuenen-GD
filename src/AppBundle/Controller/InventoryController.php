@@ -7,6 +7,8 @@ use AppBundle\Entity\Items;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,7 +29,7 @@ class InventoryController extends Controller
         $form = $this->createFormBuilder($items)
             ->add('description', TextType::class, array('label' => 'Omschrijving :'))
             ->add('amount', IntegerType::class, array('label' => 'Aantal :'))
-            ->add('price', IntegerType::class, array('label' => 'Prijs :'))
+            ->add('price', MoneyType::class, array('label' => 'Prijs :'))
             ->add('item', FileType::class, array('label' => 'Foto :'))
             ->add('upload', SubmitType::class, array('label' => 'Toevoegen'))
             ->getForm();

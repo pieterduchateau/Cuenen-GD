@@ -43,7 +43,7 @@ class Items
     private $amount;
 
     /**
-     * @ORM\Column(name="price",type="integer")
+     * @ORM\Column(name="price",type="string")
      */
     private $price;
 
