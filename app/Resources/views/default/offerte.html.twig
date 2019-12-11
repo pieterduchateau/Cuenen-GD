@@ -250,6 +250,10 @@
                 </div>
                 <form method="post" action="{{ path('factuurwithobject') }}">
                     <div class="modal-body">
+                        <div class="form-group">
+                            <label for="factuur_number">Factuur nummer :</label>
+                            <input type="number" class="form-control" id="factuur_number" name="factuur_number" aria-describedby="emailHelp" placeholder="Factuur nummer">
+                        </div>
                         <div>
                             <input type="hidden" id="offerte_nr_3" name="offerte_nr_3">
                             <input type="hidden" id="shop" name="shop" value="{{ shop }}">

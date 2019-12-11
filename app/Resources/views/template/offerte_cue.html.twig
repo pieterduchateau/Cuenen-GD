@@ -11,22 +11,18 @@
             <tr>
                 <td width="90">Naam :</td>
                 <td width="300">{{ customer.firstName }} {{ customer.lastName }}</td>
-                <td>Offerte :</td>
-                <td>{{ offerte.offertenr }}</td>
-            </tr>
-            <tr>
-                <td>Telefoon :</td>
-                <td>{{ customer.phone }}</td>
                 <td width="90">Datum :</td>
                 <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
             </tr>
             <tr>
                 <td width="90">Adres :</td>
-                <td colspan="3" >{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
+                <td>{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
+                <td>Te betalen tegen :</td>
+                <td>{{ offerte.deliverydate|date_modify("+10 day")|date("d/m/Y") }}</td>
             </tr>
             <tr>
-                <td width="90">Lever adres :</td>
-                <td colspan="3" >{{ offerte.deliveryaddress }} , {{ offerte.postcode }} {{ offerte.place }}</td>
+                <td>Telefoon :</td>
+                <td>{{ customer.phone }}</td>
             </tr>
             {% if customer.btwnumber != NULL %}
                 <tr>
@@ -34,6 +30,10 @@
                     <td colspan="3">{{ customer.btwnumber }}</td>
                 </tr>
             {% endif %}
+            <tr>
+                <td width="90">Lever adres :</td>
+                <td colspan="3" >{{ offerte.deliveryaddress }} , {{ offerte.postcode }} {{ offerte.place }}</td>
+            </tr>
             </tbody>
         </table>
     </div>

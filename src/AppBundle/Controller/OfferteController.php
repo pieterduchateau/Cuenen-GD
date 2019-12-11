@@ -134,6 +134,7 @@ class OfferteController extends Controller
     {
         $shop = $request->request->get('shop');
         $offerte_nr = $request->get('offerte_nr_3');
+        $factuur_nr = $request->get('factuur_number');
         $bodyData = $request->get('factuurbody');
 
         $offerte = $this->getDoctrine()->getRepository("AppBundle:Offerte")->findOneBy(array(
@@ -151,6 +152,7 @@ class OfferteController extends Controller
         $htmldata = $this->renderView($template, array(
             'offerte' => $offerte,
             'customer' => $customer,
+            'factuur_nr' => $factuur_nr,
             'body' => $bodyData
         ));
         $html2pdf->writeHTML($htmldata);
