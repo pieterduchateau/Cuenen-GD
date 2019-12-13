@@ -11,14 +11,14 @@
             <tr>
                 <td width="90">Naam :</td>
                 <td width="300">{{ customer.firstName }} {{ customer.lastName }}</td>
-                <td width="90">Datum :</td>
-                <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
+                <td width="90">Offerte :</td>
+                <td width="225">{{ offerte.offertenr }}</td>
             </tr>
             <tr>
                 <td width="90">Adres :</td>
                 <td>{{ customer.address }} , {{ customer.postcode }} {{ customer.place }}</td>
-                <td>Te betalen tegen :</td>
-                <td>{{ offerte.deliverydate|date_modify("+10 day")|date("d/m/Y") }}</td>
+                <td width="90">Datum :</td>
+                <td width="225">{{ offerte.deliverydate|date("d/m/Y") }}</td>
             </tr>
             <tr>
                 <td>Telefoon :</td>
