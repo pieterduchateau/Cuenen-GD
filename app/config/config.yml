@@ -76,6 +76,5 @@ swiftmailer:
             host:      %mailer2_host%
             username:  %mailer2_user%
             password:  %mailer2_password%
-            encryption: %mailer2_encryption%
             timeout: %mailer2_timeout%
             port: %mailer2_port%
