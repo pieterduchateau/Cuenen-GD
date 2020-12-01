@@ -27,7 +27,7 @@ class MailerClass
     private $sendcopycheck;
     private $senderAdresses = array(
         "CE" => "info@cue-events.eu",
-        "GM" => "myriam.hex@telenet.Be");
+        "GM" => "info@gordijnenmyriam.be");
 
     /**
      * MailerClass constructor.
